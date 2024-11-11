@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Noto+Sans+JP:wght@400;700&family=Poppins:wght@600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Hiragana Drop</title>
+</head>
+
+<body>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <input type="text" id="inputField" placeholder="Type here (advanced mode)" hidden>
+
+  <!-- Use type="module" to use ES6 modules -->
+  <script type="module">
+    import Game from './js/game.js';  // Make sure the case matches the actual file name ('game.js')
+    import KanaConverter from './js/kana_converter.js'; // Assuming KanaConverter is a default export
+
+    const queryString = window.location.hash.slice(1);
+    console.log('Starting game with query string:', queryString);
+
+
+    // Get the canvas and context
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Initialize and start the game
+    const game = new Game(canvas, ctx, queryString);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,124 @@
+/* styles/color-system.css */
+
+:root {
+    /* Primary Colors - Jade/Teal Family */
+    --primary-900: #1A5A4E;
+    --primary-700: #206B5D;
+    --primary-500: #4AB0A0;
+    --primary-300: #7CCABA;
+    --primary-100: #E6F2F0;
+
+    /* Secondary Colors - Coral/Orange Family */
+    --primary-900: #C45E3A;
+    --primary-700: #D66C45;
+    --primary-500: #E87A51;
+    --primary-300: #FF9677;
+    --primary-100: #FFE6E0;
+
+    /* Surface Colors */
+    --surface-900: #1F2937;
+    --surface-700: #374151;
+    --surface-500: #6B7280;
+    --surface-300: #E5E7EB;
+    --surface-100: #F3F6F4;
+    --surface-50: #FFFFFF;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    margin: 0;
+    padding: 2rem;
+    background: var(--surface-50);
+    color: var(--surface-900);
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: var(--primary-900);
+    margin-bottom: 2rem;
+}
+
+h2 {
+    color: var(--primary-700);
+    margin: 2rem 0 1rem;
+}
+
+.color-section {
+    margin-bottom: 3rem;
+}
+
+.color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.color-card {
+    border: 1px solid var(--surface-300);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.color-swatch {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-family: monospace;
+}
+
+.color-info {
+    padding: 1rem;
+    background: white;
+    border-top: 1px solid var(--surface-300);
+}
+
+.color-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.color-hex {
+    font-family: monospace;
+    color: var(--surface-500);
+}
+
+.dark-text {
+    color: var(--surface-900);
+    text-shadow: none;
+}
+
+.example-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--surface-100);
+    border-radius: 8px;
+}
+
+.button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-right: 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+.button-primary {
+    background: var(--secondary-500);
+    color: white;
+}
+
+.button-secondary {
+    background: var(--primary-500);
+    color: white;
+}

@@ -1,0 +1,109 @@
+/* static/css/logo.css */
+
+/* Import the main CSS to access the variables */
+
+/* Logo Container Styles */
+.brand-logo {
+    width: 180px;
+    /* Match SVG viewBox width */
+    height: 48px;
+    /* Match SVG viewBox height */
+    display: block;
+    margin-left: -28px;
+}
+
+/* Logo Typography */
+.logo-text {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-2xl);
+    font-family: "Raleway", sans-serif;
+}
+
+/* Main Text Elements */
+.text-primary {
+    fill: var(--primary-900);
+    /* Updated to Teal */
+}
+
+.text-secondary {
+    fill: var(--secondary-700);
+    /* Updated to Coral */
+}
+
+/* Animated Dots */
+.dot-primary {
+    fill: var(--primary-500);
+    /* Adjusted to Light Teal */
+}
+
+.dot-secondary {
+    fill: var(--secondary-500);
+    /* Adjusted to Coral */
+}
+
+.dot-tertiary {
+    fill: var(--primary-900);
+    /* Updated to Teal */
+}
+
+/* Underline Accent */
+.underline {
+    stroke: var(--primary-500);
+    /* Base Teal */
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0.1;
+}
+
+/* Animation Keyframes for dots */
+@keyframes fadeInOut {
+
+    0%,
+    100% {
+        opacity: 0.8;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+.dot-animation {
+    animation: fadeInOut 1.5s infinite ease-in-out;
+}
+
+.dot-animation-delay-1 {
+    animation-delay: 0.5s;
+}
+
+.dot-animation-delay-2 {
+    animation-delay: 1s;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .brand-logo {
+
+        width: 150px;
+        /* Adjust size for mobile */
+        height: 40px;
+    }
+}
+
+/* Logo variations if needed */
+.brand-logo-small {
+    width: 120px;
+    height: 32px;
+}
+
+.brand-logo-large {
+    width: 240px;
+    height: 64px;
+}
+
+/* Optional: Hover effect for logo (if applicable) */
+.brand-logo:hover {
+    filter: brightness(1.1);
+    /* Slightly brighten on hover */
+}

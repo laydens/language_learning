@@ -1,0 +1,50 @@
+{% load cms_tags sekizai_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %} | Language Learning</title>
+
+    {# Core stylesheets #}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link href="{% static 'css/material-design.css' %}" rel="stylesheet">
+    {% render_block "css" %}
+</head>
+
+<body>
+    {% cms_toolbar %}
+
+    <header class="navbar elevation-1">
+        <div class="container navbar-content">
+            <div class="brand">
+                {% placeholder "brand" %}
+            </div>
+            <nav>
+                {% placeholder "navigation" %}
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}
+        <div class="container">
+            {% placeholder "content" %}
+        </div>
+        {% endblock content %}
+    </main>
+
+    <footer class="section">
+        <div class="container">
+            {% placeholder "footer" %}
+        </div>
+    </footer>
+
+    {% render_block "js" %}
+</body>
+
+</html>

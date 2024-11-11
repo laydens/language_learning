@@ -1,0 +1,14 @@
+{# templates/plugins/content_section.html #}
+{% load cms_tags %}
+
+<section class="content-section">
+    <div class="content-box {% if instance.style %}content-box-{{ instance.style }}{% endif %}">
+        <h2>{{ instance.title }}</h2>
+        {{ instance.content|safe }}
+        {% if instance.cta_text %}
+        <a href="{{ instance.cta_link }}" class="button button-{{ instance.cta_style|default:'primary' }}">
+            {{ instance.cta_text }}
+        </a>
+        {% endif %}
+    </div>
+</section>

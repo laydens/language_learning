@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wizling Design System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="css/base.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="container">
+            <h1>Wizling Design System</h1>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="section">
+            <h2>Typography</h2>
+            <div class="card mb-lg">
+                <h1>Heading 1</h1>
+                <h2>Heading 2</h2>
+                <h3>Heading 3</h3>
+                <h4>Heading 4</h4>
+                <h5>Heading 5</h5>
+                <h6>Heading 6</h6>
+                <p>Regular paragraph text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua.</p>
+                <p class="text-secondary">Secondary text example</p>
+                <p class="text-tertiary">Tertiary text example</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Colors</h2>
+
+            <h3 class="mb-md">Primary Colors</h3>
+            <div class="card mb-lg">
+                <div style="height: 40px; background: var(--primary-900);"></div>
+                <div style="height: 40px; background: var(--primary-700);"></div>
+                <div style="height: 40px; background: var(--primary-500);"></div>
+                <div style="height: 40px; background: var(--primary-300);"></div>
+                <div style="height: 40px; background: var(--primary-100);"></div>
+            </div>
+
+            <h3 class="mb-md">Secondary Colors</h3>
+            <div class="card mb-lg">
+                <div style="height: 40px; background: var(--secondary-900);"></div>
+                <div style="height: 40px; background: var(--secondary-700);"></div>
+                <div style="height: 40px; background: var(--secondary-500);"></div>
+                <div style="height: 40px; background: var(--secondary-300);"></div>
+                <div style="height: 40px; background: var(--secondary-100);"></div>
+            </div>
+
+            <h3 class="mb-md">Surface Colors</h3>
+            <div class="card mb-lg">
+                <div style="height: 40px; background: var(--surface-900);"></div>
+                <div style="height: 40px; background: var(--surface-700);"></div>
+                <div style="height: 40px; background: var(--surface-500);"></div>
+                <div style="height: 40px; background: var(--surface-300);"></div>
+                <div style="height: 40px; background: var(--surface-100);"></div>
+                <div style="height: 40px; background: var(--surface-50);"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Components</h2>
+
+            <h3 class="mb-md">Buttons</h3>
+            <div class="card mb-lg">
+                <button class="button button-primary mb-md">Primary Button</button>
+                <button class="button button-secondary mb-md">Secondary Button</button>
+                <!-- Add more button variations -->
+            </div>
+
+            <h3 class="mb-md">Cards</h3>
+            <div class="card mb-lg">
+                <div class="card bg-subtle">
+                    <h4>Card Title</h4>
+                    <p>Card content example with some text.</p>
+                    <button class="button button-primary">Card Action</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Spacing</h2>
+            <div class="card">
+                <!-- Spacing examples -->
+                <div style="height: var(--space-xs); background: var(--primary-300); margin-bottom: var(--space-sm);">XS
+                </div>
+                <div style="height: var(--space-sm); background: var(--primary-300); margin-bottom: var(--space-sm);">SM
+                </div>
+                <div style="height: var(--space-md); background: var(--primary-300); margin-bottom: var(--space-sm);">MD
+                </div>
+                <div style="height: var(--space-lg); background: var(--primary-300); margin-bottom: var(--space-sm);">LG
+                </div>
+                <div style="height: var(--space-xl); background: var(--primary-300); margin-bottom: var(--space-sm);">XL
+                </div>
+                <div style="height: var(--space-2xl); background: var(--primary-300);">2XL</div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+{% load cms_tags menu_tags sekizai_tags static i18n %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% page_attribute "page_title" %} - Wizling{% endblock title %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@1,500&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% render_block "css" %}
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    <link href="{% static 'css/logo.css' %}" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    {% cms_toolbar %}
+
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="brand">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 48" aria-labelledby="logoTitle" role="img"
+                        class="brand-logo">
+                        <title id="logoTitle">Wizling Logo</title>
+                        <circle class="dot-primary" cx="120" cy="27" r="4" class="dot-primary">
+                            <animate attributeName="opacity" values="0.8;0.4;0.8" dur="2.5s" repeatCount="indefinite" />
+                        </circle>
+                        <circle class="dot-secondary" cx="110" cy="27" r="4" class="dot-secondary">
+                            <animate attributeName="opacity" values="0.6;0.3;0.6" dur="2.5s" repeatCount="indefinite"
+                                begin="0.5s" />
+                        </circle>
+                        <circle class="dot-tertiary" cx="100" cy="27" r="4" class="dot-tertiary">
+                            <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" repeatCount="indefinite"
+                                begin="1s" />
+                        </circle>
+                        <text class="logo-text" x="10" y="34" font-family="Raleway, sans-serif" font-weight="500">
+                            <tspan class="text-primary">wiz</tspan>
+                            <tspan class="text-secondary" dx="-6">ling</tspan>
+                        </text>
+                        <path class="underline" d="M10 38 L105 38" class="underline" />
+                    </svg>
+                </a>
+
+
+                <div class="nav-menu">
+                    <ul class="nav-links">
+                        {% show_menu 0 1 100 100 "menu/menu.html" %}
+                    </ul>
+                    <div class="nav-cta">
+                        {% static_placeholder 'nav_cta' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container section">
+            {% block content %}
+            {% placeholder "content" %}
+            {% endblock content %}
+        </div>
+    </main>
+
+    <footer class="section bg-subtle">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="brand">wizling</a>
+                    <div class="text-secondary">
+                        {% static_placeholder 'footer_about' %}
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4 class="mb-md">{% static_placeholder 'footer_links_1_title' %}</h4>
+                    {% static_placeholder 'footer_links_1' %}
+                </div>
+                <div class="footer-links">
+                    <h4 class="mb-md">{% static_placeholder 'footer_links_2_title' %}</h4>
+                    {% static_placeholder 'footer_links_2' %}
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {% render_block "js" %}
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>
