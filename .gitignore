@@ -1,0 +1,25 @@
+.idea/
+# Ignore node_modules and all its contents
+llenv/
+wizling/.env
+wizling/wizling/static/drop/
+wizling/wizling/static/hiragana_drop_back/
+wizling/media/
+__pycache__/
+__init__.py
+
+# Ignore build and dist directories
+build/
+dist/
+
+# Ignore temporary and cache directories
+.temp/
+.cache/
+
+# Ignore all files.
+.DS_Store
+
+.vscode/
+.env
+*.zip
+.env
