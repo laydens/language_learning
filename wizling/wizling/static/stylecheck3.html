@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Swatch Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .swatch {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .swatch.light {
+            color: #000000;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Primary Colors -->
+    <div class="swatch" style="background-color: #264653;">Primary 900<br>#264653</div>
+    <div class="swatch" style="background-color: #2a9d8f;">Primary 700<br>#2a9d8f</div>
+    <div class="swatch" style="background-color: #8ecae6;" class="light">Primary 500<br>#8ecae6</div>
+    <div class="swatch" style="background-color: #d8f3dc;" class="light">Primary 300<br>#d8f3dc</div>
+    <div class="swatch" style="background-color: #f0f8f8;" class="light">Primary 100<br>#f0f8f8</div>
+
+    <!-- Secondary Colors -->
+    <div class="swatch" style="background-color: #e76f51;">Secondary 900<br>#e76f51</div>
+    <div class="swatch" style="background-color: #f4a261;">Secondary 700<br>#f4a261</div>
+    <div class="swatch" style="background-color: #f6bd60;">Secondary 500<br>#f6bd60</div>
+    <div class="swatch" style="background-color: #ffddb5;" class="light">Secondary 300<br>#ffddb5</div>
+    <div class="swatch" style="background-color: #ffede1;" class="light">Secondary 100<br>#ffede1</div>
+
+    <!-- Surface Colors -->
+    <div class="swatch" style="background-color: #1f2937;">Surface 900<br>#1f2937</div>
+    <div class="swatch" style="background-color: #3a4c5c;">Surface 700<br>#3a4c5c</div>
+    <div class="swatch" style="background-color: #6b7280;">Surface 500<br>#6b7280</div>
+    <div class="swatch" style="background-color: #e5e5e5;" class="light">Surface 300<br>#e5e5e5</div>
+    <div class="swatch" style="background-color: #f7f9fc;" class="light">Surface 100<br>#f7f9fc</div>
+    <div class="swatch" style="background-color: #ffffff;" class="light">Surface 50<br>#ffffff</div>
+</body>
+
+</html>

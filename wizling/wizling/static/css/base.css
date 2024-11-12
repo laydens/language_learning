@@ -3,41 +3,44 @@
 \*------------------------------------*/
 
 :root {
-    /* Color System */
-    --primary-900: #00796B;
-    /* Teal */
-    --primary-700: #00695C;
-    /* Darker Teal */
-    --primary-500: #6ca49b;
-    /* Medium Teal */
-    --primary-300: #b1ddd9;
-    /* Light Teal */
-    --primary-100: #d4e8e6;
-    /* Very Light Teal */
+    /* Primary Colors - Fjord Series */
+    --primary-900: #162429;
+    /* Deep Fjord - Main brand color, headers */
+    --primary-700: #324D5C;
+    /* Rich Fjord - Primary interactive elements */
+    --primary-500: #527887;
+    /* Medium Fjord - Secondary actions */
+    --primary-300: #7397A5;
+    /* Soft Fjord - Supporting elements */
+    --primary-100: #D0DDE2;
+    /* Fjord Mist - Subtle backgrounds */
 
-    --secondary-900: #FF6F61;
-    /* Coral */
-    --secondary-700: #FF5C51;
-    /* Darker Coral */
-    --secondary-500: #FF8A73;
-    /* Lighter Coral */
-    --secondary-300: #FFB74D;
-    /* Soft Neutral */
-    --secondary-100: #FFE6E0;
-    /* Very Light Coral */
+    /* Secondary Colors - Maple Series */
+    --secondary-900: #8B3A15;
+    /* Deep Maple - Critical actions */
+    --secondary-700: #C55A21;
+    /* Rich Maple - Primary actions */
+    --secondary-500: #F26419;
+    /* Maple - Interactive elements */
+    --secondary-300: #EDA06D;
+    /* Soft Maple - Success states */
+    --secondary-100: #FBEADE;
+    /* Maple Mist - Subtle accents */
 
-    --surface-900: #1F2937;
-    /* Dark Gray */
-    --surface-700: #374151;
-    /* Medium Dark Gray */
-    --surface-500: #6B7280;
-    /* Medium Gray */
-    --surface-300: #d1d4d9;
-    /* Light Gray */
-    --surface-100: #F3F6F4;
-    /* Very Light Gray */
+    /* Surface Colors - Neutral Series */
+    --surface-900: #1A1C1D;
+    /* Ink - Darkest text */
+    --surface-700: #3D4144;
+    /* Dark Gray - Secondary text */
+    --surface-500: #666C70;
+    /* Medium Gray - Supporting text */
+    --surface-300: #CFD3D6;
+    /* Pale Gray - Borders */
+    --surface-100: #F0F4F5;
+    /* White Mist - Main background */
     --surface-50: #FFFFFF;
-    /* White */
+    /* Pure White - Card backgrounds */
+
 
     /* Spacing System */
     --space-xs: 0.25rem;

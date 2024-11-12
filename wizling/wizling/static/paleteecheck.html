@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game UI</title>
+    <style>
+        :root {
+            /* Main palette selection */
+            --bg-main: #F0F4F5;
+            /* Fjord 50 - Easy on eyes */
+            --bg-card: #FFFFFF;
+            /* Pure white for cards */
+            --primary: #324D5C;
+            /* Fjord 600 - Main text/UI */
+            --secondary: #7397A5;
+            /* Fjord 300 - Supporting elements */
+            --accent: #E36922;
+            /* Accent 600 - Interactive elements */
+            --success: #527887;
+            /* Fjord 400 - Correct answers */
+            --card-hover: #D0DDE2;
+            /* Fjord 100 - Card interactions */
+        }
+
+        body {
+            background-color: var(--bg-main);
+            padding: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: var(--bg-card);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .memory-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(227, 105, 34, 0.15);
+        }
+
+        .matched {
+            background: var(--success);
+            color: white;
+        }
+
+        .japanese {
+            font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif;
+        }
+
+        .score {
+            font-size: 2rem;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .level {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Example cards */
+        .demo-cards {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            min-width: 200px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .demo-card:hover {
+            background: var(--card-hover);
+        }
+
+        .kanji {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .reading {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .meaning {
+            color: var(--accent);
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="game-header">
+            <span class="level">Level N5</span>
+            <h1 style="color: var(--primary); margin-top: 1rem">Kanji Memory Game</h1>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="score">24</div>
+                <div style="color: var(--secondary)">Points</div>
+            </div>
+            <div class="stat-card">
+                <div class="score">12</div>
+                <div style="color: var(--secondary)">Streak</div>
+            </div>
+        </div>
+
+        <div class="demo-cards">
+            <div class="demo-card">
+                <div class="kanji japanese">水</div>
+                <div class="reading">みず</div>
+                <div class="meaning">water</div>
+            </div>
+            <div class="demo-card">
+                <div class="kanji japanese">火</div>
+                <div class="reading">ひ</div>
+                <div class="meaning">fire</div>
+            </div>
+            <div class="demo-card">
+                <div class="kanji japanese">木</div>
+                <div class="reading">き</div>
+                <div class="meaning">tree</div>
+            </div>
+            <div class="demo-card">
+                <div class="kanji japanese">金</div>
+                <div class="reading">かね</div>
+                <div class="meaning">gold</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

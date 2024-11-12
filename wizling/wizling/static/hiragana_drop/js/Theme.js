@@ -1,79 +1,137 @@
 // Theme.js
 const Theme = {
     colors: {
-        // Main palette
         background: {
-            primary: '#F3F7F9',
+            primary: '#F0F4F5',    // White Mist - Main background (surface-100)
             gradient: {
-                start: '#F3F7F9',
-                end: '#E8F4FF'
+                start: '#F0F4F5',  // White Mist - Gradient start (surface-100)
+                middle: '#D0DDE2', // Fjord Mist - Gradient middle (primary-100)
+                end: '#7397A5'     // Soft Fjord - Gradient end (primary-300)
+            },
+            effects: {
+                success: 'rgba(82, 120, 135, 0.2)',  // Medium Fjord with transparency (primary-500)
+                mistake: 'rgba(139, 58, 21, 0.15)'   // Deep Maple with transparency (secondary-900)
             }
         },
-        primary: '#4361EE',
-        secondary: '#E8F4FF',
-        accent: '#FF6B6B',
+        primary: {
+            main: '#162429',    // Deep Fjord - Main brand color (primary-900)
+            dark: '#324D5C',    // Rich Fjord - Primary elements (primary-700)
+            medium: '#527887',  // Medium Fjord - Secondary elements (primary-500)
+            light: '#7397A5',   // Soft Fjord - Supporting elements (primary-300)
+            pale: '#D0DDE2'     // Fjord Mist - Subtle backgrounds (primary-100)
+        },
+        secondary: {
+            main: '#8B3A15',    // Deep Maple - Critical actions (secondary-900)
+            dark: '#C55A21',    // Rich Maple - Primary actions (secondary-700)
+            medium: '#E36922',  // Maple - Interactive elements (secondary-500)
+            light: '#EDA06D',   // Soft Maple - Success states (secondary-300)
+            pale: '#FBEADE'     // Maple Mist - Subtle accents (secondary-100)
+        },
+        surface: {
+            dark: '#1A1C1D',    // Ink - Darkest text (surface-900)
+            medium: '#3D4144',  // Dark Gray - Secondary text (surface-700)
+            light: '#666C70',   // Medium Gray - Supporting text (surface-500)
+            pale: '#CFD3D6',    // Pale Gray - Borders (surface-300)
+            white: '#F0F4F5'    // White Mist - Main background (surface-100)
+        },
         text: {
-            primary: '#2C3E50',
-            secondary: '#64748B',
-            light: '#94A3B8'
+            primary: '#1A1C1D',   // Ink - Main text (surface-900)
+            secondary: '#3D4144', // Dark Gray - Secondary text (surface-700)
+            light: '#666C70'     // Medium Gray - Supporting text (surface-500)
         },
         success: {
-            primary: '#FF6D00',     // Vivid orange
-            secondary: '#FF9100',    // Bright orange
-            glow: '#FF5722'         // Deep orange-red for intense glow
+            primary: '#EDA06D',    // Soft Maple - Success primary (secondary-300)
+            secondary: '#E36922',  // Maple - Success secondary (secondary-500)
+            glow: '#8B3A15'       // Deep Maple - Success emphasis (secondary-900)
         },
         mistake: {
-            primary: '#FF1744',     // Bright red
-            secondary: '#FF4081',    // Pink-red
-            glow: '#D50000'         // Deep red for glow
+            primary: '#C55A21',    // Rich Maple - Mistake primary (secondary-700)
+            secondary: '#8B3A15',  // Deep Maple - Mistake secondary (secondary-900)
+            glow: '#E36922'       // Maple - Mistake emphasis (secondary-500)
         },
-        overlay: 'rgba(44, 62, 80, 0.85)'
+        progress: {
+            active: {
+                outer: 'rgba(139, 58, 21, 0.2)',  // Deep Maple with transparency (secondary-900)
+                inner: '#8B3A15',                 // Deep Maple - Progress fill (secondary-900)
+                glow: '#C55A21'                   // Rich Maple - Progress emphasis (secondary-700)
+            },
+            inactive: {
+                outer: 'rgba(207, 211, 214, 0.2)', // Pale Gray with transparency (surface-300)
+                inner: '#CFD3D6'                   // Pale Gray - Inactive state (surface-300)
+            }
+        }
+    },
+    fonts: {
+        japanese: {
+            primary: "'Kosugi Maru', sans-serif",
+            alternate: "'M PLUS Rounded 1c', sans-serif",
+            classic: "'Noto Sans JP', sans-serif"
+        },
+        system: {
+            primary: "'Nunito', -apple-system, sans-serif",
+            display: "'Poppins', sans-serif"
+        },
+        sizes: {
+            character: {
+                large: '48px',
+                medium: '36px',
+                small: '24px'
+            },
+            ui: {
+                title: '24px',
+                large: '20px',
+                normal: '16px',
+                small: '14px'
+            }
+        },
+        weights: {
+            normal: 400,
+            medium: 500,
+            bold: 600
+        }
     },
 
-    // Animation timings
-    animation: {
-        quick: '150ms',
-        default: '300ms',
-        slow: '500ms'
-    },
-
-    // Game specific styles
     game: {
-        character: {
-            size: 48,
-            targetGlow: 15,
-            colors: {
-                active: '#FF6B6B',
-                inactive: '#2C3E50'
-            }
-        },
-
-        options: {
-            height: 56,
-            radius: 12,
-            glow: {
-                hover: 8,
-                active: 12
-            }
-        },
-
         particles: {
             count: 25,
             size: {
                 min: 2,
-                max: 8
+                max: 7
             },
             velocity: {
-                initial: 10,
-                gravity: 0.1
+                initial: 9,
+                gravity: 0.2
             },
             lifetime: {
-                fadeSpeed: 0.01
+                fadeSpeed: 0.02
             },
             glow: {
                 blur: 10
             }
+        },
+        effects: {
+            duration: 500,
+            progressGlow: {
+                radius: 10,
+                blur: 10
+            }
+        },
+        characters: {
+            size: '0.06em',  // Relative to canvas width
+            targetGlow: 15,
+            drift: {
+                amplitude: 15,
+                speed: 0.001
+            }
+        },
+        ui: {
+            transitions: {
+                fast: '150ms',
+                normal: '300ms',
+                slow: '500ms'
+            }
         }
     }
 };
+
 export default Theme;

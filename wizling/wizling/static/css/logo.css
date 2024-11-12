@@ -1,97 +1,113 @@
 /* static/css/logo.css */
 
-/* Import the main CSS to access the variables */
-
-/* Logo Container Styles */
 .brand-logo {
     width: 180px;
-    /* Match SVG viewBox width */
     height: 48px;
-    /* Match SVG viewBox height */
     display: block;
     margin-left: -28px;
+    transition: filter 0.3s ease;
 }
 
 /* Logo Typography */
 .logo-text {
-    font-family: var(--font-primary);
+    font-family: "Raleway", sans-serif;
     font-weight: 600;
     font-size: var(--font-size-2xl);
-    font-family: "Raleway", sans-serif;
 }
 
-/* Main Text Elements */
 .text-primary {
-    fill: var(--primary-900);
-    /* Updated to Teal */
+    fill: var(--primary-700);
+    /* Rich Fjord - Deep blue-gray for main text 'wiz' (#324D5C) */
 }
 
 .text-secondary {
-    fill: var(--secondary-700);
-    /* Updated to Coral */
+    fill: var(--secondary-500);
+    /* Vibrant Maple - Warm orange for accent text 'ling' (#E36922) */
 }
 
-/* Animated Dots */
 .dot-primary {
     fill: var(--primary-500);
-    /* Adjusted to Light Teal */
+    /* Medium Fjord - Balanced blue-gray for leading dot (#527887) */
 }
 
 .dot-secondary {
     fill: var(--secondary-500);
-    /* Adjusted to Coral */
+    /* Vibrant Maple - Matching warm orange for middle dot (#E36922) */
 }
 
 .dot-tertiary {
-    fill: var(--primary-900);
-    /* Updated to Teal */
+    fill: var(--primary-300);
+    /* Soft Fjord - Lighter blue-gray for trailing dot (#7397A5) */
 }
 
-/* Underline Accent */
 .underline {
-    stroke: var(--primary-500);
-    /* Base Teal */
-    stroke-width: 2;
-    stroke-linecap: round;
-    opacity: 0.1;
+    stroke: var(--secondary-500);
+    /* Vibrant Maple - Matching warm orange for underline (#E36922) */
 }
 
-/* Animation Keyframes for dots */
+/* Underline Accent - Made more prominent */
+.underline {
+    stroke: var(--secondary-500);
+    /* <-- Update to match text */
+    /* Maple - Adds warmth and connection to 'ling' */
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    opacity: 0.15;
+}
+
+/* Refined Animation Keyframes */
 @keyframes fadeInOut {
 
     0%,
     100% {
-        opacity: 0.8;
+        opacity: 0.9;
+        transform: scale(1);
     }
 
     50% {
-        opacity: 0.4;
+        opacity: 0.5;
+        transform: scale(0.99);
     }
 }
 
 .dot-animation {
-    animation: fadeInOut 1.5s infinite ease-in-out;
+    animation: fadeInOut 5s infinite ease-in-out;
 }
 
 .dot-animation-delay-1 {
-    animation-delay: 0.5s;
+    animation-delay: 0.4s;
 }
 
 .dot-animation-delay-2 {
-    animation-delay: 1s;
+    animation-delay: 0.8s;
+}
+
+/* Hover Effects */
+.brand-logo:hover .dot-secondary {
+    fill: var(--secondary-600);
+    /* <-- Could update this for more vibrant hover */
+}
+
+.brand-logo:hover .dot-primary {
+    fill: var(--primary-400);
+}
+
+.brand-logo:hover .dot-secondary {
+    fill: var(--secondary-400);
+}
+
+.brand-logo:hover .dot-tertiary {
+    fill: var(--primary-200);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .brand-logo {
-
         width: 150px;
-        /* Adjust size for mobile */
         height: 40px;
     }
 }
 
-/* Logo variations if needed */
 .brand-logo-small {
     width: 120px;
     height: 32px;
@@ -100,10 +116,4 @@
 .brand-logo-large {
     width: 240px;
     height: 64px;
-}
-
-/* Optional: Hover effect for logo (if applicable) */
-.brand-logo:hover {
-    filter: brightness(1.1);
-    /* Slightly brighten on hover */
 }

@@ -5,6 +5,7 @@ import { StartScreen } from './GameStartScreen.js';
 import GameUI from './GameUI.js';
 import GameOptions from './GameOptions.js';
 import ParticleSystem from './ParticleSystem.js';
+import Theme from './Theme.js';
 import { CHARACTER_GROUPS, GameDataProvider } from './GameDataProvider.js';
 import { GroupSelector } from './GroupSelector.js';
 
@@ -46,8 +47,8 @@ export default class Game {
             display: "'Poppins', sans-serif"
         };
 
-        this.gameUI = new GameUI(this.ctx, this.colors, this.fonts);
-        this.gameOptions = new GameOptions(this.ctx, this.colors, this.fonts);
+        this.gameUI = new GameUI(this.ctx);
+        this.gameOptions = new GameOptions(this.ctx);
         this.particleSystem = new ParticleSystem(this.ctx);
 
         // Initialize game properties

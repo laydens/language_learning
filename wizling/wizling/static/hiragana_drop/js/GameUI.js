@@ -1,9 +1,88 @@
 // GameUI.js
+import Theme from './Theme.js';
+
 export default class GameUI {
-    constructor(ctx, colors, fonts) {
+    constructor(ctx) {
         this.ctx = ctx;
-        this.colors = colors;
-        this.fonts = fonts;
+
+        this.effectStart = 0;
+        this.isAnimatingEffect = false;
+        this.currentEffect = null;
+    }
+
+    drawLives(maxMistakes, mistakesMade, highlightIndex = null) {
+        const centerY = 30;
+        const startX = this.ctx.canvas.width - 150;
+        const spacing = 30;
+        const hearts = maxMistakes - mistakesMade;
+
+        for (let i = 0; i < maxMistakes; i++) {
+            const x = startX + (i * spacing);
+            const isHighlight = highlightIndex === i;
+            const isActive = i < hearts;
+
+            // Outer circle
+            this.ctx.beginPath();
+            this.ctx.arc(x, centerY, 10, 0, Math.PI * 2);
+
+            if (isHighlight && isActive) {
+                this.ctx.fillStyle = Theme.colors.progress.active.outer;
+                this.ctx.shadowColor = Theme.colors.progress.active.glow;
+                this.ctx.shadowBlur = Theme.game.effects.progressGlow.blur;
+            } else {
+                this.ctx.fillStyle = isActive ?
+                    Theme.colors.progress.active.outer :
+                    Theme.colors.progress.inactive.outer;
+                this.ctx.shadowBlur = 0;
+            }
+            this.ctx.fill();
+
+            // Inner circle
+            this.ctx.beginPath();
+            this.ctx.arc(x, centerY, 5, 0, Math.PI * 2);
+            this.ctx.fillStyle = isActive ?
+                Theme.colors.progress.active.inner :
+                Theme.colors.progress.inactive.inner;
+
+            if (isHighlight && isActive) {
+                this.ctx.shadowColor = Theme.colors.progress.active.glow;
+                this.ctx.shadowBlur = Theme.game.effects.progressGlow.blur;
+            }
+            this.ctx.fill();
+            this.ctx.shadowBlur = 0;
+        }
+    }
+
+    startEffect(type) {
+        this.isAnimatingEffect = true;
+        this.currentEffect = type;
+        this.effectStart = performance.now();
+        this.animateEffect();
+    }
+
+    animateEffect(timestamp) {
+        if (!this.isAnimatingEffect) return;
+
+        const progress = (timestamp - this.effectStart) / Theme.game.effects.duration;
+
+        if (progress >= 1) {
+            this.isAnimatingEffect = false;
+            this.currentEffect = null;
+            return;
+        }
+
+        // Calculate fade opacity using sine wave for smooth fade in/out
+        const opacity = Math.sin(progress * Math.PI);
+
+        if (this.currentEffect === 'success') {
+            this.ctx.fillStyle = Theme.colors.background.effects.success;
+            this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        } else if (this.currentEffect === 'mistake') {
+            this.ctx.fillStyle = Theme.colors.background.effects.mistake;
+            this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        }
+
+        requestAnimationFrame(this.animateEffect.bind(this));
     }
 
     drawVersion(version) {

@@ -9,9 +9,13 @@ export default class ParticleSystem {
     }
 
     createEffect(x, y, type) {
+        console.log('Creating effect:', type);
+
         const colors = type === 'success' ?
             [Theme.colors.success.primary, Theme.colors.success.secondary, Theme.colors.success.glow] :
-            [Theme.colors.failure.primary, Theme.colors.failure.secondary, Theme.colors.failure.glow];
+            [Theme.colors.mistake.primary, Theme.colors.mistake.secondary, Theme.colors.mistake.glow];
+
+        console.log('Using colors:', colors);
 
         for (let i = 0; i < Theme.game.particles.count; i++) {
             const angle = (i / Theme.game.particles.count) * Math.PI * 2 + Math.random() * 0.5;
@@ -26,10 +30,10 @@ export default class ParticleSystem {
                     Math.random() * (Theme.game.particles.size.max - Theme.game.particles.size.min),
                 color: colors[Math.floor(Math.random() * colors.length)],
                 life: 1,
-                opacity: 1,
+                opacity: .7,
                 rotation: Math.random() * Math.PI * 2,
                 rotationSpeed: (Math.random() - 0.5) * 0.1,
-                baseSize: Math.random() * 4 + 2  // Base size for pulsing
+                baseSize: Math.random() * 4 + 2
             });
         }
     }
@@ -42,19 +46,14 @@ export default class ParticleSystem {
         for (let i = this.particles.length - 1; i >= 0; i--) {
             const p = this.particles[i];
 
-            // Update position with deltaTime
             p.x += p.vx * deltaTime;
             p.y += p.vy * deltaTime;
 
-            // Apply gravity and resistance
             p.vy += Theme.game.particles.velocity.gravity * deltaTime;
             p.vx *= 0.99;
             p.vy *= 0.99;
 
-            // Update rotation
             p.rotation += p.rotationSpeed * deltaTime;
-
-            // Fade out
             p.life -= Theme.game.particles.lifetime.fadeSpeed * deltaTime;
             p.opacity = p.life;
 
@@ -63,36 +62,32 @@ export default class ParticleSystem {
                 continue;
             }
 
-            // Draw with enhanced visibility
             this.ctx.save();
 
-            // Use multiply blend mode for better contrast
-            this.ctx.globalCompositeOperation = 'screen';
+            // Changed blend mode to 'source-over' for more opacity
+            this.ctx.globalCompositeOperation = 'source-over';
 
-            // Increased shadow blur for more prominent glow
-            this.ctx.shadowColor = p.color;
-            this.ctx.shadowBlur = 15 * p.opacity;
+            // Set global alpha for overall opacity
+            this.ctx.globalAlpha = p.opacity;
 
-            // Draw particle with multiple layers for intensity
             this.ctx.translate(p.x, p.y);
             this.ctx.rotate(p.rotation);
 
-            // Draw main particle
+            // Draw base particle
             this.ctx.beginPath();
             this.ctx.arc(0, 0, p.baseSize, 0, Math.PI * 2);
-            this.ctx.fillStyle = p.color;
+            this.ctx.fillStyle = p.color;  // Use direct color
             this.ctx.fill();
 
-            // Draw outer glow
+            // Add glow using shadow
+            this.ctx.shadowColor = p.color;
+            this.ctx.shadowBlur = 15;
+            this.ctx.fill();
+
+            // Add extra bright center
             this.ctx.beginPath();
-            this.ctx.arc(0, 0, p.baseSize * 1.5, 0, Math.PI * 2);
-            const gradient = this.ctx.createRadialGradient(
-                0, 0, p.baseSize * 0.5,
-                0, 0, p.baseSize * 1.5
-            );
-            gradient.addColorStop(0, p.color);
-            gradient.addColorStop(1, `${p.color}00`);
-            this.ctx.fillStyle = gradient;
+            this.ctx.arc(0, 0, p.baseSize * 0.2, 0, Math.PI * 2);
+            this.ctx.fillStyle = '#fff';  // White center for extra pop
             this.ctx.fill();
 
             this.ctx.restore();
