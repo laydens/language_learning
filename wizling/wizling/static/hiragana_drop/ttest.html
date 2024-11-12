@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Theme & Particle Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #F3F7F9;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .color-sample {
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .debug-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        button {
+            padding: 8px 16px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        canvas {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="controls">
+        <h2>Theme Colors</h2>
+        <div id="colorDisplay"></div>
+    </div>
+
+    <div class="controls">
+        <h2>Particle Test</h2>
+        <!-- Removed onclick attributes -->
+        <button id="successBtn" style="background: #FF6D00; color: white;">
+            Success Effect
+        </button>
+        <button id="failureBtn" style="background: #FF1744; color: white;">
+            Failure Effect
+        </button>
+        <button id="clearBtn" style="background: #e0e0e0;">
+            Clear
+        </button>
+        <div id="stats" class="debug-info"></div>
+    </div>
+
+    <canvas id="canvas" width="800" height="400"></canvas>
+
+    <script type="module">
+        import Theme from './js/Theme.js';
+        import ParticleSystem from './js/ParticleSystem.js';
+
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Display theme colors
+            const colorDisplay = document.getElementById('colorDisplay');
+            function displayThemeColors(theme, container, path = '') {
+                const grid = document.createElement('div');
+                grid.className = 'color-grid';
+
+                for (const [key, value] of Object.entries(theme)) {
+                    if (typeof value === 'object' && value !== null) {
+                        const section = document.createElement('div');
+                        section.innerHTML = `<h3>${key}</h3>`;
+                        container.appendChild(section);
+                        displayThemeColors(value, section, path ? `${path}.${key}` : key);
+                    } else {
+                        const colorDiv = document.createElement('div');
+                        colorDiv.className = 'color-sample';
+                        colorDiv.style.backgroundColor = value;
+                        const fullPath = path ? `${path}.${key}` : key;
+                        colorDiv.innerHTML = `
+                            ${fullPath}<br>
+                            <small>${value}</small>
+                        `;
+                        grid.appendChild(colorDiv);
+                    }
+                }
+                container.appendChild(grid);
+            }
+
+            displayThemeColors(Theme.colors, colorDisplay);
+
+            // Setup canvas and particle system
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const particleSystem = new ParticleSystem(ctx);
+
+            // Button event listeners
+            document.getElementById('successBtn').addEventListener('click', () => {
+                particleSystem.createEffect(
+                    canvas.width / 2,
+                    canvas.height / 2,
+                    'success'
+                );
+            });
+
+            document.getElementById('failureBtn').addEventListener('click', () => {
+                particleSystem.createEffect(
+                    canvas.width / 2,
+                    canvas.height / 2,
+                    'failure'
+                );
+            });
+
+            document.getElementById('clearBtn').addEventListener('click', () => {
+                particleSystem.reset();
+            });
+
+            // Canvas click handler
+            canvas.addEventListener('click', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                particleSystem.createEffect(x, y, Math.random() > 0.5 ? 'success' : 'failure');
+            });
+
+            // Animation loop
+            function animate() {
+                ctx.fillStyle = '#F3F7F9';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                particleSystem.update();
+
+                document.getElementById('stats').textContent =
+                    `Active Particles: ${particleSystem.particles.length}`;
+
+                requestAnimationFrame(animate);
+            }
+
+            // Start animation
+            animate();
+        });
+    </script>
+</body>
+
+</html>

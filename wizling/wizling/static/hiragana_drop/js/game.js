@@ -1,9 +1,10 @@
 // game.js
-import FallingCharacter from './character.js';
+import FallingCharacter from './FallingCharacter.js';
 import GameOverScreen from './GameOverScreen.js';
 import { StartScreen } from './GameStartScreen.js';
 import GameUI from './GameUI.js';
 import GameOptions from './GameOptions.js';
+import ParticleSystem from './ParticleSystem.js';
 import { CHARACTER_GROUPS, GameDataProvider } from './GameDataProvider.js';
 import { GroupSelector } from './GroupSelector.js';
 
@@ -13,14 +14,13 @@ export default class Game {
         // Core initialization
         this.canvas = canvas;
         this.ctx = ctx;
-        this.version = "v1.1.53";
+        this.version = "v1.1.57";
         this.queryString = queryString;
         console.log('queryString in Game constructor: ', queryString);
         console.log('Game version:', this.version);
         // Game state flags
         this.isLoading = true;
         this.gameStarted = false;  // Add flag to track if game has started
-        this.densityInterval = setInterval(this.increaseDensity.bind(this), 30000);
         console.log('Initializing game with query string:', queryString);
 
         // Visual properties
@@ -48,7 +48,7 @@ export default class Game {
 
         this.gameUI = new GameUI(this.ctx, this.colors, this.fonts);
         this.gameOptions = new GameOptions(this.ctx, this.colors, this.fonts);
-
+        this.particleSystem = new ParticleSystem(this.ctx);
 
         // Initialize game properties
         this.initializeGameProperties();
@@ -140,6 +140,7 @@ export default class Game {
             const margin = characterSize;
             const x = margin + Math.random() * (this.canvas.width - characterSize - margin * 2);
 
+            console.log("Spawning character with fall speed:", this.characterFallSpeed);
             const newChar = new FallingCharacter(character, x, this.characterFallSpeed, this.ctx, this);
             this.fallingCharacters.push(newChar);
             this.lastSpawnTime = currentTime;
@@ -176,6 +177,7 @@ export default class Game {
             this.updateFallingCharacters();
             this.updateParticles();
             this.drawUI();
+            this.particleSystem.update();
 
             if (this.gameOptions.options.length > 0) {
                 this.gameOptions.draw();
@@ -317,6 +319,7 @@ export default class Game {
         this.bestStreak = 0;
         this.particles = [];
         this.targetCharacter = null;  // Reset target character
+        this.particleSystem.reset();
         this.gameOptions.reset();
         console.log('Game state reset - New fall speed:', this.characterFallSpeed);
     }
@@ -359,42 +362,19 @@ export default class Game {
 
     clearIntervals() {
         if (this.gameLoop) {
-            clearInterval(this.gameLoop);
+            cancelAnimationFrame(this.gameLoop);
             this.gameLoop = null;
         }
         if (this.densityInterval) {
             clearInterval(this.densityInterval);
             this.densityInterval = null;
         }
+        this.lastSpawnTime = 0;  // Reset spawn timer
     }
 
     isPointInRect(x, y, rect) {
         return x >= rect.x && x <= rect.x + rect.width &&
             y >= rect.y && y <= rect.y + rect.height;
-    }
-
-    resetGameState() {
-
-        console.log('Resetting game state...');
-        console.log('Previous fall speed:', this.characterFallSpeed);
-        this.fallingCharacters = [];
-        this.options = [];
-        this.gameSpeed = 1000;
-        this.characterFallSpeed = 1.2;  // Reset to initial speed
-        this.currentDensity = 1;
-        this.score = 0;
-        this.highScore = localStorage.getItem('highScore') || 0;
-        this.selectedOptionIndex = -1;
-        this.isGameOver = false;
-        this.maxMistakes = 3;
-        this.mistakesMade = 0;
-        this.currentStreak = 0;    // Streak for gameplay/speed increases
-        this.bestStreak = 0;       // Best streak achieved this game
-        this.score = 0;
-        this.particles = [];
-        this.animations = [];
-
-        console.log('Game state reset - New fall speed:', this.characterFallSpeed);
     }
 
     showLoadingScreen() {
@@ -460,22 +440,7 @@ export default class Game {
     }
 
     updateParticles() {
-        for (let i = this.particles.length - 1; i >= 0; i--) {
-            const p = this.particles[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.life -= 0.02;
-
-            if (p.life <= 0) {
-                this.particles.splice(i, 1);
-                continue;
-            }
-
-            this.ctx.beginPath();
-            this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            this.ctx.fillStyle = `${p.color}${Math.floor(p.life * 255).toString(16).padStart(2, '0')}`;
-            this.ctx.fill();
-        }
+        this.particleSystem.update();
     }
 
     drawUI() {
@@ -632,8 +597,17 @@ export default class Game {
     handleCorrectAnswer() {
         if (this.fallingCharacters.length === 0) return;
 
-        const removedChar = this.fallingCharacters.shift();
-        this.addParticleEffect(removedChar.x + removedChar.size / 2, removedChar.y + removedChar.size / 2, 'success');
+        const character = this.fallingCharacters[0]; // Get reference without removing
+
+        // Get position before removal
+        const charX = character.x;
+        const charY = character.y;
+
+        // Now remove the character
+        this.fallingCharacters.shift();
+
+        // Create particle effect at the stored position
+        this.addParticleEffect(charX + 20, charY + 20, 'success'); // Using fixed offset of 20 for center
 
         // Update score and streak
         this.score += 10;
@@ -713,20 +687,6 @@ export default class Game {
     }
 
     addParticleEffect(x, y, type) {
-        const colors = type === 'success' ?
-            [this.colors.success, '#A8E6CF', '#1AB571'] :
-            [this.colors.accent, '#FFB6B6', '#FF8787'];
-
-        for (let i = 0; i < 20; i++) {
-            this.particles.push({
-                x: x,
-                y: y,
-                vx: (Math.random() - 0.5) * 8,
-                vy: (Math.random() - 0.5) * 8,
-                size: Math.random() * 6 + 2,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                life: 1
-            });
-        }
+        this.particleSystem.createEffect(x, y, type);
     }
 }

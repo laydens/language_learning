@@ -14,13 +14,32 @@ export class StartScreen {
             animationFrame: null
         });
 
+        console.log("Current mode:", this.mode);
+        console.log("Available CHARACTER_GROUPS:", CHARACTER_GROUPS);
+
         // Get game data based on query string
         console.log("config.mode on load of Start Screen: ", this.mode);
+        // Get game data based on query string
         const gameData = GameDataProvider.getData(this.mode, { script: this.mode, groups: [] });
 
         // Get script type from game data
         this.gameTitle = gameData.data.title;
         this.currentScript = this.mode;
+
+        // Check if customization is available for this script
+        this.hasCustomization = CHARACTER_GROUPS && CHARACTER_GROUPS[this.currentScript];
+
+        // Initialize group selector only if customization is available
+        if (this.hasCustomization) {
+            this.groupSelector = new GroupSelector({
+                ...config,
+                script: this.currentScript,
+                mode: config.mode,
+                onSelect: selection => this.onStart(selection)
+            });
+        }
+
+        console.log("Current script set to:", this.currentScript);
 
         // Initialize group selector
         this.groupSelector = new GroupSelector({
@@ -33,7 +52,7 @@ export class StartScreen {
         // UI Layout configuration
         this.layout = {
             title: { y: 40, fontSize: 48 },
-            subtitle: { y: 80, fontSize: 24 },  // Added subtitle layout
+            subtitle: { y: 80, fontSize: 24 },
             mainButton: { width: 320, height: 80, y: 180 },
             customizeLink: { y: 300, fontSize: 16 }
         };
@@ -53,22 +72,27 @@ export class StartScreen {
             })
         };
 
-        console.log("Initialized Start Screen with config:", config);
-
-
         this.animate();
     }
-
     // Particle System
     animate = () => {
-        if (Math.random() < 0.1) {
+        // Only add particles if we have valid character groups
+        if (CHARACTER_GROUPS &&
+            CHARACTER_GROUPS[this.currentScript] &&
+            Math.random() < 0.1) {
             this.addParticle();
         }
         this.animationFrame = requestAnimationFrame(this.animate);
     }
 
     addParticle() {
+        // Double check we have valid data
+        if (!CHARACTER_GROUPS || !CHARACTER_GROUPS[this.currentScript]) {
+            return;  // Silently return instead of logging error
+        }
         const chars = Object.keys(CHARACTER_GROUPS[this.currentScript]);
+        if (!chars.length) return;  // Make sure we have characters
+
         this.particles.push({
             char: chars[Math.floor(Math.random() * chars.length)],
             x: Math.random() * 800,
@@ -122,7 +146,10 @@ export class StartScreen {
     drawMainInterface(ctx, canvas) {
         this.drawTitle(ctx, canvas);
         this.drawMainButton(ctx, canvas);
-        this.drawCustomizeLink(ctx, canvas);
+        // Only draw customize link if customization is available
+        if (this.hasCustomization) {
+            this.drawCustomizeLink(ctx, canvas);
+        }
     }
 
     drawTitle(ctx, canvas) {
@@ -180,46 +207,42 @@ export class StartScreen {
 
         // Character set indicator
         ctx.font = `16px ${this.fonts.primary}`;
-        const characterCount = Object.keys(CHARACTER_GROUPS[this.currentScript]).length;
-        // ctx.fillText(
-        //     `All ${characterCount} ${this.currentScript} character groups`,
-        //     centerX,
-        //     bounds.y + bounds.height / 2 + 20
-        // );
-
-        ctx.restore();
+        if (CHARACTER_GROUPS && CHARACTER_GROUPS[this.currentScript]) {
+            const characterCount = Object.keys(CHARACTER_GROUPS[this.currentScript]).length;
+            ctx.font = `16px ${this.fonts.primary}`;
+            ctx.restore();
+        }
     }
 
     handleClick(x, y, canvas) {
         console.log("Handling click at:", x, y);
-        console.log("GameStartScreen: handleClick called at", x, y);
-        if (this.showGroupSelection) {
+
+        if (this.showGroupSelection && this.hasCustomization) {
             return this.groupSelector.handleClick(x, y, canvas);
         }
 
         const point = { x, y };
-        const mainButtonBounds = this.getBounds('mainButton', canvas);  // Changed from getMainButtonBounds
-        const customizeLinkBounds = this.getBounds('customizeLink', canvas);  // Changed from getCustomizeLinkBounds
-
-        console.log("GameStartScreen: mainButtonBounds", mainButtonBounds);
-        console.log("GameStartScreen: customizeLinkBounds", customizeLinkBounds);
-        console.log("GameStartScreen: Click at", x, y);
+        const mainButtonBounds = this.getBounds('mainButton', canvas);
 
         if (this.isPointInRect(point, mainButtonBounds)) {
             this.onStart({
                 script: this.currentScript,
-                groups: Object.keys(CHARACTER_GROUPS[this.currentScript])
+                groups: this.hasCustomization ?
+                    Object.keys(CHARACTER_GROUPS[this.currentScript]) :
+                    []
             });
             return true;
         }
 
-        if (this.isPointInRect(point, customizeLinkBounds)) {
-            this.showGroupSelection = true;
-            this.groupSelector.currentScript = this.mode == 'katakana' ? 'katakana' : 'hiragana';
-            console.log("this.showGroupSelection: ", this.showGroupSelection);
-            console.log("this.currentsciprt: ", this.currentScript);
-            this.draw(canvas.getContext('2d'), canvas);
-            return true;
+        // Only check customize link if customization is available
+        if (this.hasCustomization) {
+            const customizeLinkBounds = this.getBounds('customizeLink', canvas);
+            if (this.isPointInRect(point, customizeLinkBounds)) {
+                this.showGroupSelection = true;
+                this.groupSelector.currentScript = this.mode;
+                this.draw(canvas.getContext('2d'), canvas);
+                return true;
+            }
         }
 
         return false;
@@ -257,13 +280,10 @@ export class StartScreen {
     handleMouseMove(x, y, canvas) {
         const point = { x, y };
         const isOverButton = this.isPointInRect(point, this.getBounds('mainButton', canvas));
-        const isOverLink = this.isPointInRect(point, this.getBounds('customizeLink', canvas));
+        const isOverLink = this.hasCustomization &&
+            this.isPointInRect(point, this.getBounds('customizeLink', canvas));
 
         canvas.style.cursor = (isOverButton || isOverLink) ? 'pointer' : 'default';
         return isOverButton || isOverLink;
-    }
-
-    destroy() {
-        cancelAnimationFrame(this.animationFrame);
     }
 }

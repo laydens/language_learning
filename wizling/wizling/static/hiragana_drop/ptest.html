@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Particle System Test</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .stats {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        button {
+            padding: 8px 16px;
+            margin-right: 10px;
+        }
+
+        canvas {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="controls">
+        <button onclick="triggerEffect('success')">Success Effect</button>
+        <button onclick="triggerEffect('failure')">Failure Effect</button>
+        <button onclick="clearParticles()">Clear</button>
+    </div>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <div class="stats" id="stats"></div>
+
+    <script type="module">
+        import ParticleSystem from './js/ParticleSystem.js';
+
+        // Setup
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const colors = {
+            background: '#F3F7F9',
+            primary: '#4A90E2',
+            secondary: '#E8F4FF',
+            accent: '#FF6B6B',
+            text: '#2C3E50',
+            success: '#2ECC71',
+            overlay: 'rgba(44, 62, 80, 0.85)'
+        };
+
+        const particleSystem = new ParticleSystem(ctx, colors);
+
+        // Animation loop
+        function animate() {
+            ctx.fillStyle = colors.background;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            particleSystem.update();
+
+            // Update stats
+            document.getElementById('stats').textContent =
+                `Particles: ${particleSystem.particles.length}`;
+
+            requestAnimationFrame(animate);
+        }
+
+        // Export functions to global scope for button clicks
+        window.triggerEffect = (type) => {
+            particleSystem.createEffect(
+                canvas.width / 2,
+                canvas.height / 2,
+                type
+            );
+        };
+
+        window.clearParticles = () => {
+            particleSystem.reset();
+        };
+
+        // Allow clicking on canvas to trigger effects
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            particleSystem.createEffect(x, y, Math.random() > 0.5 ? 'success' : 'failure');
+        });
+
+        // Start animation
+        animate();
+    </script>
+</body>
+
+</html>
