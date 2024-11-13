@@ -36,6 +36,21 @@ export const CHARACTER_GROUPS = {
     }
 };
 
+export const SCRIPT_OPTIONS = {
+    hiragana: {
+        title: 'Hiragana Practice',
+        allowGroups: true
+    },
+    katakana: {
+        title: 'Katakana Practice',
+        allowGroups: true
+    },
+    mixed: {
+        title: 'Mixed Practice',
+        allowGroups: false  // Mixed mode doesn't allow group selection
+    }
+};
+
 const generateMixedDictionary = (groups = []) => {
     const mixed = {};
 
@@ -108,7 +123,8 @@ export const GameDataProvider = {
         return {
             error: false,
             data: {
-                title: `${selection.script.charAt(0).toUpperCase() + selection.script.slice(1)} Practice`,
+                title: SCRIPT_OPTIONS[selection.script]?.title ||
+                    `${selection.script.charAt(0).toUpperCase() + selection.script.slice(1)} Practice`,
                 dictionary
             }
         };

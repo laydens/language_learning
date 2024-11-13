@@ -3,6 +3,7 @@ const Theme = {
     colors: {
         background: {
             primary: '#F0F4F5',    // White Mist - Main background (surface-100)
+            secondary: '#FDF5EF',     // Warm Tint - Tinted backgrounds (secondary-50)
             gradient: {
                 start: '#F0F4F5',  // White Mist - Gradient start (surface-100)
                 middle: '#D0DDE2', // Fjord Mist - Gradient middle (primary-100)
@@ -18,21 +19,24 @@ const Theme = {
             dark: '#324D5C',    // Rich Fjord - Primary elements (primary-700)
             medium: '#527887',  // Medium Fjord - Secondary elements (primary-500)
             light: '#7397A5',   // Soft Fjord - Supporting elements (primary-300)
-            pale: '#D0DDE2'     // Fjord Mist - Subtle backgrounds (primary-100)
+            pale: '#D0DDE2',     // Fjord Mist - Subtle backgrounds (primary-100)
+            tint: '#F0F4F5'     // White Mist - Tinted backgrounds (surface-100)
         },
         secondary: {
             main: '#8B3A15',    // Deep Maple - Critical actions (secondary-900)
             dark: '#C55A21',    // Rich Maple - Primary actions (secondary-700)
-            medium: '#E36922',  // Maple - Interactive elements (secondary-500)
+            medium: '#F26419',  // Maple - Interactive elements (secondary-500)
             light: '#EDA06D',   // Soft Maple - Success states (secondary-300)
-            pale: '#FBEADE'     // Maple Mist - Subtle accents (secondary-100)
+            pale: '#FBEADE',    // Maple Mist - Subtle accents (secondary-100)
+            tint: '#FDF5EF'     // Warm Tint - Tinted backgrounds (secondary-50)
         },
         surface: {
             dark: '#1A1C1D',    // Ink - Darkest text (surface-900)
             medium: '#3D4144',  // Dark Gray - Secondary text (surface-700)
             light: '#666C70',   // Medium Gray - Supporting text (surface-500)
             pale: '#CFD3D6',    // Pale Gray - Borders (surface-300)
-            white: '#F0F4F5'    // White Mist - Main background (surface-100)
+            white: '#F0F4F5',    // White Mist - Main background (surface-100)
+            truewhite: '#FFFFFF' // White - Pure white
         },
         text: {
             primary: '#1A1C1D',   // Ink - Main text (surface-900)
@@ -41,8 +45,8 @@ const Theme = {
         },
         success: {
             primary: '#EDA06D',    // Soft Maple - Success primary (secondary-300)
-            secondary: '#E36922',  // Maple - Success secondary (secondary-500)
-            glow: '#8B3A15'       // Deep Maple - Success emphasis (secondary-900)
+            secondary: '#FBEADE',  // Maple Mist - Success emphasis (secondary-100)
+            glow: '#FDF5EF'       //  Warm Tint - Tinted backgrounds (secondary-50)
         },
         mistake: {
             primary: '#C55A21',    // Rich Maple - Mistake primary (secondary-700)
@@ -51,9 +55,9 @@ const Theme = {
         },
         progress: {
             active: {
-                outer: 'rgba(139, 58, 21, 0.2)',  // Deep Maple with transparency (secondary-900)
-                inner: '#8B3A15',                 // Deep Maple - Progress fill (secondary-900)
-                glow: '#C55A21'                   // Rich Maple - Progress emphasis (secondary-700)
+                outer: 'rgba(242, 100, 25, 0.5)',  // Deep Maple with transparency (secondary-900)
+                inner: '#F26419',  // Maple - Interactive elements (secondary-500)
+                glow: '#D0DDE2'                   // Rich Maple - Progress emphasis (secondary-700)
             },
             inactive: {
                 outer: 'rgba(207, 211, 214, 0.2)', // Pale Gray with transparency (surface-300)
@@ -63,9 +67,9 @@ const Theme = {
     },
     fonts: {
         japanese: {
-            primary: "'Kosugi Maru', sans-serif",
+            primary: "'Noto Sans JP', sans-serif",
             alternate: "'M PLUS Rounded 1c', sans-serif",
-            classic: "'Noto Sans JP', sans-serif"
+            classic: "'Kosugi Maru', sans-serif"
         },
         system: {
             primary: "'Nunito', -apple-system, sans-serif",

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System Style Guide - Updated Colors</title>
+    <link rel="stylesheet" href="./css/base.css">
+    <style>
+        .button {
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .button-primary {
+            background: linear-gradient(135deg, var(--secondary-500), var(--secondary-700));
+            border: none;
+            box-shadow: 0 2px 8px rgba(242, 100, 25, 0.2);
+        }
+
+        .button-secondary {
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+            border: none;
+            box-shadow: 0 2px 8px rgba(82, 120, 135, 0.2);
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            background: var(--surface-50);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            padding: var(--space-xl);
+        }
+
+        .cta-card {
+            border: none;
+            background: linear-gradient(165deg, var(--surface-50) 0%, var(--primary-50) 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            padding: var(--space-xl);
+            position: relative;
+            border-top: 4px solid var(--primary-500);
+        }
+
+        .color-swatch {
+            height: 120px;
+            border-radius: 12px;
+            padding: var(--space-sm);
+            color: white;
+            margin-bottom: var(--space-xs);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .color-info {
+            font-family: var(--font-mono);
+            font-size: var(--font-size-sm);
+            margin-top: auto;
+            /* Pushes the hex code to bottom */
+        }
+
+        /* Color swatches */
+        .primary-900 {
+            background: var(--primary-900);
+        }
+
+        .primary-700 {
+            background: var(--primary-700);
+        }
+
+        .primary-500 {
+            background: var(--primary-500);
+        }
+
+        .primary-300 {
+            background: var(--primary-300);
+        }
+
+        .primary-100 {
+            background: var(--primary-100);
+            color: var(--surface-900);
+        }
+
+        .primary-50 {
+            background: var(--primary-50);
+            color: var(--surface-900);
+        }
+
+        .secondary-900 {
+            background: var(--secondary-900);
+        }
+
+        .secondary-700 {
+            background: var(--secondary-700);
+        }
+
+        .secondary-500 {
+            background: var(--secondary-500);
+        }
+
+        .secondary-300 {
+            background: var(--secondary-300);
+            color: var(--surface-900);
+        }
+
+        .secondary-100 {
+            background: var(--secondary-100);
+            color: var(--surface-900);
+        }
+
+        .secondary-50 {
+            background: var(--secondary-50);
+            color: var(--surface-900);
+        }
+
+        table {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            background-color: var(--surface-50);
+            border: 1px solid var(--surface-300);
+        }
+
+        th {
+            background: linear-gradient(165deg, var(--surface-50) 0%, var(--primary-50) 100%);
+            color: var(--surface-700);
+            border: 1px solid var(--surface-300);
+            padding: var(--space-md);
+            font-weight: 600;
+        }
+
+        td {
+            border: 1px solid var(--surface-300);
+            padding: var(--space-md);
+            background-color: var(--surface-50);
+        }
+
+        .nav {
+            background: var(--surface-50);
+            border-bottom: 1px solid var(--surface-300);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="#" class="brand">
+                <h1>Style Guide</h1>
+            </a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="colors" class="content-box">
+            <h2>Color System</h2>
+
+            <h3>Primary Colors - Fjord Series</h3>
+            <div class="content-grid mb-lg">
+                <div class="card">
+                    <div class="color-swatch primary-900">
+                        <h4>Primary 900</h4>
+                        <span class="color-info">#162429</span>
+                    </div>
+                    <p>Deep Fjord - Main brand color, headers</p>
+                </div>
+                <div class="card">
+                    <div class="color-swatch primary-700">
+                        <h4>Primary 700</h4>
+                        <span class="color-info">#324D5C</span>
+                    </div>
+                    <p>Rich Fjord - Primary interactive elements</p>
+                </div>
+                <div class="card">
+                    <div class="color-swatch primary-500">
+                        <h4>Primary 500</h4>
+                        <span class="color-info">#527887</span>
+                    </div>
+                    <p>Medium Fjord - Secondary actions</p>
+                </div>
+                <div class="card">
+                    <div class="color-swatch primary-300">
+                        <h4>Primary 300</h4>
+                        <span class="color-info">#7397A5</span>
+                    </div>
+                    <p>Soft Fjord - Supporting elements</p>
+                </div>
+                <div class="card">
+                    <div class="color-swatch primary-100">
+                        <h4>Primary 100</h4>
+                        <span class="color-info">#D0DDE2</span>
+                    </div>
+                    <p>Fjord Mist - Subtle backgrounds</p>
+                </div>
+                <div class="card">
+                    <div class="color-swatch primary-50">
+                        <h4>Primary 50</h4>
+                        <span class="color-info">#EBF1F4</span>
+                    </div>
+                    <p>Fjord Whisper - Very subtle highlights</p>
+                </div>
+            </div>
+
+            <h3>Secondary Colors - Maple Series</h3>
+            <div class="content-grid mb-lg">
+                <div class="card">
+                    <div class="color-swatch secondary-900">
+                        <h4>Secondary 900</h4>
+                        <span class="color-info">#8B3A15</span>
+                    </div>
+                    <p>Deep Maple - Critical actions</p>
+                </div>
+                <div class="card">
+                    <div class="color-swatch secondary-700">
+                        <h4>Secondary 700</h4>
+                        <span class="color-info">#C55A21</span>
+                    </div>
+                    <p>Rich Maple - Primary actions</p>
+                </div>
+                <div class="card">
+                    <div class="color-swatch secondary-500">
+                        <h4>Secondary 500</h4>
+                        <span class="color-info">#F26419</span>
+                    </div>
+                    <p>Maple - Interactive elements</p>
+                </div>
+                <div class="card">
+                    <div class="color-swatch secondary-300">
+                        <h4>Secondary 300</h4>
+                        <span class="color-info">#EDA06D</span>
+                    </div>
+                    <p>Soft Maple - Success states</p>
+                </div>
+                <div class="card">
+                    <div class="color-swatch secondary-100">
+                        <h4>Secondary 100</h4>
+                        <span class="color-info">#FBEADE</span>
+                    </div>
+                    <p>Maple Mist - Subtle accents</p>
+                </div>
+                <div class="card">
+                    <div class="color-swatch secondary-50">
+                        <h4>Secondary 50</h4>
+                        <span class="color-info">#FDF5EF</span>
+                    </div>
+                    <p>Maple Whisper - Very subtle highlights</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Components section showing usage -->
+        <section id="components" class="content-box">
+            <h2>Components</h2>
+
+            <h3>Buttons</h3>
+            <div class="card mb-lg">
+                <button class="button button-primary mb-md">Primary Button</button>
+                <button class="button button-secondary">Secondary Button</button>
+            </div>
+
+            <h3>Call to Action Cards</h3>
+            <div class="cta-grid">
+                <div class="cta-card">
+                    <h2>Feature One</h2>
+                    <p>Description of the first major feature or benefit.</p>
+                    <button class="button button-primary">Get Started</button>
+                </div>
+                <div class="cta-card">
+                    <h2>Feature Two</h2>
+                    <p>Description of the second major feature or benefit.</p>
+                    <button class="button button-primary">Learn More</button>
+                </div>
+            </div>
+
+            <h3>Tables</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Header 1</th>
+                        <th>Header 2</th>
+                        <th>Header 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                        <td>Data 3</td>
+                    </tr>
+                    <tr>
+                        <td>Data 4</td>
+                        <td>Data 5</td>
+                        <td>Data 6</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+
+</html>

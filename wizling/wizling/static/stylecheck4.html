@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System Style Guide</title>
+    <link rel="stylesheet" href="./css/base.css">
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="#" class="brand">
+                <h1>Style Guide</h1>
+            </a>
+            <div class="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="#colors">Colors</a></li>
+                    <li><a href="#typography">Typography</a></li>
+                    <li><a href="#components">Components</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="colors" class="content-box">
+            <h2>Color System</h2>
+
+            <h3>Primary Colors - Fjord Series</h3>
+            <div class="content-grid mb-lg">
+                <div class="card" style="background: var(--primary-900); color: white;">
+                    <h4>Primary 900</h4>
+                    <p>Deep Fjord</p>
+                </div>
+                <div class="card" style="background: var(--primary-700); color: white;">
+                    <h4>Primary 700</h4>
+                    <p>Rich Fjord</p>
+                </div>
+                <div class="card" style="background: var(--primary-500); color: white;">
+                    <h4>Primary 500</h4>
+                    <p>Medium Fjord</p>
+                </div>
+                <div class="card" style="background: var(--primary-300);">
+                    <h4>Primary 300</h4>
+                    <p>Soft Fjord</p>
+                </div>
+                <div class="card" style="background: var(--primary-100);">
+                    <h4>Primary 100</h4>
+                    <p>Fjord Mist</p>
+                </div>
+            </div>
+
+            <h3>Secondary Colors - Maple Series</h3>
+            <div class="content-grid mb-lg">
+                <div class="card" style="background: var(--secondary-900); color: white;">
+                    <h4>Secondary 900</h4>
+                    <p>Deep Maple</p>
+                </div>
+                <div class="card" style="background: var(--secondary-700); color: white;">
+                    <h4>Secondary 700</h4>
+                    <p>Rich Maple</p>
+                </div>
+                <div class="card" style="background: var(--secondary-500); color: white;">
+                    <h4>Secondary 500</h4>
+                    <p>Maple</p>
+                </div>
+                <div class="card" style="background: var(--secondary-300);">
+                    <h4>Secondary 300</h4>
+                    <p>Soft Maple</p>
+                </div>
+                <div class="card" style="background: var(--secondary-100);">
+                    <h4>Secondary 100</h4>
+                    <p>Maple Mist</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="typography" class="content-box">
+            <h2>Typography</h2>
+            <div class="card">
+                <h1>Heading 1</h1>
+                <h2>Heading 2</h2>
+                <h3>Heading 3</h3>
+                <h4>Heading 4</h4>
+                <h5>Heading 5</h5>
+                <h6>Heading 6</h6>
+                <p>This is a paragraph with the base font size. The quick brown fox jumps over the lazy dog.</p>
+                <p class="text-secondary">This is secondary text.</p>
+                <p class="text-tertiary">This is tertiary text.</p>
+            </div>
+        </section>
+
+        <section id="components" class="content-box">
+            <h2>Components</h2>
+
+            <h3>Buttons</h3>
+            <div class="card mb-lg">
+                <button class="button button-primary mb-md">Primary Button</button>
+                <button class="button button-secondary">Secondary Button</button>
+            </div>
+
+            <h3>Cards</h3>
+            <div class="content-grid mb-lg">
+                <div class="card">
+                    <h3>Card Title</h3>
+                    <p>This is a sample card with some content.</p>
+                    <button class="button button-primary">Learn More</button>
+                </div>
+                <div class="card">
+                    <h3>Another Card</h3>
+                    <p>Cards can contain various types of content.</p>
+                    <button class="button button-secondary">Explore</button>
+                </div>
+            </div>
+
+            <h3>CTA Section</h3>
+            <div class="cta-grid">
+                <div class="cta-card">
+                    <h2>Feature One</h2>
+                    <p>Description of the first major feature or benefit.</p>
+                    <button class="button button-primary">Get Started</button>
+                </div>
+                <div class="cta-card">
+                    <h2>Feature Two</h2>
+                    <p>Description of the second major feature or benefit.</p>
+                    <button class="button button-primary">Learn More</button>
+                </div>
+            </div>
+
+            <h3>Tables</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Header 1</th>
+                        <th>Header 2</th>
+                        <th>Header 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                        <td>Data 3</td>
+                    </tr>
+                    <tr>
+                        <td>Data 4</td>
+                        <td>Data 5</td>
+                        <td>Data 6</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer class="nav">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <h3>Style Guide</h3>
+                <p class="text-secondary">A comprehensive guide to our design system.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="#colors">Colors</a></li>
+                    <li><a href="#typography">Typography</a></li>
+                    <li><a href="#components">Components</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

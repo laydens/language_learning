@@ -14,6 +14,8 @@
     /* Soft Fjord - Supporting elements */
     --primary-100: #D0DDE2;
     /* Fjord Mist - Subtle backgrounds */
+    --primary-50: #EBF1F4;
+    /* Fjord Whisper - Very subtle highlights */
 
     /* Secondary Colors - Maple Series */
     --secondary-900: #8B3A15;
@@ -26,6 +28,8 @@
     /* Soft Maple - Success states */
     --secondary-100: #FBEADE;
     /* Maple Mist - Subtle accents */
+    --secondary-50: #FDF5EF;
+    /* Maple Whisper - Very subtle highlights */
 
     /* Surface Colors - Neutral Series */
     --surface-900: #1A1C1D;
@@ -40,7 +44,6 @@
     /* White Mist - Main background */
     --surface-50: #FFFFFF;
     /* Pure White - Card backgrounds */
-
 
     /* Spacing System */
     --space-xs: 0.25rem;
@@ -198,348 +201,6 @@ p {
     padding: 0 var(--space-md);
 }
 
-/* .section {
-   padding: var(--space-2xl) 0; 
-} */
-
-/*------------------------------------*\
-  #COMPONENTS
-\*------------------------------------*/
-
-/* Navigation */
-.nav {
-    background: var(--bg-element);
-    border-bottom: 1px solid var(--border-default);
-    padding: var(--space-md) 0;
-}
-
-.nav-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: var(--space-2xl);
-}
-
-.nav-menu {
-    display: flex;
-    align-items: center;
-    gap: var(--space-lg);
-}
-
-.nav-links {
-    display: flex;
-    gap: var(--space-md);
-    list-style: none;
-}
-
-.nav-links a {
-    color: var(--text-primary);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s ease;
-}
-
-.nav-links a:hover {
-    color: var(--primary-500);
-}
-
-/* Brand */
-.brand {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: var(--primary-900);
-}
-
-/* Buttons */
-.button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-sm) var(--space-lg);
-    border-radius: var(--border-radius-md);
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    border: none;
-    cursor: pointer;
-}
-
-.button-primary {
-    background: var(--action-primary);
-    color: var(--text-inverse);
-}
-
-.button-primary:hover {
-    background: var(--action-primary-hover);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-}
-
-.button-secondary {
-    background: var(--action-secondary);
-    color: var(--text-inverse);
-}
-
-.button-secondary:hover {
-    background: var(--action-secondary-hover);
-}
-
-/* Cards */
-.card {
-    background: var(--bg-element);
-    border: 1px solid var(--border-default);
-    border-radius: var(--border-radius-md);
-    padding: var(--space-lg);
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    margin: var(--space-md);
-}
-
-.card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.card h3 {
-    margin: 0 0 var(--space-sm);
-    font-weight: 600;
-}
-
-/* Content Grid */
-.content-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-lg);
-}
-
-
-
-/* Hero Section Adjustments */
-.hero {
-    padding: var(--space-lg) var(--space-md) var(--space-sm);
-    /* Decreased bottom padding */
-    background-color: var(--bg-body);
-    text-align: left;
-    display: flex;
-    align-items: center;
-    gap: var(--space-lg);
-    flex-wrap: wrap;
-    border-bottom: 1px solid var(--surface-300);
-    overflow: hidden;
-}
-
-.hero p {
-    margin-bottom: var(--space-sm);
-    /* Reduced margin below the paragraph */
-}
-
-.hero::before {
-    content: "あ カ た";
-    position: absolute;
-    top: 10%;
-    left: -10%;
-    font-size: 10rem;
-    color: var(--primary-100);
-    opacity: 0.2;
-    z-index: -1;
-    transform: rotate(-15deg);
-}
-
-.hero::after {
-    content: "ひ ら が な カ タ カ ナ";
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    font-size: 8rem;
-    color: var(--primary-300);
-    opacity: 0.1;
-    z-index: -1;
-    transform: rotate(10deg);
-}
-
-/* CTA Grid Section with Background Watermarks */
-/* CTA Grid Adjustments */
-.cta-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-lg);
-    max-width: 1000px;
-    margin: var(--space-lg) auto;
-    /* Reduced vertical margin */
-    padding-top: var(--space-sm);
-    /* Reduce padding at the top to avoid excess spacing */
-}
-
-.cta-grid::before {
-    content: "か ん じ";
-    position: absolute;
-    top: 50%;
-    left: 10%;
-    font-size: 12rem;
-    color: var(--primary-300);
-    opacity: 0.1;
-    z-index: -1;
-    transform: rotate(-10deg);
-    pointer-events: none;
-    /* Ensures the text doesn't interfere with user interaction */
-}
-
-.hero-svg {
-    flex-shrink: 0;
-    max-width: 80px;
-    /* Reduced size for the SVG */
-    height: auto;
-}
-
-.hero-text {
-    flex: 1;
-}
-
-.hero h1 {
-    font-size: var(--font-size-2xl);
-    color: var(--text-primary);
-    font-weight: 600;
-}
-
-.hero span {
-    display: block;
-    font-size: var(--font-size-base);
-    color: var(--primary-700);
-    margin-bottom: var(--space-xs);
-}
-
-.hero p {
-    margin-bottom: var(--space-md);
-    color: var(--text-secondary);
-    font-size: var(--font-size-base);
-    max-width: 450px;
-    /* Narrower text block for readability */
-}
-
-.hero .button {
-    font-size: var(--font-size-base);
-    padding: var(--space-sm) var(--space-lg);
-    margin-top: var(--space-sm);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    /* Add some hover effect */
-}
-
-.hero .button:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-/* CTA Grid Section */
-.cta-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    /* More adaptive layout */
-    gap: var(--space-lg);
-    max-width: 1000px;
-    margin: var(--space-2xl) auto;
-    /* Add vertical spacing to balance the layout */
-}
-
-.cta-card {
-    background: var(--bg-element);
-    border: 2px solid var(--primary-300);
-    border-radius: var(--border-radius-lg);
-    padding: var(--space-lg);
-    text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: var(--shadow-sm);
-    /* Subtle initial shadow */
-}
-
-.cta-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-}
-
-.cta-card h2 {
-    color: var(--primary-900);
-    font-size: var(--font-size-xl);
-    margin-bottom: var(--space-md);
-}
-
-.cta-card p {
-    color: var(--text-secondary);
-    margin-bottom: var(--space-lg);
-    font-size: var(--font-size-sm);
-}
-
-/* CTA Button Consistency */
-.cta-card .button {
-    padding: var(--space-sm) var(--space-md);
-    font-size: var(--font-size-base);
-    background: var(--action-primary);
-    color: var(--text-inverse);
-}
-
-.cta-card .button:hover {
-    background: var(--action-primary-hover);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-}
-
-/* Responsive Updates */
-@media (max-width: 768px) {
-    .hero {
-        padding: var(--space-md);
-        text-align: center;
-    }
-
-    .hero h1 {
-        font-size: var(--font-size-lg);
-    }
-
-    .hero-svg {
-        max-width: 60px;
-    }
-
-    .cta-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-md);
-    }
-}
-
-/* Content Box */
-.content-box {
-    padding: var(--space-lg);
-    border-radius: var(--border-radius-md);
-    margin-bottom: var(--space-lg);
-    margin-top: var(--space-lg);
-}
-
-.content-box-light {
-    background: var(--primary-100);
-}
-
-/* Footer */
-.footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: var(--space-xl);
-}
-
-.footer-brand {
-    max-width: 320px;
-}
-
-.footer-links ul {
-    list-style: none;
-}
-
-.footer-links a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.footer-links a:hover {
-    color: var(--primary-500);
-}
 
 /*------------------------------------*\
   #UTILITIES
@@ -577,47 +238,22 @@ p {
     margin-bottom: var(--space-lg);
 }
 
-/* table styles to control table appearance */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-    background-color: var(--surface-100);
-    margin-top: var(--space-md);
-}
 
-th,
-td {
-    border: 1px solid var(--primary-500);
-    padding: var(--space-sm);
-}
-
-th {
-    background-color: var(--primary-100);
-    color: var(--text-primary);
-}
-
-td {
-    color: var(--text-secondary);
-}
-
-
-/*------------------------------------*\
-  #RESPONSIVE
-\*------------------------------------*/
-
-@media (max-width: 768px) {
-    .nav-menu {
-        display: none;
+@media (max-width: 480px) {
+    .container {
+        padding: 0 var(--space-sm);
     }
 
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-lg);
+    h1 {
+        font-size: var(--font-size-2xl);
     }
 
-    .cta-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-md);
+    h2 {
+        font-size: var(--font-size-xl);
+    }
+
+    .button {
+        width: 100%;
+        margin-bottom: var(--space-sm);
     }
 }

@@ -6,8 +6,8 @@ import GameUI from './GameUI.js';
 import GameOptions from './GameOptions.js';
 import ParticleSystem from './ParticleSystem.js';
 import Theme from './Theme.js';
-import { CHARACTER_GROUPS, GameDataProvider } from './GameDataProvider.js';
-import { GroupSelector } from './GroupSelector.js';
+import { GameDataProvider } from './GameDataProvider.js';
+//import { GroupSelector } from './GroupSelector.js';
 
 
 export default class Game {
@@ -25,15 +25,7 @@ export default class Game {
         console.log('Initializing game with query string:', queryString);
 
         // Visual properties
-        this.colors = {
-            background: '#F3F7F9',
-            primary: '#4A90E2',
-            secondary: '#E8F4FF',
-            accent: '#FF6B6B',
-            text: '#2C3E50',
-            success: '#2ECC71',
-            overlay: 'rgba(44, 62, 80, 0.85)'
-        };
+        this.colors = Theme.colors;
 
         this.targetStyle = {
             color: '#FF6B6B',
@@ -42,10 +34,7 @@ export default class Game {
             nonTargetColor: '#2C3E50'
         };
 
-        this.fonts = {
-            primary: "'Nunito', sans-serif",
-            display: "'Poppins', sans-serif"
-        };
+        this.fonts = Theme.fonts;
 
         this.gameUI = new GameUI(this.ctx);
         this.gameOptions = new GameOptions(this.ctx);
@@ -82,7 +71,7 @@ export default class Game {
         this.gameLoop = null;
         this.densityInterval = null;
         this.gameSpeed = 1000;
-        this.characterFallSpeed = 1.2;
+        this.characterFallSpeed = 1.5;
         this.currentDensity = 2;
         this.score = 0;
         this.highScore = localStorage.getItem('highScore') || 0;
@@ -101,8 +90,8 @@ export default class Game {
         // Initialize GameOver screen
         this.gameOverScreen = new GameOverScreen({
             colors: {
-                primary: this.colors.primary,
-                text: this.colors.text,
+                primary: this.colors.background.primary,
+                text: this.colors.text.primary,
             },
             texts: {
                 gameOver: 'Game Over!',
@@ -115,7 +104,7 @@ export default class Game {
         // Initialize Start screen with access to queryString
         this.startScreen = new StartScreen({
             colors: this.colors,
-            fonts: this.fonts,
+            fonts: Theme.fonts,
             mode: this.queryString,
             onStart: (selection) => {
                 const gameData = GameDataProvider.getData(this.queryString, selection);
@@ -229,7 +218,9 @@ export default class Game {
     // In Game class
     handleMouseUp() {
         console.log("Game: handleMouseUp called");
-        this.gameOptions.handleMouseUp();
+        if (this.gameStarted) {  // Only handle mouseup during actual gameplay
+            this.gameOptions.handleMouseUp();
+        }
     }
 
     bindEventListeners() {
@@ -271,11 +262,11 @@ export default class Game {
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            background: ${this.colors.accent};
+            background: ${Theme.colors.background.primary};
             color: white;
             padding: 10px 20px;
             border-radius: 4px;
-            font-family: ${this.fonts.primary};
+            font-family: ${Theme.fonts.system.display};
             z-index: 1000;
             opacity: 0.9;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
@@ -379,11 +370,11 @@ export default class Game {
     }
 
     showLoadingScreen() {
-        this.ctx.fillStyle = this.colors.background;
+        this.ctx.fillStyle = this.colors.background.primary;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.ctx.font = `600 24px ${this.fonts.primary}`;
-        this.ctx.fillStyle = this.colors.text;
+        this.ctx.font = `600 24px ${Theme.fonts.system.display}`;
+        this.ctx.fillStyle = this.colors.text.primary;
         this.ctx.textAlign = 'center';
         this.ctx.fillText('Loading...', this.canvas.width / 2, this.canvas.height / 2);
     }
@@ -394,8 +385,8 @@ export default class Game {
 
     setupCanvas() {
         const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
-        gradient.addColorStop(0, this.colors.background);
-        gradient.addColorStop(1, '#E8F4FF');
+        gradient.addColorStop(0, this.colors.background.primary);
+        gradient.addColorStop(1, this.colors.background.secondary);
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -458,18 +449,18 @@ export default class Game {
         this.gameUI.drawUI(gameState);
     }
 
-    drawHeart(x, y, size, color) {
-        this.ctx.save();
-        this.ctx.beginPath();
-        this.ctx.moveTo(x, y + size / 4);
-        this.ctx.bezierCurveTo(x, y, x - size / 2, y, x - size / 2, y + size / 4);
-        this.ctx.bezierCurveTo(x - size / 2, y + size / 2, x, y + size * 3 / 4, x, y + size);
-        this.ctx.bezierCurveTo(x, y + size * 3 / 4, x + size / 2, y + size / 2, x + size / 2, y + size / 4);
-        this.ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + size / 4);
-        this.ctx.fillStyle = color;
-        this.ctx.fill();
-        this.ctx.restore();
-    }
+    // drawHeart(x, y, size, color) {
+    //     this.ctx.save();
+    //     this.ctx.beginPath();
+    //     this.ctx.moveTo(x, y + size / 4);
+    //     this.ctx.bezierCurveTo(x, y, x - size / 2, y, x - size / 2, y + size / 4);
+    //     this.ctx.bezierCurveTo(x - size / 2, y + size / 2, x, y + size * 3 / 4, x, y + size);
+    //     this.ctx.bezierCurveTo(x, y + size * 3 / 4, x + size / 2, y + size / 2, x + size / 2, y + size / 4);
+    //     this.ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + size / 4);
+    //     this.ctx.fillStyle = color;
+    //     this.ctx.fill();
+    //     this.ctx.restore();
+    // }
 
     gameOver() {
         this.isGameOver = true;
@@ -539,33 +530,33 @@ export default class Game {
 
 
     // In Game class, add version display to drawUI method
-    drawUI() {
-        // Version in top right
-        this.ctx.font = '16px Arial';
-        this.ctx.fillStyle = '#666666';
-        this.ctx.textAlign = 'right';
-        this.ctx.fillText(`v${this.version}`, this.canvas.width - 20, 30);
+    // drawUI() {
+    //     // Version in top right
+    //     this.ctx.font = this.fonts.sizes.ui.small + ' ' + this.fonts.system.display;
+    //     this.ctx.fillStyle = Theme.colors.text.secondary;
+    //     this.ctx.textAlign = 'right';
+    //     this.ctx.fillText(`v${this.version}`, this.canvas.width - 20, 30);
 
-        // Score and streak on left side
-        this.ctx.textAlign = 'left';
-        this.ctx.fillStyle = this.colors.text;
+    //     // Score and streak on left side
+    //     this.ctx.textAlign = 'left';
+    //     this.ctx.fillStyle = Theme.colors.text.primary;
 
-        // Score
-        this.ctx.font = `600 24px ${this.fonts.primary}`;
-        this.ctx.fillText(`Score: ${this.score}`, 20, 40);
+    //     // Score
+    //     this.ctx.font = `600 24px ${Theme.fonts.system.display}`;
+    //     this.ctx.fillText(`Score: ${this.score}`, 20, 40);
 
-        // Current/Best Streak below score
-        this.ctx.font = `16px ${this.fonts.primary}`;
-        this.ctx.fillText(`Streak: ${this.currentStreak} (Best: ${this.bestStreak})`, 20, 65);
+    //     // Current/Best Streak below score
+    //     this.ctx.font = `16px ${Theme.fonts.system.display}`;
+    //     this.ctx.fillText(`Streak: ${this.currentStreak} (Best: ${this.bestStreak})`, 20, 65);
 
-        // Hearts/Lives in top right
-        const mistakeX = this.canvas.width - 150;
-        const hearts = this.maxMistakes - this.mistakesMade;
-        for (let i = 0; i < this.maxMistakes; i++) {
-            const color = i < hearts ? this.colors.accent : '#D8D8D8';
-            this.drawHeart(mistakeX + (i * 30), 30, 12, color);
-        }
-    }
+    //     // Hearts/Lives in top right
+    //     const mistakeX = this.canvas.width - 150;
+    //     const hearts = this.maxMistakes - this.mistakesMade;
+    //     for (let i = 0; i < this.maxMistakes; i++) {
+    //         const color = i < hearts ? Theme.colors.secondary.medium : Theme.colors.secondary.pale;
+    //         this.drawHeart(mistakeX + (i * 30), 30, 12, color);
+    //     }
+    // }
 
 
 

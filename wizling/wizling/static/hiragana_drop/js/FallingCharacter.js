@@ -1,3 +1,4 @@
+import Theme from './Theme.js';
 // js/Character.js
 export default class FallingCharacter {
     constructor(character, x, speed, ctx) {
@@ -11,8 +12,8 @@ export default class FallingCharacter {
     }
 
     draw(isActive = false) {
-        this.ctx.font = `${0.06 * this.ctx.canvas.width}px Arial`;
-        this.ctx.fillStyle = isActive ? '#ff0000' : '#000';
+        this.ctx.font = `${0.06 * this.ctx.canvas.width}px ${Theme.fonts.japanese.primary}`;
+        this.ctx.fillStyle = isActive ? Theme.colors.secondary.medium : Theme.colors.primary.medium;
         this.ctx.fillText(this.character, this.x, this.y);
     }
 

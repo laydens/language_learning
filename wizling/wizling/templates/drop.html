@@ -1,0 +1,39 @@
+{% load cms_tags menu_tags sekizai_tags static i18n %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Noto+Sans+JP:wght@400;700&family=Poppins:wght@600&display=swap"
+        rel="stylesheet"> -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=M+PLUS+Rounded+1c&family=Noto+Sans+JP&family=Nunito&family=Poppins&display=swap"
+        rel="stylesheet">
+
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+    <link href="{% static 'hiragana_drop/css/style.css' %}" rel="stylesheet">
+    <title>{% block title %}{% page_attribute "page_title" %} - Wizling{% endblock title %}</title>
+</head>
+
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <input type="text" id="inputField" placeholder="Type here (advanced mode)" hidden>
+
+    <!-- Use type="module" to use ES6 modules -->
+    <script type="module">
+        import Game from "{% static 'hiragana_drop/js/Game.js' %}";
+        import KanaConverter from "{% static 'hiragana_drop/js/kana_converter.js' %}";
+        const hashValue = window.location.hash.slice(1);
+        console.log('Starting game with hash value:', hashValue);
+
+        // Get the canvas and context
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        // Initialize and start the game
+        const game = new Game(canvas, ctx, hashValue);
+    </script>
+</body>
+
+</html>

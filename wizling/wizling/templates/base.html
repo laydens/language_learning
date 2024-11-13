@@ -14,13 +14,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     {% render_block "css" %}
     <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    <link href="{% static 'css/components.css' %}" rel="stylesheet">
     <link href="{% static 'css/logo.css' %}" rel="stylesheet">
     {% block extra_css %}{% endblock %}
 </head>
 
 <body>
     {% cms_toolbar %}
-
     <nav class="nav">
         <div class="container">
             <div class="nav-content">

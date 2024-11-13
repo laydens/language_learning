@@ -47,7 +47,7 @@ export default class GameOptions {
         const y = canvas.height - optionBoxHeight * 1.3;
 
         // Clear the option area
-        this.ctx.clearRect(0, canvas.height - optionBoxHeight * 2, canvas.width, optionBoxHeight * 2);
+        //     this.ctx.clearRect(0, canvas.height - optionBoxHeight * 2, canvas.width, optionBoxHeight * 2);
 
         this.options.forEach((option, index) => {
             const x = startX + index * (optionBoxWidth + spacing);

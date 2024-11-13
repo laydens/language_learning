@@ -233,6 +233,7 @@ SITE_ID = 1
 
 CMS_TEMPLATES = (
     ("base.html", _("Standard")),
+    ("drop.html", _("KanaDropGame")),
 )
 
 

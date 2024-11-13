@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System Style Guide - Refined</title>
+    <link rel="stylesheet" href="./css/base.css">
+    <style>
+        body {
+            background: linear-gradient(165deg, var(--surface-50) 0%, var(--primary-100) 100%);
+            min-height: 100vh;
+        }
+
+        .button {
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .button-primary {
+            background: linear-gradient(135deg, var(--secondary-500), var(--secondary-700));
+            border: none;
+            box-shadow: 0 2px 8px rgba(242, 100, 25, 0.2);
+        }
+
+        .button-secondary {
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+            border: none;
+            box-shadow: 0 2px 8px rgba(82, 120, 135, 0.2);
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            background: var(--surface-50);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            padding: var(--space-xl);
+        }
+
+        .cta-card {
+            border: none;
+            background: var(--surface-50);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            padding: var(--space-xl);
+            position: relative;
+            border-top: 4px solid var(--primary-500);
+        }
+
+        .content-grid {
+            gap: var(--space-xl);
+            padding: var(--space-lg) 0;
+        }
+
+        table {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            background-color: var(--surface-50);
+            border: 1px solid var(--surface-300);
+            /* Lighter border */
+        }
+
+        th {
+            background: linear-gradient(165deg, var(--primary-100) 0%, var(--surface-100) 100%);
+            color: var(--surface-700);
+            /* Darker text for better contrast */
+            border: 1px solid var(--surface-300);
+            /* Lighter border */
+            padding: var(--space-md);
+            font-weight: 600;
+        }
+
+        td {
+            border: 1px solid var(--surface-300);
+            /* Lighter border */
+            padding: var(--space-md);
+            background-color: var(--surface-50);
+        }
+
+        /* Enhance accessibility */
+        .button:focus,
+        .card:focus-within {
+            outline: 2px solid var(--primary-500);
+            outline-offset: 2px;
+        }
+
+        /* Add subtle animation */
+        .cta-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav {
+            background: var(--surface-50);
+            border-bottom: 1px solid var(--surface-300);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Additional container styling for better contrast against gradient */
+        .container {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            padding: var(--space-xl);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="container nav-content">
+            <a href="#" class="brand">
+                <h1>Style Guide</h1>
+            </a>
+            <div class="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="#colors">Colors</a></li>
+                    <li><a href="#typography">Typography</a></li>
+                    <li><a href="#components">Components</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="colors" class="content-box">
+            <h2>Color System</h2>
+
+            <h3>Primary Colors - Fjord Series</h3>
+            <div class="content-grid mb-lg">
+                <div class="card" style="background: var(--primary-900); color: white;">
+                    <h4>Primary 900</h4>
+                    <p>Deep Fjord</p>
+                </div>
+                <div class="card" style="background: var(--primary-700); color: white;">
+                    <h4>Primary 700</h4>
+                    <p>Rich Fjord</p>
+                </div>
+                <div class="card" style="background: var(--primary-500); color: white;">
+                    <h4>Primary 500</h4>
+                    <p>Medium Fjord</p>
+                </div>
+                <div class="card" style="background: var(--primary-300);">
+                    <h4>Primary 300</h4>
+                    <p>Soft Fjord</p>
+                </div>
+                <div class="card" style="background: var(--primary-100);">
+                    <h4>Primary 100</h4>
+                    <p>Fjord Mist</p>
+                </div>
+            </div>
+
+            <h3>Secondary Colors - Maple Series</h3>
+            <div class="content-grid mb-lg">
+                <div class="card" style="background: var(--secondary-900); color: white;">
+                    <h4>Secondary 900</h4>
+                    <p>Deep Maple</p>
+                </div>
+                <div class="card" style="background: var(--secondary-700); color: white;">
+                    <h4>Secondary 700</h4>
+                    <p>Rich Maple</p>
+                </div>
+                <div class="card" style="background: var(--secondary-500); color: white;">
+                    <h4>Secondary 500</h4>
+                    <p>Maple</p>
+                </div>
+                <div class="card" style="background: var(--secondary-300);">
+                    <h4>Secondary 300</h4>
+                    <p>Soft Maple</p>
+                </div>
+                <div class="card" style="background: var(--secondary-100);">
+                    <h4>Secondary 100</h4>
+                    <p>Maple Mist</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="typography" class="content-box">
+            <h2>Typography</h2>
+            <div class="card">
+                <h1>Heading 1</h1>
+                <h2>Heading 2</h2>
+                <h3>Heading 3</h3>
+                <h4>Heading 4</h4>
+                <h5>Heading 5</h5>
+                <h6>Heading 6</h6>
+                <p>This is a paragraph with the base font size. The quick brown fox jumps over the lazy dog.</p>
+                <p class="text-secondary">This is secondary text.</p>
+                <p class="text-tertiary">This is tertiary text.</p>
+            </div>
+        </section>
+
+        <section id="components" class="content-box">
+            <h2>Components</h2>
+
+            <h3>Buttons</h3>
+            <div class="card mb-lg">
+                <button class="button button-primary mb-md">Primary Button</button>
+                <button class="button button-secondary">Secondary Button</button>
+            </div>
+
+            <h3>Cards</h3>
+            <div class="content-grid mb-lg">
+                <div class="card">
+                    <h3>Card Title</h3>
+                    <p>This is a sample card with some content.</p>
+                    <button class="button button-primary">Learn More</button>
+                </div>
+                <div class="card">
+                    <h3>Another Card</h3>
+                    <p>Cards can contain various types of content.</p>
+                    <button class="button button-secondary">Explore</button>
+                </div>
+            </div>
+
+            <h3>CTA Section</h3>
+            <div class="cta-grid">
+                <div class="cta-card">
+                    <h2>Feature One</h2>
+                    <p>Description of the first major feature or benefit.</p>
+                    <button class="button button-primary">Get Started</button>
+                </div>
+                <div class="cta-card">
+                    <h2>Feature Two</h2>
+                    <p>Description of the second major feature or benefit.</p>
+                    <button class="button button-primary">Learn More</button>
+                </div>
+            </div>
+
+            <h3>Tables</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Header 1</th>
+                        <th>Header 2</th>
+                        <th>Header 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                        <td>Data 3</td>
+                    </tr>
+                    <tr>
+                        <td>Data 4</td>
+                        <td>Data 5</td>
+                        <td>Data 6</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer class="nav">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <h3>Style Guide</h3>
+                <p class="text-secondary">A comprehensive guide to our design system.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="#colors">Colors</a></li>
+                    <li><a href="#typography">Typography</a></li>
+                    <li><a href="#components">Components</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

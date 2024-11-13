@@ -1,10 +1,10 @@
 // gameScreens.js
 import { CHARACTER_GROUPS } from './GameDataProvider.js';
-
+import Theme from './Theme.js';
 export class GroupSelector {
     constructor(config) {
-        this.colors = config.colors;
-        this.fonts = config.fonts;
+        this.colors = Theme.colors;
+        this.fonts = Theme.fonts;
         this.onStart = config.onStart;
         this.mode = config.mode;
         this.selectedGroups = new Set();
@@ -63,7 +63,7 @@ export class GroupSelector {
 
     draw(ctx, canvas) {
         // Clear canvas
-        ctx.fillStyle = this.colors.background;
+        ctx.fillStyle = Theme.colors.background.primary;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // Draw title
@@ -76,7 +76,7 @@ export class GroupSelector {
     drawTitle(ctx, canvas) {
         ctx.save();
         // Title
-        ctx.font = `bold ${this.layout.title.fontSize}px ${this.fonts.display}`;
+        ctx.font = `bold ${this.layout.title.fontSize}px ${Theme.fonts.system.display}`;
         ctx.fillStyle = '#2C3E50';
         ctx.textAlign = 'center';
         ctx.fillText('Kana Drop', canvas.width / 2, this.layout.title.y);
@@ -95,12 +95,12 @@ export class GroupSelector {
             ctx.save();
             ctx.beginPath();
             ctx.roundRect(x, y, width, height, 8);
-            ctx.fillStyle = isSelected ? this.colors.primary : '#F8FAFC';
+            ctx.fillStyle = isSelected ? Theme.colors.primary.medium : Theme.colors.background.secondary;
             ctx.fill();
 
             // Draw text
-            ctx.font = `bold 18px ${this.fonts.primary}`;
-            ctx.fillStyle = isSelected ? '#FFFFFF' : '#64748B';
+            ctx.font = `bold 18px ${Theme.fonts.system.display}`;
+            ctx.fillStyle = isSelected ? Theme.colors.primary.tint : Theme.colors.text.secondary;
             ctx.textAlign = 'center';
             ctx.fillText(
                 script.charAt(0).toUpperCase() + script.slice(1),
@@ -126,8 +126,8 @@ export class GroupSelector {
             ctx.save();
             ctx.beginPath();
             ctx.roundRect(x, y, checkboxSize, checkboxSize, 6);
-            ctx.fillStyle = isSelected ? this.colors.primary : '#FFFFFF';
-            ctx.strokeStyle = isSelected ? this.colors.primary : '#CBD5E1';
+            ctx.fillStyle = isSelected ? Theme.colors.primary.medium : Theme.colors.surface.white;
+            ctx.strokeStyle = isSelected ? this.colors.primary.dark : Theme.colors.surface.pale;
             ctx.fill();
             ctx.stroke();
 
@@ -142,7 +142,7 @@ export class GroupSelector {
             }
 
             // Group label with kana
-            ctx.font = `500 16px ${this.fonts.primary}`;
+            ctx.font = `500 16px ${Theme.fonts.japanese.primary}`;
             ctx.fillStyle = '#334155';
             ctx.textAlign = 'left';
             ctx.fillText(`${this.groupDescriptions[key]}: ${Object.keys(chars).join(' ')}`,
@@ -186,11 +186,11 @@ export class GroupSelector {
             buttonLayout.height,
             12
         );
-        ctx.fillStyle = buttonLayout.isEnabled ? this.colors.primary : '#E2E8F0';
+        ctx.fillStyle = buttonLayout.isEnabled ? this.colors.primary.medium : Theme.colors.surface.pale;
         ctx.fill();
 
         // Button text
-        ctx.font = `bold 20px ${this.fonts.primary}`;
+        ctx.font = `bold 20px ${Theme.fonts.japanese.primary}`;
         ctx.fillStyle = buttonLayout.isEnabled ? '#FFFFFF' : '#94A3B8';
         ctx.textAlign = 'center';
         ctx.fillText(
