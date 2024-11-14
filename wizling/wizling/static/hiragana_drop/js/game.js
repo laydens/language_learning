@@ -1,7 +1,7 @@
 // game.js
 import FallingCharacter from './FallingCharacter.js';
 import GameOverScreen from './GameOverScreen.js';
-import { StartScreen } from './GameStartScreen.js';
+import { StartScreenManager } from './StartScreenManager.js';
 import GameUI from './GameUI.js';
 import GameOptions from './GameOptions.js';
 import ParticleSystem from './ParticleSystem.js';
@@ -102,7 +102,7 @@ export default class Game {
         });
 
         // Initialize Start screen with access to queryString
-        this.startScreen = new StartScreen({
+        this.startScreen = new StartScreenManager({
             colors: this.colors,
             fonts: Theme.fonts,
             mode: this.queryString,

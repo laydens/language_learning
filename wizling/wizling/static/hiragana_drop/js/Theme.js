@@ -41,7 +41,8 @@ const Theme = {
         text: {
             primary: '#1A1C1D',   // Ink - Main text (surface-900)
             secondary: '#3D4144', // Dark Gray - Secondary text (surface-700)
-            light: '#666C70'     // Medium Gray - Supporting text (surface-500)
+            light: '#666C70',    // Medium Gray - Supporting text (surface-500)
+            white: '#FFFFFF'    // White - Pure white
         },
         success: {
             primary: '#EDA06D',    // Soft Maple - Success primary (secondary-300)

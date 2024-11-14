@@ -95,12 +95,12 @@ export class GroupSelector {
             ctx.save();
             ctx.beginPath();
             ctx.roundRect(x, y, width, height, 8);
-            ctx.fillStyle = isSelected ? Theme.colors.primary.medium : Theme.colors.background.secondary;
+            ctx.fillStyle = isSelected ? Theme.colors.primary.medium : Theme.colors.primary.pale;
             ctx.fill();
 
             // Draw text
             ctx.font = `bold 18px ${Theme.fonts.system.display}`;
-            ctx.fillStyle = isSelected ? Theme.colors.primary.tint : Theme.colors.text.secondary;
+            ctx.fillStyle = isSelected ? Theme.colors.primary.tint : Theme.colors.primary.light;
             ctx.textAlign = 'center';
             ctx.fillText(
                 script.charAt(0).toUpperCase() + script.slice(1),
@@ -186,12 +186,12 @@ export class GroupSelector {
             buttonLayout.height,
             12
         );
-        ctx.fillStyle = buttonLayout.isEnabled ? this.colors.primary.medium : Theme.colors.surface.pale;
+        ctx.fillStyle = buttonLayout.isEnabled ? this.colors.secondary.medium : Theme.colors.secondary.pale;
         ctx.fill();
 
         // Button text
         ctx.font = `bold 20px ${Theme.fonts.japanese.primary}`;
-        ctx.fillStyle = buttonLayout.isEnabled ? '#FFFFFF' : '#94A3B8';
+        ctx.fillStyle = buttonLayout.isEnabled ? Theme.colors.text.white : Theme.colors.secondary.light;
         ctx.textAlign = 'center';
         ctx.fillText(
             buttonLayout.isEnabled ? 'Start Game' : 'Select Groups',
@@ -263,6 +263,12 @@ export class GroupSelector {
             }
         });
         return false;
+    }
+
+    getSelectedGroups() {
+        // Return array of just the group names without the script prefix
+        return Array.from(this.selectedGroups)
+            .map(groupKey => groupKey.split('-')[1]);
     }
 
     handleStartClick(x, y, canvas) {
