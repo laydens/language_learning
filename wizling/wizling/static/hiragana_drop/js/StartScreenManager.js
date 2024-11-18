@@ -15,7 +15,7 @@ export class StartScreenManager {
             showGroupSelection: false
         });
 
-        this.updateGameData();  // Set initial game data
+        this.updateGameData();
         this.scriptButtons = [];
 
         // Initialize managers/UI
@@ -24,18 +24,12 @@ export class StartScreenManager {
 
         // Initialize group selector if needed
         if (SCRIPT_OPTIONS[this.mode]?.allowGroups) {
-            this.groupSelector = new GroupSelector({
-                script: this.mode,
-                mode: this.mode,
-                onSelect: selection => this.onStart(selection)
-            });
+            this.initializeGroupSelector();
         }
 
-        // Start systems
         this.particleManager.start(this.mode);
+        console.log('StartScreenManager after assign, this.onStart:', this.onStart);
     }
-
-
 
     draw(ctx, canvas) {
         // Draw background first
@@ -85,94 +79,137 @@ export class StartScreenManager {
         }
     }
 
-
-
     handleClick(x, y, canvas) {
+        // Delegate to appropriate click handler based on current screen
+        if (this.showGroupSelection) {
+            return this.handleGroupSelectionScreenClick(x, y, canvas);
+        } else {
+            return this.handleMainScreenClick(x, y, canvas);
+        }
+    }
+
+    handleMainScreenClick(x, y, canvas) {
         const point = { x, y };
 
-        // Handle group selection if active
-        if (this.showGroupSelection && this.groupSelector) {
-            const handled = this.groupSelector.handleClick(x, y, canvas);
-            if (handled) return true;
-        }
+        // Check script selector buttons
+        const scriptButtonClick = this.handleScriptButtonClick(point, canvas);  // Pass canvas to the handler
+        if (scriptButtonClick) return true;
 
-        // Check script selector buttons first
-        for (const button of this.scriptButtons) {
-            if (this.isPointInRect(point, button.bounds)) {
-                if (this.mode !== button.script) {
-                    // Update mode
-                    this.mode = button.script;
-
-                    // Update game data and UI
-                    this.updateGameData();
-
-                    // Reset group selection when changing scripts
-                    this.showGroupSelection = false;
-
-                    // Reinitialize group selector if needed
-                    if (SCRIPT_OPTIONS[this.mode]?.allowGroups) {
-                        this.groupSelector = new GroupSelector({
-                            script: this.mode,
-                            mode: this.mode,
-                            onSelect: selection => this.onStart(selection)
-                        });
-                    } else {
-                        this.groupSelector = null;
-                    }
-
-                    // Update particle system
-                    this.particleManager.stop();
-                    this.particleManager.start(this.mode);
-
-                    // Force a redraw
-                    requestAnimationFrame(() => this.draw(canvas.getContext('2d'), canvas));
-                }
-                return true;
-            }
-        }
-
-        // Main button
+        // Check main button
         if (this.mainButtonBounds && this.isPointInRect(point, this.mainButtonBounds)) {
-            let groups = [];
-            if (SCRIPT_OPTIONS[this.mode]?.allowGroups && this.groupSelector) {
-                groups = this.groupSelector.getSelectedGroups();
-                if (groups.length === 0) {
-                    groups = Object.keys(CHARACTER_GROUPS[this.mode]);
-                }
-            }
-
-            this.onStart({
-                script: this.mode,
-                groups: groups
-            });
-            return true;
+            return this.handleStartGameClick();
         }
 
-        // Customize link
-        if (this.mode !== 'mixed' &&
+        // Check customize link
+        if (this.canShowCustomize() &&
             this.customizeLinkBounds &&
             this.isPointInRect(point, this.customizeLinkBounds)) {
-            this.showGroupSelection = true;
-            if (!this.groupSelector) {
-                this.groupSelector = new GroupSelector({
-                    script: this.mode,
-                    mode: this.mode,
-                    onSelect: selection => this.onStart(selection)
-                });
-            }
-            // Force a redraw to show group selection
-            requestAnimationFrame(() => this.draw(canvas.getContext('2d'), canvas));
-            return true;
+            return this.handleCustomizeClick(canvas);
         }
 
-        // Home link
+        // Check home link
         if (this.homeLinkBounds && this.isPointInRect(point, this.homeLinkBounds)) {
-            window.location.href = 'https://wizling.com';
+            window.location.href = '/';
             return true;
         }
 
         return false;
     }
+
+    handleGroupSelectionScreenClick(x, y, canvas) {
+        if (!this.groupSelector) return false;
+        const handled = this.groupSelector.handleClick(x, y, canvas);
+        // If the click was handled and we need to redraw
+        if (handled) {
+            this.requestRedraw(canvas);
+        }
+        return handled;
+    }
+
+    handleScriptButtonClick(point, canvas) {
+        for (const button of this.scriptButtons) {
+            if (this.isPointInRect(point, button.bounds)) {
+                if (this.mode !== button.script) {
+                    this.switchMode(button.script);
+                    this.requestRedraw(canvas);  // Ensure we redraw after mode switch
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    handleStartGameClick() {
+        let groups = [];
+        if (SCRIPT_OPTIONS[this.mode]?.allowGroups && this.groupSelector) {
+            groups = this.groupSelector.getSelectedGroups();
+            console.log('StartScreenManager.handleStartGameClick - got groups:', groups);
+            if (groups.length === 0) {
+                groups = Object.keys(CHARACTER_GROUPS[this.mode]);
+                console.log('StartScreenManager.handleStartGameClick - using all groups:', groups);
+            }
+        }
+        console.log('StartScreenManager.handleStartGameClick - final groups:', groups);
+        this.onStart({
+            script: this.mode,
+            groups: groups
+        });
+        return true;
+    }
+
+    handleCustomizeClick(canvas) {
+        this.showGroupSelection = true;
+        this.initializeGroupSelector();
+        this.requestRedraw(canvas);
+        return true;
+    }
+
+    switchMode(newMode) {
+        this.mode = newMode;
+        this.updateGameData();
+        this.showGroupSelection = false;
+
+        if (SCRIPT_OPTIONS[this.mode]?.allowGroups) {
+            this.initializeGroupSelector();
+        } else {
+            this.groupSelector = null;
+        }
+
+        // Update particle system
+        this.particleManager.stop();
+        this.particleManager.start(this.mode);
+    }
+
+
+    initializeGroupSelector() {
+        this.groupSelector = new GroupSelector({
+            script: this.mode,
+            mode: this.mode,
+            onSelect: (selection) => {
+                console.log('GroupSelector onSelect called with selection:', selection);
+                this.showGroupSelection = false;
+                // Make sure we're passing both script and groups correctly
+                this.onStart({
+                    script: selection.script, // Use the script from selection
+                    groups: selection.groups  // Use the groups from selection
+                });
+                if (this.canvas) {
+                    this.requestRedraw(this.canvas);
+                }
+            }
+        });
+    }
+
+    canShowCustomize() {
+        return this.mode !== 'mixed' && SCRIPT_OPTIONS[this.mode]?.allowGroups;
+    }
+
+    requestRedraw(canvas) {
+        this.canvas = canvas; // Store canvas reference for mode switches
+        requestAnimationFrame(() => this.draw(canvas.getContext('2d'), canvas));
+    }
+
+
 
     handleMouseMove(x, y, canvas) {
         const point = { x, y };

@@ -5,7 +5,7 @@ export class GroupSelector {
     constructor(config) {
         this.colors = Theme.colors;
         this.fonts = Theme.fonts;
-        this.onStart = config.onStart;
+        this.onStart = config.onSelect;
         this.mode = config.mode;
         this.selectedGroups = new Set();
         this.currentScript = config.mode === 'katakana' ? 'katakana' : 'hiragana';
@@ -266,9 +266,11 @@ export class GroupSelector {
     }
 
     getSelectedGroups() {
-        // Return array of just the group names without the script prefix
-        return Array.from(this.selectedGroups)
+        const groups = Array.from(this.selectedGroups)
             .map(groupKey => groupKey.split('-')[1]);
+        console.log('GroupSelector.getSelectedGroups - selectedGroups Set:', this.selectedGroups);
+        console.log('GroupSelector.getSelectedGroups - returning:', groups);
+        return groups;
     }
 
     handleStartClick(x, y, canvas) {
@@ -279,10 +281,18 @@ export class GroupSelector {
             x <= buttonLayout.x + buttonLayout.width &&
             y >= buttonLayout.y &&
             y <= buttonLayout.y + buttonLayout.height) {
-            this.onStart({
+            const groups = Array.from(this.selectedGroups).map(g => g.split('-')[1]);
+            console.log('GroupSelector.handleStartClick - selectedGroups:', this.selectedGroups);
+            console.log('GroupSelector.handleStartClick - sending groups:', groups);
+            console.log('GroupSelector.handleStartClick - current script:', this.currentScript);
+
+            // Make sure we're sending both script and groups
+            const selection = {
                 script: this.currentScript,
-                groups: Array.from(this.selectedGroups).map(g => g.split('-')[1])
-            });
+                groups: groups
+            };
+            console.log('GroupSelector.handleStartClick - sending selection:', selection);
+            this.onStart(selection);
             return true;
         }
         return false;

@@ -15,8 +15,21 @@ https://docs.django-cms.org/en/release-4.1.x/reference/configuration.html
 
 import os
 from pathlib import Path
-
+from dotenv import load_dotenv
+import sys
 from django.utils.translation import gettext_lazy as _
+from pathlib import Path
+if Path('.env').exists():
+    load_dotenv()
+
+print(f"Socket path check: {os.path.exists('/cloudsql/wizling:us-central1:s-layden-mysql')}")    
+ALLOWED_HOSTS = ['*'] 
+# ALLOWED_HOSTS = [
+#     'localhost', 
+#     '127.0.0.1',
+#     'djangocms-649684198786.us-central1.run.app',
+#     '.run.app'  # This allows all Cloud Run URLs
+# ]
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,12 +44,25 @@ SECRET_KEY = 'django-insecure-5nz3$_^&_u(*v)e20mk@@ag6j(g0_0z#z5&5$zly6wst=b$b6x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else []
 
 # Application definition
 
 INSTALLED_APPS = [
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail',
+
+    'modelcluster',
+    'taggit',
     'djangocms_admin_style',
 
     'django.contrib.admin',
@@ -93,6 +119,7 @@ MIDDLEWARE = [
     'cms.middleware.toolbar.ToolbarMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 ROOT_URLCONF = 'wizling.urls'
@@ -138,36 +165,87 @@ WSGI_APPLICATION = 'wizling.wsgi.application'
 #     }
 # }
 
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'language_learning_cms',
+#         'USER': 'cms_user',
+#         'PASSWORD': '123qwe!@#QWE',
+#         'HOST': '127.0.0.1',  
+#         'PORT': '3306',
+#         'OPTIONS': {
+#      'charset': 'utf8mb4',
+#     'init_command': 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci'  }
+#     }
+# }
+
+
+
+print("=" * 50)
+print("DEBUG DATABASE CONFIGURATION")
+print("=" * 50)
+print(f"sys.path: {sys.path}")
+print(f"Current working directory: {os.getcwd()}")
+print("\nEnvironment Variables:")
+print(f"CMS_DB: {os.getenv('CMS_DB')}")
+print(f"DB_USER: {os.getenv('DB_USER')}")
+print(f"DB_HOST: {os.getenv('DB_HOST')}")
+print(f"DB_PASSWORD exists: {'yes' if os.getenv('DB_PASSWORD') else 'no'}")
+print(f"DB_PASSWORD length: {len(os.getenv('DB_PASSWORD', ''))}")
+
+
+print("\nFinal Database Configuration:")
+db_config = {
+    'ENGINE': 'django.db.backends.mysql',
+    'NAME': os.getenv('CMS_DB'),
+    'USER': os.getenv('DB_USER'),
+    'PASSWORD': os.getenv('DB_PASSWORD'),
+    'HOST': os.getenv('DB_HOST'),
+    'PORT': None,  # Remove port when using Unix socket
+    'OPTIONS': {
+        'charset': 'utf8mb4',
+        'init_command': 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci',
+        'ssl': {'ssl': {}},  # Keep SSL
+        'auth_plugin': 'caching_sha2_password'  # Explicitly set auth plugin
+    }
+}
+
+
+
+print(f"DB Config (sanitized): {dict((k,v) if k != 'PASSWORD' else (k, '***') for k,v in db_config.items())}")
+print("=" * 50)
+
+
 DATABASES = {
-  'default': {
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'language_learning_cms',
-        'USER': 'cms_user',
-        'PASSWORD': '123qwe!@#QWE',
-        'HOST': 'host.docker.internal',
-        'HOST': '127.0.0.1',  # Explicitly set this
+        'NAME': os.getenv('CMS_DB'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
-    },
-    'language_data': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'language_learning',
-        'USER': os.getenv('LANG_DB_USER'),
-        'PASSWORD': os.getenv('LANG_DB_PASSWORD'),
-        'HOST': 'host.docker.internal',
-        # 'HOST': os.getenv('DB_HOST'),
-        'PORT': int(os.getenv('DB_PORT', 3306)),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'use_unicode': True,
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'auth_plugin': 'mysql_native_password',  # Add this line
+            'init_command': 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci'
         }
     }
 }
+    # 'language_data': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'language_learning',
+    #     'USER': os.getenv('LANG_DB_USER'),
+    #     'PASSWORD': os.getenv('LANG_DB_PASSWORD'),
+    #     'HOST': 'host.docker.internal',
+    #     # 'HOST': os.getenv('DB_HOST'),
+    #     'PORT': int(os.getenv('DB_PORT', 3306)),
+    #     'OPTIONS': {
+    #         'charset': 'utf8mb4',
+    #         'use_unicode': True,
+    #         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+    #         'auth_plugin': 'mysql_native_password',  # Add this line
+    #     }
+    # }}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -186,6 +264,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+# ALLOW STYLES IN WYSIWYG
+CMS_TINYMCE_OPTIONS = {
+    'valid_elements': '*[*]',  # Allow all HTML tags and attributes
+    'extended_valid_elements': 'div[class|id|style],span[class|id|style],p[class|id|style]',  # Specify allowed tags and attributes for custom styles
+    'valid_styles': {
+        '*': 'color,font-size,text-align,padding,margin,border'  # Specify allowed inline styles
+    },
+}
 
 
 # Internationalization
@@ -210,6 +298,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "wizling/static"),  # Include the app's static folder
@@ -252,6 +341,17 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 TEXT_INLINE_EDITING = True
 
+CKEDITOR_SETTINGS = {
+    'contentsCss': ['/static/css/components.css', '/static/css/base.css'],  # Link your custom CSS
+    # 'stylesSet': 'default',  # Use default stylesSet if no customization is needed
+    'allowedContent': True,  # Allow all HTML and styles
+    'extraAllowedContent': '*[*]{*}',  # Allow all tags, attributes, and styles
+}
+
+
+TEXT_ADDITIONAL_ATTRIBUTES = ('id', 'class', 'style', 'data-*')  # Add attributes that should not be stripped
+
+
 # Add project-wide static files directory
 # https://docs.djangoproject.com/en/5.1/ref/settings/#staticfiles-dirs
 
@@ -266,5 +366,11 @@ INTERNAL_IPS = [
 # Add project-wide static files directory
 # https://docs.djangoproject.com/en/5.1/ref/settings/#media-root
 
-MEDIA_URL = "media/"
-MEDIA_ROOT = str(BASE_DIR.parent / "wizling" / "media")
+#MEDIA_URL = "media/"
+#MEDIA_ROOT = str(BASE_DIR.parent / "wizling" / "media")
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+WAGTAIL_SITE_NAME = 'Wizling'
+WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip']
+#WAGTAILADMIN_BASE_URL = 'http://wizling.com/'

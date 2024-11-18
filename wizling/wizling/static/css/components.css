@@ -119,7 +119,7 @@
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--space-lg);
     max-width: 1000px;
-    margin: var(--space-2xl) auto;
+    /* margin: var(--space-2xl) auto; */
 }
 
 .cta-card {
@@ -127,7 +127,7 @@
     background: linear-gradient(165deg, var(--surface-50) 0%, var(--primary-50) 100%);
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-    padding: var(--space-xl);
+    padding: 0 var(--space-xl) var(--space-sm) var(--space-xl);
     position: relative;
     border-top: 4px solid var(--primary-500);
     text-align: center;
@@ -265,6 +265,15 @@ td {
 }
 
 /* Footer */
+footer {
+    background: var(--surface-50);
+    border-top: 1px solid var(--surface-300);
+    padding: var(--space-xl) 0;
+    margin-top: var(--space-2xl);
+    font-size: var(--font-size-sm);
+
+}
+
 .footer-grid {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
@@ -289,6 +298,54 @@ td {
     color: var(--primary-500);
 }
 
+.footer-copyright {
+    padding: var(--space-md) 0;
+    margin-top: var(--space-md);
+    border-top: 1px solid var(--surface-300);
+    text-align: center;
+    font-size: var(--font-size-xs);
+}
+
+.hero-content {
+    display: flex;
+    /* This is crucial for side-by-side */
+    align-items: center;
+    gap: var(--space-2xl);
+}
+
+.hero-text {
+    flex: 1;
+    /* Takes up half the space */
+    max-width: 50%;
+    /* Ensures text doesn't get too wide */
+}
+
+.hero-image {
+    flex: 1;
+    /* Takes up half the space */
+    max-width: 50%;
+    /* Ensures image doesn't get too wide */
+}
+
+.hero-image img {
+    /* width: 100%; */
+    height: auto;
+    border-radius: 12px;
+
+}
+
+.site-footer {
+    background: var(--surface-50);
+    border-top: 1px solid var(--surface-300);
+    padding: var(--space-xl) 0;
+    margin-top: var(--space-2xl);
+}
+
+main {
+    padding-bottom: var(--space-xl);
+}
+
+
 
 /*------------------------------------*\
   #RESPONSIVE
@@ -309,18 +366,29 @@ td {
         gap: var(--space-md);
     }
 
+    .container {
+        max-width: 1200px;
+        /* Add if not already defined */
+        margin: 0 auto;
+        /* Add if not already defined */
+        padding: 0 var(--space-md);
+        /* Add if not already defined */
+    }
+
     .hero {
-        padding: var(--space-md);
-        text-align: center;
+        padding: var(--space-2xl) 0;
     }
 
-    .hero h1 {
-        font-size: var(--font-size-lg);
+
+
+    .hero-text {
+        flex: 1;
     }
 
-    .hero-svg {
-        max-width: 60px;
+    .hero-image {
+        flex: 1;
     }
+
 
     .content-grid {
         grid-template-columns: 1fr;

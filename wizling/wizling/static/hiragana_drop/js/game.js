@@ -41,7 +41,7 @@ export default class Game {
         this.particleSystem = new ParticleSystem(this.ctx);
 
         // Initialize game properties
-        this.initializeGameProperties();
+        this.resetGameState();
 
         // Initialize screens
         this.initializeScreens();
@@ -58,32 +58,34 @@ export default class Game {
         this.setupBindings();
 
 
-
-        // In Game class, add this at the end of constructor:
-
-
     }
 
-    initializeGameProperties() {
-        console.log('qstring in initprops...' + this.queryString);
+
+
+
+    resetGameState() {
+        console.log('Resetting game state...');
+
         this.fallingCharacters = [];
         this.options = [];
         this.gameLoop = null;
         this.densityInterval = null;
         this.gameSpeed = 1000;
-        this.characterFallSpeed = 1.5;
-        this.currentDensity = 2;
+        this.characterFallSpeed = 1.9;
+        this.currentDensity = 1;
         this.score = 0;
         this.highScore = localStorage.getItem('highScore') || 0;
         this.selectedOptionIndex = -1;
         this.isGameOver = false;
-        this.maxMistakes = 4;
+        this.maxMistakes = 3;
         this.mistakesMade = 0;
         this.currentStreak = 0;
         this.bestStreak = 0;
         this.particles = [];
-        this.lastSpawnTime = 0;
-        this.spawnInterval = 2000;
+        this.targetCharacter = null;  // Reset target character
+        this.particleSystem.reset();
+        this.gameOptions.reset();
+        console.log('Game state reset - New fall speed:', this.characterFallSpeed);
     }
 
     initializeScreens() {
@@ -291,30 +293,6 @@ export default class Game {
         this.increaseDensity = this.increaseDensity.bind(this);
     }
 
-    resetGameState() {
-        console.log('Resetting game state...');
-
-        this.fallingCharacters = [];
-        this.options = [];
-        this.gameLoop = null;
-        this.densityInterval = null;
-        this.gameSpeed = 1000;
-        this.characterFallSpeed = 1.2;
-        this.currentDensity = 1;
-        this.score = 0;
-        this.highScore = localStorage.getItem('highScore') || 0;
-        this.selectedOptionIndex = -1;
-        this.isGameOver = false;
-        this.maxMistakes = 3;
-        this.mistakesMade = 0;
-        this.currentStreak = 0;
-        this.bestStreak = 0;
-        this.particles = [];
-        this.targetCharacter = null;  // Reset target character
-        this.particleSystem.reset();
-        this.gameOptions.reset();
-        console.log('Game state reset - New fall speed:', this.characterFallSpeed);
-    }
 
     init() {
         this.bindEventListeners();

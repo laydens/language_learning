@@ -78,14 +78,12 @@ const generateMixedDictionary = (groups = []) => {
 };
 
 export const GameDataProvider = {
-    getData(queryString, selection = { script: 'hiragana', groups: [] }) {
-        // Default to hiragana if no query string is provided
-        if (!queryString) {
-            selection = { script: 'hiragana', groups: [] };
-        }
+    getData(mode, config = { script: 'hiragana', groups: [] }) {
+        console.log('GameDataProvider getData called with:', { mode, config });
 
-        console.log("queryString in getData: ", queryString);
-        console.log("CHARACTER_GROUPS:", CHARACTER_GROUPS);
+        // Use the passed config
+        const selection = config;
+        console.log("Selection in getData:", selection);
 
         let dictionary = {};
 
@@ -101,7 +99,7 @@ export const GameDataProvider = {
             }
 
             // Populate dictionary with selected groups or all groups if none are specified
-            if (selection.groups.length > 0) {
+            if (selection.groups && selection.groups.length > 0) {
                 selection.groups.forEach(group => {
                     const groupChars = scriptGroups[group];
                     if (groupChars) {

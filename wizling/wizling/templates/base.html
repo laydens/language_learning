@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% page_attribute "page_title" %} - Wizling{% endblock title %}</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -83,21 +84,47 @@
     </main>
 
     <footer class="section bg-subtle">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="/" class="brand">wizling</a>
-                    <div class="text-secondary">
-                        {% static_placeholder 'footer_about' %}
-                    </div>
-                </div>
-                <div class="footer-links">
-                    <h4 class="mb-md">{% static_placeholder 'footer_links_1_title' %}</h4>
-                    {% static_placeholder 'footer_links_1' %}
-                </div>
-                <div class="footer-links">
-                    <h4 class="mb-md">{% static_placeholder 'footer_links_2_title' %}</h4>
-                    {% static_placeholder 'footer_links_2' %}
+        <div class="container footer-links">
+            <div class="footer-content footer-link">
+                <a href="/" class="brand">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 48" width="100" aria-labelledby="logoTitle"
+                        role="img">
+                        <title id="logoTitle">Wizling Logo</title>
+                        <defs>
+                            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="1" result="coloredBlur" />
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur" />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <!-- Dots with minimal animation -->
+                        <circle class="dot-primary dot-animation" cx="120" cy="27" r="4" filter="url(#glow)">
+                            <animate attributeName="opacity" values="0.9;0.85;0.9" dur="8s" repeatCount="indefinite" />
+                        </circle>
+                        <circle class="dot-secondary dot-animation dot-animation-delay-1" cx="110" cy="27" r="4"
+                            filter="url(#glow)">
+                            <animate attributeName="opacity" values="0.8;0.75;0.8" dur="8s" repeatCount="indefinite"
+                                begin="0.4s" />
+                        </circle>
+                        <circle class="dot-tertiary dot-animation dot-animation-delay-2" cx="100" cy="27" r="4"
+                            filter="url(#glow)">
+                            <animate attributeName="opacity" values="0.7;0.65;0.7" dur="8s" repeatCount="indefinite"
+                                begin="0.8s" />
+                        </circle>
+                        <!-- Text with adjusted positioning and subtle shadow -->
+                        <text class="logo-text" x="10" y="34" font-family="Raleway, sans-serif" font-weight="600">
+                            <tspan class="text-primary">wiz</tspan>
+                            <tspan class="text-secondary" dx="-6">ling</tspan>
+                        </text>
+                        <!-- Refined underline with gentle curve -->
+                        <path class="underline" d="M10 38 Q57.5 36 105 38" />
+                    </svg>
+                </a>
+                <a href="/about-us/" class="footer-link">About Wizling</a>
+                <div class="footer-copyright">
+                    <p class="text-secondary footer-link">&copy; {% now "Y" %} Wizling. All rights reserved.</p>
                 </div>
             </div>
         </div>

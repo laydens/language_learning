@@ -20,12 +20,18 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.i18n import JavaScriptCatalog
+from wagtail.admin import urls as wagtailadmin_urls
+from wagtail import urls as wagtail_urls
+from wagtail.documents import urls as wagtaildocs_urls
 
 urlpatterns = i18n_patterns(
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     path('admin/', admin.site.urls),
     path('filer/', include('filer.urls')),
     path('', include('cms.urls')),
+    path('a/', include(wagtailadmin_urls)),
+    path('d/', include(wagtaildocs_urls)),
+    path('p/', include(wagtail_urls)),
 )
 
 

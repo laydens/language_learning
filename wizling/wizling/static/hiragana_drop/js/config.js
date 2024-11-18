@@ -1,7 +1,7 @@
 // js/config.js
 
 const GameConfig = {
-    initialSpeed: 200,
+    initialSpeed: 500,
     speedIncrement: 10,
     correctThreshold: 90, // Percent
     masteryStreak: 10,    // Correct answers needed for progression

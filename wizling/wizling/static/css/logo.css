@@ -4,7 +4,7 @@
     width: 180px;
     height: 48px;
     display: block;
-    margin-left: -28px;
+    margin-left: 0;
     transition: filter 0.3s ease;
 }
 
