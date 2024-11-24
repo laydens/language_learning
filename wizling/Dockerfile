@@ -13,11 +13,23 @@ RUN pip install gunicorn python-dotenv
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Don't copy .env or prod.env
+# Copy project files
 COPY manage.py .
 COPY wizling ./wizling
 COPY media ./media
 
-ENV PYTHONUNBUFFERED=1
+# Create static files directory
+RUN mkdir -p staticfiles
+
+# Set environment variable for static files collection
+ENV PYTHONUNBUFFERED=1 \
+    DJANGO_SETTINGS_MODULE=wizling.settings \
+    STATIC_ROOT=/app/staticfiles
+
+# Collect static files
+RUN python manage.py collectstatic --noinput --clear
+
+# Make sure static files are accessible
+RUN chmod -R 755 /app/staticfiles
 
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "wizling.wsgi:application"]

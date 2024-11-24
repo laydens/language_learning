@@ -1,4 +1,3 @@
-// ParticleSystem.js
 import Theme from './Theme.js';
 
 export default class ParticleSystem {
@@ -8,91 +7,88 @@ export default class ParticleSystem {
         this.lastUpdate = performance.now();
     }
 
-    createEffect(x, y, type) {
-        console.log('Creating effect:', type);
+    createEffect(x, y) {
+        const colors = [Theme.colors.secondary.medium, Theme.colors.secondary.main, Theme.colors.secondary.light, Theme.colors.secondary.pale]; // Vibrant warm palette (orange, red, yellow)
+        console.log('ParticleSystem.js: createEffect: colors:', colors);
+        // Define ranges for particle properties
+        const minSize = 4; // Minimum particle size
+        const maxSize = 7; // Maximum particle size
+        const minVelocity = 0.5; // Minimum speed of particles
+        const maxVelocity = 1.3; // Maximum speed of particles
 
-        const colors = type === 'success' ?
-            [Theme.colors.success.primary, Theme.colors.success.secondary, Theme.colors.success.glow] :
-            [Theme.colors.mistake.primary, Theme.colors.mistake.secondary, Theme.colors.mistake.glow];
-
-        console.log('Using colors:', colors);
-
-        for (let i = 0; i < Theme.game.particles.count; i++) {
-            const angle = (i / Theme.game.particles.count) * Math.PI * 2 + Math.random() * 0.5;
-            const velocity = Theme.game.particles.velocity.initial * (0.8 + Math.random() * 0.4);
+        for (let i = 0; i < 20; i++) { // Moderate particle count for density
+            const angle = Math.random() * Math.PI * 2; // Spread particles in all directions
+            const velocity = minVelocity + Math.random() * (maxVelocity - minVelocity); // Random velocity within range
+            const size = minSize + Math.random() * (maxSize - minSize); // Random size within range
 
             this.particles.push({
-                x,
-                y,
-                vx: Math.cos(angle) * velocity,
-                vy: Math.sin(angle) * velocity,
-                size: Theme.game.particles.size.min +
-                    Math.random() * (Theme.game.particles.size.max - Theme.game.particles.size.min),
-                color: colors[Math.floor(Math.random() * colors.length)],
-                life: 1,
-                opacity: .7,
-                rotation: Math.random() * Math.PI * 2,
-                rotationSpeed: (Math.random() - 0.5) * 0.1,
-                baseSize: Math.random() * 4 + 2
+                x, // Initial x-position of the particle
+                y, // Initial y-position of the particle
+                vx: Math.cos(angle) * velocity, // Horizontal velocity based on angle
+                vy: Math.sin(angle) * velocity, // Vertical velocity based on angle
+                size, // Size of the particle
+                color: colors[Math.floor(Math.random() * colors.length)], // Randomly pick a color from the palette
+                life: 1.2, // Initial lifespan of the particle (affects fade-out)
+                opacity: 1 // Initial opacity (fully visible)
             });
         }
     }
 
+
+
+
     update() {
+        if (this.particles.length === 0) return;
+
         const now = performance.now();
-        const deltaTime = (now - this.lastUpdate) / 16.67;
+        const deltaTime = (now - this.lastUpdate) / 16.67; // Normalize deltaTime to ~60 FPS
         this.lastUpdate = now;
+
+        this.ctx.save();
+        this.ctx.globalCompositeOperation = 'lighter'; // Vibrant blending
 
         for (let i = this.particles.length - 1; i >= 0; i--) {
             const p = this.particles[i];
 
-            p.x += p.vx * deltaTime;
-            p.y += p.vy * deltaTime;
-
-            p.vy += Theme.game.particles.velocity.gravity * deltaTime;
-            p.vx *= 0.99;
-            p.vy *= 0.99;
-
-            p.rotation += p.rotationSpeed * deltaTime;
-            p.life -= Theme.game.particles.lifetime.fadeSpeed * deltaTime;
-            p.opacity = p.life;
+            // Update particle position and motion
+            p.x += p.vx * deltaTime * 0.6;
+            p.y += p.vy * deltaTime * 0.6;
+            p.vy += 0.01 * deltaTime; // Gravity pull
+            p.vx *= 0.97; // Gradual horizontal damping
+            p.vy *= 0.97; // Gradual vertical damping
+            p.life -= 0.01; // Lifespan decay
+            p.opacity = Math.max(0, p.life); // Fade out based on life
 
             if (p.life <= 0) {
-                this.particles.splice(i, 1);
+                this.particles.splice(i, 1); // Remove fully faded particles
                 continue;
             }
 
-            this.ctx.save();
-
-            // Changed blend mode to 'source-over' for more opacity
-            this.ctx.globalCompositeOperation = 'source-over';
-
-            // Set global alpha for overall opacity
             this.ctx.globalAlpha = p.opacity;
 
-            this.ctx.translate(p.x, p.y);
-            this.ctx.rotate(p.rotation);
+            // Create a radial gradient
+            const gradient = this.ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+            gradient.addColorStop(0, Theme.hexToRgba(p.color, 1)); // Center: Full opacity of particle's color
+            gradient.addColorStop(0.3, Theme.hexToRgba(p.color, 0.4)); // Mid-point: Softer opacity
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); // Edge: Transparent fade-out
 
-            // Draw base particle
+            // Draw the gradient
+            this.ctx.fillStyle = gradient;
             this.ctx.beginPath();
-            this.ctx.arc(0, 0, p.baseSize, 0, Math.PI * 2);
-            this.ctx.fillStyle = p.color;  // Use direct color
+            this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); // Draw particle
             this.ctx.fill();
 
-            // Add glow using shadow
-            this.ctx.shadowColor = p.color;
-            this.ctx.shadowBlur = 15;
-            this.ctx.fill();
-
-            // Add extra bright center
-            this.ctx.beginPath();
-            this.ctx.arc(0, 0, p.baseSize * 0.2, 0, Math.PI * 2);
-            this.ctx.fillStyle = '#fff';  // White center for extra pop
-            this.ctx.fill();
-
-            this.ctx.restore();
+            // Add glow effect using the particle's base color
+            this.ctx.shadowColor = Theme.hexToRgba(p.color, 0.3); // Slightly transparent glow
+            this.ctx.shadowBlur = p.size * 1.2; // Glow intensity proportional to size
         }
+
+        this.ctx.restore();
     }
+
+
+
+
 
     reset() {
         this.particles = [];

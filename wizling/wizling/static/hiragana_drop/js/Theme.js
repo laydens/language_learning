@@ -8,10 +8,6 @@ const Theme = {
                 start: '#F0F4F5',  // White Mist - Gradient start (surface-100)
                 middle: '#D0DDE2', // Fjord Mist - Gradient middle (primary-100)
                 end: '#7397A5'     // Soft Fjord - Gradient end (primary-300)
-            },
-            effects: {
-                success: 'rgba(82, 120, 135, 0.2)',  // Medium Fjord with transparency (primary-500)
-                mistake: 'rgba(139, 58, 21, 0.15)'   // Deep Maple with transparency (secondary-900)
             }
         },
         primary: {
@@ -64,6 +60,29 @@ const Theme = {
                 outer: 'rgba(207, 211, 214, 0.2)', // Pale Gray with transparency (surface-300)
                 inner: '#CFD3D6'                   // Pale Gray - Inactive state (surface-300)
             }
+        },
+
+    },
+    breakpoints: {
+        mobile: 480,
+        tablet: 768,
+        desktop: 1024
+    },
+    scale: {
+        mobile: {
+            character: 0.04,  // Smaller characters on mobile
+            button: 0.8,     // Slightly smaller buttons
+            spacing: 0.7     // Tighter spacing
+        },
+        tablet: {
+            character: 0.05,
+            button: 0.9,
+            spacing: 0.85
+        },
+        desktop: {
+            character: 0.06,  // Original size
+            button: 1,
+            spacing: 1
         }
     },
     fonts: {
@@ -78,15 +97,15 @@ const Theme = {
         },
         sizes: {
             character: {
-                large: '48px',
-                medium: '36px',
-                small: '24px'
+                large: 'clamp(32px, 6vw, 48px)',
+                medium: 'clamp(24px, 4.5vw, 36px)',
+                small: 'clamp(18px, 3vw, 24px)'
             },
             ui: {
-                title: '24px',
-                large: '20px',
-                normal: '16px',
-                small: '14px'
+                title: 'clamp(20px, 4vw, 24px)',
+                large: 'clamp(16px, 3vw, 20px)',
+                normal: 'clamp(14px, 2.5vw, 16px)',
+                small: 'clamp(12px, 2vw, 14px)'
             }
         },
         weights: {
@@ -98,10 +117,18 @@ const Theme = {
 
     game: {
         particles: {
-            count: 25,
+            count: {
+                mobile: 15,    // Fewer particles on mobile
+                tablet: 20,
+                desktop: 25
+            },
             size: {
                 min: 2,
-                max: 7
+                max: {
+                    mobile: 5,
+                    tablet: 6,
+                    desktop: 7
+                }
             },
             velocity: {
                 initial: 9,
@@ -130,13 +157,80 @@ const Theme = {
             }
         },
         ui: {
-            transitions: {
-                fast: '150ms',
-                normal: '300ms',
-                slow: '500ms'
+            header: {
+                height: {
+                    mobile: 40,
+                    tablet: 46,
+                    desktop: 52
+                },
+                padding: {
+                    mobile: 8,
+                    tablet: 12,
+                    desktop: 16
+                }
+            },
+            buttons: {
+                minWidth: {
+                    mobile: 160,
+                    tablet: 200,
+                    desktop: 220
+                },
+                height: {
+                    mobile: 44,
+                    tablet: 50,
+                    desktop: 56
+                }
+            },
+            spacing: {
+                small: 'clamp(8px, 1.5vw, 12px)',
+                medium: 'clamp(16px, 2.5vw, 24px)',
+                large: 'clamp(24px, 4vw, 40px)'
             }
         }
+
+    },
+
+    // Add helper function to get device type
+    getDeviceType(width) {
+        if (width < this.breakpoints.mobile) return 'mobile';
+        if (width < this.breakpoints.tablet) return 'tablet';
+        return 'desktop';
+    },
+
+    // Add helper function to get scaled value
+    getScaledValue(baseValue, property) {
+        const width = window.innerWidth;
+        const deviceType = this.getDeviceType(width);
+        return baseValue * this.scale[deviceType][property];
+    },
+
+    // Add helper for responsive font size
+    getResponsiveFontSize(baseSize) {
+        const width = window.innerWidth;
+        if (width < this.breakpoints.mobile) return `${baseSize * 0.8}px`;
+        if (width < this.breakpoints.tablet) return `${baseSize * 0.9}px`;
+        return `${baseSize}px`;
+    },
+    // Convert Hex (#RRGGBB) to RGBA with specified opacity
+    hexToRgba(hex, opacity) {
+        // Remove leading '#' if present
+        const cleanHex = hex.replace('#', '');
+
+        // Parse RGB components
+        const r = parseInt(cleanHex.substring(0, 2), 16);
+        const g = parseInt(cleanHex.substring(2, 4), 16);
+        const b = parseInt(cleanHex.substring(4, 6), 16);
+
+        // Return rgba string
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
     }
+
+};
+
+Theme.colors.success = {
+    primary: Theme.colors.secondary.light,
+    secondary: Theme.colors.secondary.pale,
+    glow: Theme.colors.secondary.tint,
 };
 
 export default Theme;

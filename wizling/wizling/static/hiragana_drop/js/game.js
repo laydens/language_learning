@@ -1,4 +1,5 @@
 // game.js
+import ResponsiveGame from './ResponsiveGame.js';
 import FallingCharacter from './FallingCharacter.js';
 import GameOverScreen from './GameOverScreen.js';
 import { StartScreenManager } from './StartScreenManager.js';
@@ -7,12 +8,14 @@ import GameOptions from './GameOptions.js';
 import ParticleSystem from './ParticleSystem.js';
 import Theme from './Theme.js';
 import { GameDataProvider } from './GameDataProvider.js';
+
 //import { GroupSelector } from './GroupSelector.js';
 
 
 export default class Game {
     constructor(canvas, ctx, queryString) {
         // Core initialization
+        console.log('Canvas width:', canvas.width);
         this.canvas = canvas;
         this.ctx = ctx;
         this.version = "v1.1.57";
@@ -23,10 +26,11 @@ export default class Game {
         this.isLoading = true;
         this.gameStarted = false;  // Add flag to track if game has started
         console.log('Initializing game with query string:', queryString);
-
+        this.backgroundImage = new Image();
+        this.backgroundImage.src = '/static/images/cloud3.png';
         // Visual properties
         this.colors = Theme.colors;
-
+        this.responsive = new ResponsiveGame(canvas, this);
         this.targetStyle = {
             color: '#FF6B6B',
             glowColor: 'rgba(255, 107, 107, 0.5)',
@@ -58,6 +62,7 @@ export default class Game {
         this.setupBindings();
 
 
+
     }
 
 
@@ -71,8 +76,8 @@ export default class Game {
         this.gameLoop = null;
         this.densityInterval = null;
         this.gameSpeed = 1000;
-        this.characterFallSpeed = 1.9;
-        this.currentDensity = 1;
+        this.characterFallSpeed = 1.7;
+        this.currentDensity = 2;
         this.score = 0;
         this.highScore = localStorage.getItem('highScore') || 0;
         this.selectedOptionIndex = -1;
@@ -86,6 +91,117 @@ export default class Game {
         this.particleSystem.reset();
         this.gameOptions.reset();
         console.log('Game state reset - New fall speed:', this.characterFallSpeed);
+
+        this.levelConfig = {
+            baseSpeed: 1.6,
+            speedIncreasePerLevel: 0.2,    // Speed increases by 15% per level
+            maxSpeed: 3.0,                  // Cap the maximum speed
+
+            baseDensity: 1,
+            densityLevels: [
+                { level: 1, density: 1 },
+                { level: 3, density: 2 },
+                { level: 5, density: 3 },
+                { level: 7, density: 4 }
+            ],
+
+            pointsToNextLevel: 100,         // Points needed to advance a level
+            maxLevel: 10                    // Cap the maximum level
+        };
+
+        this.currentLevel = 1;
+    }
+
+    // Add this method to handle level progression
+    updateLevel() {
+        const previousLevel = this.currentLevel;
+        this.currentLevel = Math.min(
+            Math.floor(this.score / this.levelConfig.pointsToNextLevel) + 1,
+            this.levelConfig.maxLevel
+        );
+
+        // If level changed, update game parameters
+        if (previousLevel !== this.currentLevel) {
+            this.updateGameParameters();
+            this.showLevelUpMessage();
+        }
+    }
+
+    // Update game parameters based on current level
+    updateGameParameters() {
+        // Update fall speed
+        this.characterFallSpeed = Math.min(
+            this.levelConfig.baseSpeed +
+            (this.currentLevel - 1) * this.levelConfig.speedIncreasePerLevel,
+            this.levelConfig.maxSpeed
+        );
+
+        // Update density based on level thresholds
+        const densityConfig = this.levelConfig.densityLevels
+            .filter(config => config.level <= this.currentLevel)
+            .pop();
+        this.currentDensity = densityConfig ? densityConfig.density : this.levelConfig.baseDensity;
+
+        console.log(`Level ${this.currentLevel}: Speed ${this.characterFallSpeed.toFixed(2)}, Density ${this.currentDensity}`);
+    }
+
+    // Visual feedback for level up
+    showLevelUpMessage() {
+        // Store the level up time to show the message temporarily
+        this.levelUpTime = Date.now();
+
+        // Create a particle effect for level up
+        const centerX = this.canvas.width / 2;
+        const centerY = this.canvas.height / 2;
+        this.particleSystem.createEffect(centerX, centerY, 'levelUp');
+    }
+
+    handleResize(width, height) {
+        // Update any size-dependent game properties
+        if (this.gameUI) {
+            this.gameUI.handleResize(width, height);
+        }
+        if (this.gameOptions) {
+            this.gameOptions.handleResize(width, height);
+        }
+        // Redraw the current game state
+        this.setupCanvas();
+    }
+
+    // Add level up message display
+    drawLevelUpMessage() {
+        const opacity = Math.max(0, 1 - (Date.now() - this.levelUpTime) / 2000);
+
+        this.ctx.save();
+        const mainColor = Theme.colors.secondary.medium;
+        const subColor = Theme.colors.primary.medium;
+
+        // Main level text with fade
+        this.ctx.fillStyle = `rgba(${this.hexToRgb(mainColor)}, ${opacity})`;
+        this.ctx.font = `bold 48px ${Theme.fonts.system.display}`;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillText(`Level ${this.currentLevel}!`, this.canvas.width / 2, this.canvas.height / 2);
+
+        // Subtitle with fade
+        this.ctx.font = `24px ${Theme.fonts.system.display}`;
+        this.ctx.fillStyle = `rgba(${this.hexToRgb(subColor)}, ${opacity})`;
+        this.ctx.fillText('Speed Increased!', this.canvas.width / 2, this.canvas.height / 2 + 40);
+
+        this.ctx.restore();
+    }
+
+    hexToRgb(hex) {
+        // Remove the # if present
+        hex = hex.replace(/^#/, '');
+
+        // Parse hex to RGB
+        const bigint = parseInt(hex, 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+
+        return `${r}, ${g}, ${b}`;
     }
 
     initializeScreens() {
@@ -123,7 +239,19 @@ export default class Game {
         this.spawnCharacter = () => {
             const currentTime = Date.now();
             if (currentTime - this.lastSpawnTime < this.spawnInterval) return;
+
+            // Changed density check to consider current level density
             if (this.fallingCharacters.length >= this.currentDensity) return;
+
+            // Reduced minimum stagger for higher densities
+            const minStaggerDistance = Math.max(150 - (this.currentLevel * 10), 80); // Reduces spacing as level increases
+            const lastCharacterY = this.fallingCharacters.length > 0
+                ? this.fallingCharacters[this.fallingCharacters.length - 1].y
+                : -minStaggerDistance;
+
+            // Adjusted spawn check for multiple characters
+            if (lastCharacterY > -minStaggerDistance && this.fallingCharacters.length > 0) return;
+
 
             const keys = Object.keys(this.dictionary);
             const character = keys[Math.floor(Math.random() * keys.length)];
@@ -167,10 +295,12 @@ export default class Game {
             this.setupCanvas();
             this.spawnCharacter();
             this.updateFallingCharacters();
-            this.updateParticles();
-            this.drawUI();
-            this.particleSystem.update();
 
+
+            this.updateParticles(); // This should call particleSystem.update()
+
+
+            this.drawUI();
             if (this.gameOptions.options.length > 0) {
                 this.gameOptions.draw();
             }
@@ -180,30 +310,34 @@ export default class Game {
 
 
         this.handleClick = (event) => {
-            const mouseX = event.clientX - this.canvas.offsetLeft;
-            const mouseY = event.clientY - this.canvas.offsetTop;
-
-            if (!this.gameStarted) {
-                this.startScreen.handleClick(mouseX, mouseY, this.canvas);
-                return;
-            }
+            const coords = this.responsive.convertToCanvasCoords(
+                event.clientX || event.touches[0].clientX,
+                event.clientY || event.touches[0].clientY
+            );
 
             if (this.isGameOver) {
                 const buttonBounds = this.getPlayAgainButtonBounds();
-                if (this.isPointInRect(mouseX, mouseY, buttonBounds)) {
+                if (this.isPointInRect(coords.x, coords.y, buttonBounds)) {
                     this.startGame();
                     return;
                 }
             }
 
-            this.checkOptionSelection(mouseX, mouseY);
+            if (!this.gameStarted) {
+                this.startScreen.handleClick(coords.x, coords.y, this.canvas);
+                return;
+            }
+
+            this.checkOptionSelection(coords.x, coords.y);
         };
 
-        this.increaseDensity = () => {
-            if (this.currentDensity < 4) {
-                this.currentDensity++;
-            }
-        };
+
+
+        // this.increaseDensity = () => {
+        //     if (this.currentDensity < 4) {
+        //         this.currentDensity++;
+        //     }
+        // };
     }
 
     checkOptionSelection(mouseX, mouseY) {
@@ -241,7 +375,8 @@ export default class Game {
         // Reset state
         this.resetGameState();
         this.clearIntervals();
-
+        this.currentLevel = 1;
+        this.updateGameParameters();
         // Validate dictionary
         const characterCount = Object.keys(this.dictionary).length;
         if (characterCount === 0) {
@@ -252,7 +387,7 @@ export default class Game {
 
         // Start game loops
         requestAnimationFrame(this.updateGame);
-        this.densityInterval = setInterval(this.increaseDensity, 30000);
+
     }
 
     // Add this method for error message display
@@ -335,11 +470,7 @@ export default class Game {
             cancelAnimationFrame(this.gameLoop);
             this.gameLoop = null;
         }
-        if (this.densityInterval) {
-            clearInterval(this.densityInterval);
-            this.densityInterval = null;
-        }
-        this.lastSpawnTime = 0;  // Reset spawn timer
+        this.lastSpawnTime = 0;
     }
 
     isPointInRect(x, y, rect) {
@@ -362,11 +493,16 @@ export default class Game {
     }
 
     setupCanvas() {
-        const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
-        gradient.addColorStop(0, this.colors.background.primary);
-        gradient.addColorStop(1, this.colors.background.secondary);
-        this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        if (this.backgroundImage) {
+            this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height);
+        } else {
+            // Fallback gradient if image hasn't loaded
+            const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+            gradient.addColorStop(0, this.colors.background.primary);
+            gradient.addColorStop(1, this.colors.background.secondary);
+            this.ctx.fillStyle = gradient;
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }
     }
 
     updateGame() {
@@ -410,7 +546,21 @@ export default class Game {
     }
 
     updateParticles() {
-        this.particleSystem.update();
+        // console.log('updateParticles checking particle system:', {
+        //     particleSystem: this.particleSystem,
+        //     particleCount: this.particleSystem?.particles?.length || 0
+        // });
+
+        // Add error handling to catch any issues
+        try {
+            if (this.particleSystem) {
+                this.particleSystem.update();
+            } else {
+                console.error('Particle system is not initialized');
+            }
+        } catch (error) {
+            console.error('Error updating particles:', error);
+        }
     }
 
     drawUI() {
@@ -421,24 +571,18 @@ export default class Game {
             bestStreak: this.bestStreak,
             maxMistakes: this.maxMistakes,
             mistakesMade: this.mistakesMade,
-            gameTitle: this.gameTitle
+            gameTitle: this.gameTitle,
+            currentLevel: this.currentLevel,
+            nextLevelPoints: (this.currentLevel * this.levelConfig.pointsToNextLevel) - this.score
         };
 
         this.gameUI.drawUI(gameState);
-    }
 
-    // drawHeart(x, y, size, color) {
-    //     this.ctx.save();
-    //     this.ctx.beginPath();
-    //     this.ctx.moveTo(x, y + size / 4);
-    //     this.ctx.bezierCurveTo(x, y, x - size / 2, y, x - size / 2, y + size / 4);
-    //     this.ctx.bezierCurveTo(x - size / 2, y + size / 2, x, y + size * 3 / 4, x, y + size);
-    //     this.ctx.bezierCurveTo(x, y + size * 3 / 4, x + size / 2, y + size / 2, x + size / 2, y + size / 4);
-    //     this.ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + size / 4);
-    //     this.ctx.fillStyle = color;
-    //     this.ctx.fill();
-    //     this.ctx.restore();
-    // }
+        // Show level up message if within 2 seconds of leveling up
+        if (this.levelUpTime && Date.now() - this.levelUpTime < 2000) {
+            this.drawLevelUpMessage();
+        }
+    }
 
     gameOver() {
         this.isGameOver = true;
@@ -506,57 +650,6 @@ export default class Game {
         return { x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight };
     }
 
-
-    // In Game class, add version display to drawUI method
-    // drawUI() {
-    //     // Version in top right
-    //     this.ctx.font = this.fonts.sizes.ui.small + ' ' + this.fonts.system.display;
-    //     this.ctx.fillStyle = Theme.colors.text.secondary;
-    //     this.ctx.textAlign = 'right';
-    //     this.ctx.fillText(`v${this.version}`, this.canvas.width - 20, 30);
-
-    //     // Score and streak on left side
-    //     this.ctx.textAlign = 'left';
-    //     this.ctx.fillStyle = Theme.colors.text.primary;
-
-    //     // Score
-    //     this.ctx.font = `600 24px ${Theme.fonts.system.display}`;
-    //     this.ctx.fillText(`Score: ${this.score}`, 20, 40);
-
-    //     // Current/Best Streak below score
-    //     this.ctx.font = `16px ${Theme.fonts.system.display}`;
-    //     this.ctx.fillText(`Streak: ${this.currentStreak} (Best: ${this.bestStreak})`, 20, 65);
-
-    //     // Hearts/Lives in top right
-    //     const mistakeX = this.canvas.width - 150;
-    //     const hearts = this.maxMistakes - this.mistakesMade;
-    //     for (let i = 0; i < this.maxMistakes; i++) {
-    //         const color = i < hearts ? Theme.colors.secondary.medium : Theme.colors.secondary.pale;
-    //         this.drawHeart(mistakeX + (i * 30), 30, 12, color);
-    //     }
-    // }
-
-
-
-    updateParticles() {
-        for (let i = this.particles.length - 1; i >= 0; i--) {
-            const p = this.particles[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.life -= 0.02;
-
-            if (p.life <= 0) {
-                this.particles.splice(i, 1);
-                continue;
-            }
-
-            this.ctx.beginPath();
-            this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            this.ctx.fillStyle = `${p.color}${Math.floor(p.life * 255).toString(16).padStart(2, '0')}`;
-            this.ctx.fill();
-        }
-    }
-
     destroy() {
         this.clearIntervals();
         this.canvas.removeEventListener('mousedown', this.handleClick);
@@ -567,17 +660,21 @@ export default class Game {
     handleCorrectAnswer() {
         if (this.fallingCharacters.length === 0) return;
 
-        const character = this.fallingCharacters[0]; // Get reference without removing
-
-        // Get position before removal
+        const character = this.fallingCharacters[0];
+        // Get character position in canvas coordinates
         const charX = character.x;
         const charY = character.y;
 
-        // Now remove the character
+        console.log('Raw character position:', { charX, charY });
+
+        // Convert to screen coordinates using responsive handler
+        const screenPos = this.responsive.convertToCanvasCoords(charX, charY);
+        console.log('Converted screen position:', screenPos);
+
         this.fallingCharacters.shift();
 
-        // Create particle effect at the stored position
-        this.addParticleEffect(charX + 20, charY + 20, 'success'); // Using fixed offset of 20 for center
+        // Use converted coordinates for particle effect
+        this.addParticleEffect(screenPos.x, screenPos.y, 'success');
 
         // Update score and streak
         this.score += 10;
@@ -585,6 +682,9 @@ export default class Game {
         if (this.currentStreak > this.bestStreak) {
             this.bestStreak = this.currentStreak;
         }
+
+        // Check for level progression
+        this.updateLevel();
 
         // Set new target if there are more characters
         if (this.fallingCharacters.length > 0) {
@@ -625,13 +725,17 @@ export default class Game {
         console.log('Current target character:', targetChar.character);
         const correctAnswer = this.dictionary[targetChar.character];
 
-        console.log('Selected:', selectedAnswer, 'Correct:', correctAnswer);
+        console.log('Comparing:', {
+            selected: selectedAnswer,
+            correct: correctAnswer,
+            isMatch: selectedAnswer === correctAnswer
+        });
 
         if (selectedAnswer === correctAnswer) {
-            console.log('Correct answer!');
+            console.log('Correct answer - calling handleCorrectAnswer');
             this.handleCorrectAnswer();
         } else {
-            console.log('Wrong answer');
+            console.log('Wrong answer - calling handleWrongAnswer');
             this.handleWrongAnswer();
         }
     }
@@ -657,6 +761,7 @@ export default class Game {
     }
 
     addParticleEffect(x, y, type) {
+        console.log('addParticleEffect called:', { x, y, type });
         this.particleSystem.createEffect(x, y, type);
     }
 }

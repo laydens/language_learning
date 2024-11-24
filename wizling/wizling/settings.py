@@ -32,17 +32,46 @@ if not IN_PRODUCTION:
 # Core Settings
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-5nz3$_^&_u(*v)e20mk@@ag6j(g0_0z#z5&5$zly6wst=b$b6x')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+
+DEFAULT_DOMAINS = [
+    'localhost',
+    '127.0.0.1',
+    'djangocms-649684198786.us-central1.run.app',
+    '.run.app'
+]
+
+# Use explicit hosts in production, fallback to DEFAULT_DOMAINS in development
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'djangocms-649684198786.us-central1.run.app',
+    '.run.app',  # The dot prefix allows all subdomains
+    '.wizling.com',  # Allows all subdomains of wizling.com
+    'wizling.com',
+]
+
+# CSRF settings should be equally explicit
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'https://djangocms-649684198786.us-central1.run.app',
+    'https://*.run.app',
+    'https://*.wizling.com',
+    'https://wizling.com',
+    'http://*.wizling.com',
+]
+
+
 
 # FIX THESE FALLBACKS. DO WE NOT NEED SOCKETS?
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.getenv('CMS_DB', 'language_learning_cms'),
-        'USER': os.getenv('DB_USER', 'cms_user'),
-        'PASSWORD': os.getenv('DB_PASSWORD', os.getenv('CMS_DB_PASSWORD')),
-        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
-        'PORT': os.getenv('DB_PORT', '3306'),
+        'USER': os.getenv('CMS_DB_USER', 'cms_user'),
+        'PASSWORD': os.getenv('CMS_DB_PASSWORD'),
+        'HOST': os.getenv('CMS_DB_HOST', '127.0.0.1'),
+        'PORT': os.getenv('CMS_DB_PORT', '3306') if os.getenv('CMS_DB_HOST') == '127.0.0.1' else '',
         'OPTIONS': {
             'charset': 'utf8mb4',
             'init_command': 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci'
@@ -120,10 +149,11 @@ MIDDLEWARE = [
 ]
 
 # Static Files Configuration
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATIC_URL = '/static/'  # URL prefix for static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Where collectstatic will put files
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "wizling", "static"),
+    os.path.join(BASE_DIR, "wizling", "static"),  # Where your source static files live
 ]
 
 # Media Files Configuration

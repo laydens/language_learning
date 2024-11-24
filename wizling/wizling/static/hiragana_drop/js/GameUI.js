@@ -7,12 +7,48 @@ export default class GameUI {
         this.effectStart = 0;
         this.isAnimatingEffect = false;
         this.currentEffect = null;
+
+        // Base dimensions for reference
+        this.baseWidth = 1129;
+        this.baseHeight = 725;
+
+        // Initialize scales
+        this.scaleX = 1;
+        this.scaleY = 1;
+
+        // Initialize layout
+        this.initializeLayout();
     }
+
+
+    initializeLayout() {
+        this.layout = {
+            header: {
+                height: 52,
+                padding: 16
+            },
+            score: {
+                x: 24,
+                y: 24,
+                fontSize: 24
+            },
+            progress: {
+                startX: 120,
+                y: 24,
+                spacing: 24
+            }
+        };
+    }
+
+
+
 
     // GameUI.js
     // Add this method to your existing GameUI class
 
     drawUI(gameState) {
+        if (!this.ctx) return;
+
         const {
             version,
             score,
@@ -31,7 +67,10 @@ export default class GameUI {
     }
 
     drawHeaderOverlay() {
-        const headerHeight = 52;  // Narrower header
+        if (!this.ctx) return;
+
+        const headerHeight = this.layout.header.height;
+        const canvasWidth = this.ctx.canvas?.width || this.width || this.baseWidth;
 
         this.ctx.save();
 
@@ -43,13 +82,16 @@ export default class GameUI {
 
         // Draw header background with bottom border radius
         this.ctx.beginPath();
-        this.ctx.roundRect(0, 0, this.ctx.canvas.width, headerHeight, [0, 0, 12, 12]);
+        this.ctx.roundRect(0, 0, canvasWidth, headerHeight, [0, 0, 12, 12]);
         this.ctx.fill();
 
         this.ctx.restore();
     }
 
+
     drawHeaderContent(gameState) {
+        if (!this.ctx) return;
+
         const {
             version,
             score,
@@ -59,6 +101,8 @@ export default class GameUI {
             gameTitle
         } = gameState;
 
+        const canvasWidth = this.ctx.canvas?.width || this.width || this.baseWidth;
+
         this.ctx.save();
 
         // Game title - centered
@@ -66,35 +110,37 @@ export default class GameUI {
         this.ctx.fillStyle = Theme.colors.text.primary;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
-        this.ctx.fillText(gameTitle, this.ctx.canvas.width / 2, 24);
+        this.ctx.fillText(gameTitle, canvasWidth / 2, this.layout.score.y);
 
         // Score - left side
         this.ctx.textAlign = 'left';
         this.ctx.font = `${Theme.fonts.weights.bold} ${Theme.fonts.sizes.ui.large} ${Theme.fonts.system.display}`;
         this.ctx.fillStyle = Theme.colors.primary.main;
-        this.ctx.fillText(score.toString(), 24, 24);
+        this.ctx.fillText(score.toString(), this.layout.score.x, this.layout.score.y);
 
         if (bestStreak > 0) {
             this.ctx.font = `${Theme.fonts.weights.normal} ${Theme.fonts.sizes.ui.small} ${Theme.fonts.system.display}`;
             this.ctx.fillStyle = Theme.colors.text.secondary;
-            this.ctx.fillText(`Best: ${bestStreak}`, 24, 42);
+            this.ctx.fillText(`Best: ${bestStreak}`, this.layout.score.x, this.layout.score.y + 18);
         }
 
         // Progress indicators - right side
-        const progressStartX = this.ctx.canvas.width - 120;
-        this.drawProgressLives(maxMistakes, mistakesMade, null, progressStartX, 24);
+        const progressStartX = canvasWidth - this.layout.progress.startX;
+        this.drawProgressLives(maxMistakes, mistakesMade, null, progressStartX, this.layout.progress.y);
 
         // Version - far right
         this.ctx.font = `${Theme.fonts.weights.normal} ${Theme.fonts.sizes.ui.small} ${Theme.fonts.system.display}`;
         this.ctx.fillStyle = Theme.colors.text.secondary;
         this.ctx.textAlign = 'right';
-        this.ctx.fillText(version, this.ctx.canvas.width - 16, 24);
+        this.ctx.fillText(version, canvasWidth - this.layout.header.padding, this.layout.score.y);
 
         this.ctx.restore();
     }
 
     drawProgressLives(maxMistakes, mistakesMade, highlightIndex, startX, centerY) {
-        const spacing = 24; // Slightly tighter spacing
+        if (!this.ctx) return;
+
+        const spacing = this.layout.progress.spacing;
         const remainingLives = maxMistakes - mistakesMade;
 
         for (let i = 0; i < maxMistakes; i++) {
@@ -104,9 +150,12 @@ export default class GameUI {
 
             this.ctx.save();
 
-            // Outer circle - smaller for header
+            const radius = Math.round(8 * this.scaleX);
+            const innerRadius = Math.round(4 * this.scaleX);
+
+            // Outer circle
             this.ctx.beginPath();
-            this.ctx.arc(x, centerY, 8, 0, Math.PI * 2);
+            this.ctx.arc(x, centerY, radius, 0, Math.PI * 2);
 
             if (isHighlight && isActive) {
                 this.ctx.fillStyle = Theme.colors.progress.active.outer;
@@ -119,9 +168,9 @@ export default class GameUI {
             }
             this.ctx.fill();
 
-            // Inner dot - smaller for header
+            // Inner dot
             this.ctx.beginPath();
-            this.ctx.arc(x, centerY, 4, 0, Math.PI * 2);
+            this.ctx.arc(x, centerY, innerRadius, 0, Math.PI * 2);
             this.ctx.fillStyle = isActive ?
                 Theme.colors.progress.active.inner :
                 Theme.colors.progress.inactive.inner;
@@ -134,6 +183,39 @@ export default class GameUI {
 
             this.ctx.restore();
         }
+    }
+
+    handleResize(width, height) {
+        // Store the new dimensions
+        this.width = width;
+        this.height = height;
+
+        // Calculate new scale factors
+        this.scaleX = width / this.baseWidth;
+        this.scaleY = height / this.baseHeight;
+
+        // Update layout values if needed
+        this.updateLayoutForSize();
+    }
+
+    updateLayoutForSize() {
+        // Scale layout values based on current size
+        this.layout = {
+            header: {
+                height: Math.round(52 * this.scaleY),
+                padding: Math.round(16 * this.scaleX)
+            },
+            score: {
+                x: Math.round(24 * this.scaleX),
+                y: Math.round(24 * this.scaleY),
+                fontSize: Math.round(24 * this.scaleY)
+            },
+            progress: {
+                startX: Math.round(120 * this.scaleX),
+                y: Math.round(24 * this.scaleY),
+                spacing: Math.round(24 * this.scaleX)
+            }
+        };
     }
 
     drawScoreArea(score, currentStreak, bestStreak) {

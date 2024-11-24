@@ -1,5 +1,18 @@
+# .dockerignore
+.git
+.gitignore
 .env
 prod.env
-.git
-__pycache__
 *.pyc
+__pycache__
+.pytest_cache
+*.sqlite3
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Don't ignore these
+!staticfiles/
+!media/
+!wizling/static/

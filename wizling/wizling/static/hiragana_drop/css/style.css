@@ -1,15 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  background-color: #222;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
 #gameCanvas {
-  background-color: #fff;
-  border: 2px solid #000;
-  margin-top: 20px;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 #inputField {
@@ -27,4 +37,53 @@ body {
 
 body {
   font-family: 'Nunito', sans-serif;
+}
+
+/* Mobile responsive sizing */
+@media (max-width: 1129px) {
+  #gameCanvas {
+    width: 100vw;
+    height: auto;
+    aspect-ratio: 1129/725;
+    /* Maintain aspect ratio */
+  }
+}
+
+/* Media queries for different screen sizes */
+@media (max-width: 768px) {
+  #gameCanvas {
+    width: 100%;
+    /* Use parent container width */
+    height: 100%;
+    /* Use parent container height */
+  }
+}
+
+
+@media (min-width: 481px) and (max-width: 768px) {
+  #gameCanvas {
+    margin: 10px;
+  }
+}
+
+@media (min-width: 769px) {
+  #gameCanvas {
+    margin: 0px;
+  }
+}
+
+/* Portrait orientation styles */
+@media (orientation: portrait) {
+  #gameCanvas {
+    width: 100vw;
+    height: auto;
+  }
+}
+
+/* Landscape orientation styles */
+@media (orientation: landscape) {
+  #gameCanvas {
+    height: 100vh;
+    width: auto;
+  }
 }

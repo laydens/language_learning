@@ -188,7 +188,7 @@ h6 {
 
 p {
     margin-bottom: var(--space-md);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
 }
 
 /*------------------------------------*\

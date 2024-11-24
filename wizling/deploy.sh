@@ -5,10 +5,13 @@ PROJECT_ID="wizling"
 SERVICE_NAME="djangocms"
 REGION="us-central1"
 CLOUD_SQL_INSTANCE="wizling-mysql"
-DB_NAME="language_learning_cms"
-DB_USER="cms_service"
-DB_PASSWORD_SECRET="cms-service-password"
+CMS_DB="language_learning_cms"
+CMS_DB_USER="cms_service"
+CMS_DB_PASSWORD_SECRET="cms-service-password"
 SERVICE_ACCOUNT="cloudrun-serviceaccount@wizling.iam.gserviceaccount.com"
+
+# Domain Configuration
+CLOUD_RUN_DOMAIN="djangocms-649684198786.us-central1.run.app"
 
 # Derived variables
 IMAGE_PATH="$REGION-docker.pkg.dev/$PROJECT_ID/$SERVICE_NAME/$SERVICE_NAME"
@@ -29,7 +32,7 @@ gcloud run deploy $SERVICE_NAME \
  --allow-unauthenticated \
  --service-account $SERVICE_ACCOUNT \
  --add-cloudsql-instances $CLOUD_SQL_CONNECTION_NAME \
- --set-env-vars "CMS_DB=$DB_NAME,DB_USER=$DB_USER,DB_HOST=/cloudsql/$CLOUD_SQL_CONNECTION_NAME" \
- --set-secrets "DB_PASSWORD=$DB_PASSWORD_SECRET:latest"
-
+ --set-env-vars="CMS_DB=$CMS_DB,CMS_DB_USER=$CMS_DB_USER,CMS_DB_HOST=/cloudsql/$CLOUD_SQL_CONNECTION_NAME,ALLOWED_HOSTS=$CLOUD_RUN_DOMAIN" \
+ --set-secrets="CMS_DB_PASSWORD=$CMS_DB_PASSWORD_SECRET:latest"
+echo "http://wizling.com"
 echo "✅ Deployment complete!"
