@@ -14,11 +14,13 @@ import { GameDataProvider } from './GameDataProvider.js';
 
 export default class Game {
     constructor(canvas, ctx, queryString) {
+
+        this.version = "v1.1.66";
         // Core initialization
         console.log('Canvas width:', canvas.width);
         this.canvas = canvas;
         this.ctx = ctx;
-        this.version = "v1.1.57";
+
         this.queryString = queryString;
         console.log('queryString in Game constructor: ', queryString);
         console.log('Game version:', this.version);

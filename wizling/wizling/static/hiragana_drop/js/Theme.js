@@ -1,6 +1,13 @@
 // Theme.js
 const Theme = {
     colors: {
+        success: {
+            primary: '#EDA06D',    // Soft Maple - Core particle
+            secondary: '#FBEADE',  // Maple Mist - Inner glow
+            vibrant: '#FF8C00',    // Dark Orange - Bold highlight
+            accent: '#FFD700',     // Gold - Bright accent
+            glow: '#FDF5EF'       // Warm Tint - Outer fade
+        },
         background: {
             primary: '#F0F4F5',    // White Mist - Main background (surface-100)
             secondary: '#FDF5EF',     // Warm Tint - Tinted backgrounds (secondary-50)
@@ -39,11 +46,6 @@ const Theme = {
             secondary: '#3D4144', // Dark Gray - Secondary text (surface-700)
             light: '#666C70',    // Medium Gray - Supporting text (surface-500)
             white: '#FFFFFF'    // White - Pure white
-        },
-        success: {
-            primary: '#EDA06D',    // Soft Maple - Success primary (secondary-300)
-            secondary: '#FBEADE',  // Maple Mist - Success emphasis (secondary-100)
-            glow: '#FDF5EF'       //  Warm Tint - Tinted backgrounds (secondary-50)
         },
         mistake: {
             primary: '#C55A21',    // Rich Maple - Mistake primary (secondary-700)
@@ -227,10 +229,5 @@ const Theme = {
 
 };
 
-Theme.colors.success = {
-    primary: Theme.colors.secondary.light,
-    secondary: Theme.colors.secondary.pale,
-    glow: Theme.colors.secondary.tint,
-};
 
 export default Theme;
