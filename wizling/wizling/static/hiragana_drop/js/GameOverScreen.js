@@ -11,25 +11,25 @@ export default class GameOverScreen {
             playAgain: 'Try Again',
             startOver: 'Start Over',
             exit: 'Exit to Wizling',
-            ...options.texts  // Maintain existing text override capability
+            ...options.texts
+        };
+
+        // Add event callbacks object
+        this.callbacks = {
+            onTryAgain: options.onTryAgain || (() => { }),
+            onStartOver: options.onStartOver || (() => { }),
+            onExit: options.onExit || (() => { })
         };
     }
 
-    draw(ctx, canvas, gameStats, onPlayAgain) {
+    draw(ctx, canvas, gameStats) {
         this.ctx = ctx;
         this.canvas = canvas;
         this.gameStats = gameStats;
-        this.onPlayAgain = onPlayAgain;  // Maintain original callback
 
         this.drawOverlay();
         this.drawContent();
         this.drawButtons();
-
-        // Maintain existing click handler pattern
-        if (!this.clickHandler) {
-            this.clickHandler = this.handleClick.bind(this);
-            this.canvas.addEventListener('click', this.clickHandler);
-        }
     }
 
     drawOverlay() {
@@ -111,7 +111,7 @@ export default class GameOverScreen {
 
     drawButtons() {
         const { x, y, width, height } = this.containerBounds;
-        const buttonWidth = width * 0.7;
+        const buttonWidth = width * 0.9;
         const buttonHeight = 48;
         const startY = y + height - 140;
 
@@ -184,16 +184,18 @@ export default class GameOverScreen {
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
 
-        // Primary button maintains original behavior
-        if (this.isPointInRect(x, y, this.buttonBounds.playAgain)) {
-            this.onPlayAgain();
+        // Convert to canvas coordinates
+        const canvasX = x * (this.canvas.width / rect.width);
+        const canvasY = y * (this.canvas.height / rect.height);
+
+        if (this.isPointInRect(canvasX, canvasY, this.buttonBounds.playAgain)) {
+            this.callbacks.onTryAgain();
         }
-        // Secondary buttons use window.location
-        else if (this.isPointInRect(x, y, this.buttonBounds.startOver)) {
-            window.location.reload();  // Simple reload for start over
+        else if (this.isPointInRect(canvasX, canvasY, this.buttonBounds.startOver)) {
+            this.callbacks.onStartOver();
         }
-        else if (this.isPointInRect(x, y, this.buttonBounds.exit)) {
-            window.location.href = '/';
+        else if (this.isPointInRect(canvasX, canvasY, this.buttonBounds.exit)) {
+            this.callbacks.onExit();
         }
     }
 

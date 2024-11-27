@@ -62,11 +62,17 @@
                     </svg>
                 </a>
 
+                <button class="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
 
                 <div class="nav-menu">
-                    <ul class="nav-links">
-                        {% show_menu 0 1 100 100 "menu/menu.html" %}
-                    </ul>
+                    {% show_menu 0 1 100 100 "menu/menu.html" %}
                     <div class="nav-cta">
                         {% static_placeholder 'nav_cta' %}
                     </div>
@@ -132,6 +138,30 @@
 
     {% render_block "js" %}
     {% block extra_js %}{% endblock %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const navMenu = document.querySelector('.nav-menu');
+
+            if (mobileMenuButton && navMenu) {
+                mobileMenuButton.addEventListener('click', function () {
+                    navMenu.classList.toggle('active');
+                    this.setAttribute('aria-expanded',
+                        this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'
+                    );
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function (event) {
+                    if (!navMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+                        navMenu.classList.remove('active');
+                        mobileMenuButton.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
+
 
 </html>

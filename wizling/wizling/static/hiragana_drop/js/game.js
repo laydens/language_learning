@@ -15,7 +15,7 @@ import { GameDataProvider } from './GameDataProvider.js';
 export default class Game {
     constructor(canvas, ctx, queryString) {
 
-        this.version = "v1.1.66";
+        this.version = "v1.1.72";
         // Core initialization
         console.log('Canvas width:', canvas.width);
         this.canvas = canvas;
@@ -63,8 +63,6 @@ export default class Game {
 
         this.setupBindings();
 
-
-
     }
 
 
@@ -78,8 +76,8 @@ export default class Game {
         this.gameLoop = null;
         this.densityInterval = null;
         this.gameSpeed = 1000;
-        this.characterFallSpeed = 1.7;
-        this.currentDensity = 2;
+        this.characterFallSpeed = 1.0;
+        this.currentDensity = 4;
         this.score = 0;
         this.highScore = localStorage.getItem('highScore') || 0;
         this.selectedOptionIndex = -1;
@@ -92,23 +90,28 @@ export default class Game {
         this.targetCharacter = null;  // Reset target character
         this.particleSystem.reset();
         this.gameOptions.reset();
-        console.log('Game state reset - New fall speed:', this.characterFallSpeed);
 
+        this.characterConfig = {
+            baseStaggerDistance: 100,     // Base pixels between characters
+            minStaggerDistance: 100,       // Minimum stagger distance allowed
+            staggerReductionPerLevel: 5   // How much to reduce stagger per level
+        };
         this.levelConfig = {
-            baseSpeed: 1.6,
-            speedIncreasePerLevel: 0.2,    // Speed increases by 15% per level
-            maxSpeed: 3.0,                  // Cap the maximum speed
+            baseSpeed: this.characterFallSpeed, // Increased base speed
+            speedIncreasePerLevel: 0.1,         // Doubled speed increase
+            maxSpeed: 5.0,                      // Increased max speed
 
-            baseDensity: 1,
+            baseDensity: 2,
             densityLevels: [
                 { level: 1, density: 1 },
-                { level: 3, density: 2 },
-                { level: 5, density: 3 },
-                { level: 7, density: 4 }
+                { level: 2, density: 2 },      // Reduced level requirement
+                { level: 3, density: 3 },      // Reduced level requirement
+                { level: 4, density: 4 }       // Reduced level requirement
             ],
 
-            pointsToNextLevel: 100,         // Points needed to advance a level
-            maxLevel: 10                    // Cap the maximum level
+
+            pointsToNextLevel: 80,             // Reduced points needed
+            maxLevel: 10
         };
 
         this.currentLevel = 1;
@@ -213,13 +216,21 @@ export default class Game {
                 primary: this.colors.background.primary,
                 text: this.colors.text.primary,
             },
-            texts: {
-                gameOver: 'Game Over!',
-                score: 'Final Score',
-                highScore: 'Best Score',
-                playAgain: 'Try Again'
+            // Add callback handlers
+            onTryAgain: () => {
+                console.log('Try Again clicked');
+                this.startGame();
+            },
+            onStartOver: () => {
+                console.log('Start Over clicked');
+                window.location.reload();
+            },
+            onExit: () => {
+                console.log('Exit clicked');
+                window.location.href = '/';
             }
         });
+
 
         // Initialize Start screen with access to queryString
         this.startScreen = new StartScreenManager({
@@ -242,35 +253,44 @@ export default class Game {
             const currentTime = Date.now();
             if (currentTime - this.lastSpawnTime < this.spawnInterval) return;
 
-            // Changed density check to consider current level density
-            if (this.fallingCharacters.length >= this.currentDensity) return;
+            // Calculate current level's stagger distance
+            const staggerReduction = this.currentLevel * this.characterConfig.staggerReductionPerLevel;
+            const currentStaggerDistance = Math.max(
+                this.characterConfig.baseStaggerDistance - staggerReduction,
+                this.characterConfig.minStaggerDistance
+            );
 
-            // Reduced minimum stagger for higher densities
-            const minStaggerDistance = Math.max(150 - (this.currentLevel * 10), 80); // Reduces spacing as level increases
+            // Check stagger distance
             const lastCharacterY = this.fallingCharacters.length > 0
                 ? this.fallingCharacters[this.fallingCharacters.length - 1].y
-                : -minStaggerDistance;
+                : -currentStaggerDistance;
 
-            // Adjusted spawn check for multiple characters
-            if (lastCharacterY > -minStaggerDistance && this.fallingCharacters.length > 0) return;
+            // Only check stagger if we haven't reached density limit
+            if (this.fallingCharacters.length < this.currentDensity) {
+                if (lastCharacterY < -currentStaggerDistance) return;
 
+                const keys = Object.keys(this.dictionary);
+                const character = keys[Math.floor(Math.random() * keys.length)];
 
-            const keys = Object.keys(this.dictionary);
-            const character = keys[Math.floor(Math.random() * keys.length)];
+                const characterSize = 40;
+                const margin = characterSize;
+                const x = margin + Math.random() * (this.canvas.width - characterSize - margin * 2);
 
-            const characterSize = 40;
-            const margin = characterSize;
-            const x = margin + Math.random() * (this.canvas.width - characterSize - margin * 2);
+                // Calculate initial Y position based on character's position in sequence
+                const initialY = -characterSize - (this.fallingCharacters.length * currentStaggerDistance);
 
-            console.log("Spawning character with fall speed:", this.characterFallSpeed);
-            const newChar = new FallingCharacter(character, x, this.characterFallSpeed, this.ctx, this);
-            this.fallingCharacters.push(newChar);
-            this.lastSpawnTime = currentTime;
+                console.log("Spawning character with fall speed:", this.characterFallSpeed);
+                const newChar = new FallingCharacter(character, x, this.characterFallSpeed, this.ctx, this);
+                newChar.y = initialY; // Set initial Y position with spacing
 
-            if (this.fallingCharacters.length === 1) {
-                console.log('Setting initial target:', character);
-                this.targetCharacter = character;
-                this.generateOptions(character);
+                this.fallingCharacters.push(newChar);
+                this.lastSpawnTime = currentTime;
+
+                if (this.fallingCharacters.length === 1) {
+                    console.log('Setting initial target:', character);
+                    this.targetCharacter = character;
+                    this.generateOptions(character);
+                }
             }
         };
 
@@ -312,34 +332,23 @@ export default class Game {
 
 
         this.handleClick = (event) => {
-            const coords = this.responsive.convertToCanvasCoords(
-                event.clientX || event.touches[0].clientX,
-                event.clientY || event.touches[0].clientY
-            );
+            const rect = this.canvas.getBoundingClientRect();
+            const mouseX = (event.clientX - rect.left) * (this.canvas.width / rect.width);
+            const mouseY = (event.clientY - rect.top) * (this.canvas.height / rect.height);
 
             if (this.isGameOver) {
-                const buttonBounds = this.getPlayAgainButtonBounds();
-                if (this.isPointInRect(coords.x, coords.y, buttonBounds)) {
-                    this.startGame();
-                    return;
-                }
-            }
-
-            if (!this.gameStarted) {
-                this.startScreen.handleClick(coords.x, coords.y, this.canvas);
+                // Simply pass the click event to GameOverScreen
+                this.gameOverScreen.handleClick(event);
                 return;
             }
 
-            this.checkOptionSelection(coords.x, coords.y);
+            if (!this.gameStarted) {
+                this.startScreen.handleClick(mouseX, mouseY, this.canvas);
+                return;
+            }
+            this.checkOptionSelection(mouseX, mouseY);
         };
 
-
-
-        // this.increaseDensity = () => {
-        //     if (this.currentDensity < 4) {
-        //         this.currentDensity++;
-        //     }
-        // };
     }
 
     checkOptionSelection(mouseX, mouseY) {
@@ -356,9 +365,7 @@ export default class Game {
     // In Game class
     handleMouseUp() {
         console.log("Game: handleMouseUp called");
-        if (this.gameStarted) {  // Only handle mouseup during actual gameplay
-            this.gameOptions.handleMouseUp();
-        }
+        this.gameOptions.handleMouseUp();
     }
 
     bindEventListeners() {
@@ -523,27 +530,39 @@ export default class Game {
     }
 
     updateFallingCharacters() {
+        // First, sort characters by Y position to ensure proper order
+        this.fallingCharacters.sort((a, b) => b.y - a.y);
+
+        // Always set the lowest character as target
+        if (this.fallingCharacters.length > 0) {
+            const lowestChar = this.fallingCharacters[0];
+            if (this.targetCharacter !== lowestChar.character) {
+                console.log('Setting new target to lowest character:', lowestChar.character);
+                this.targetCharacter = lowestChar.character;
+                this.generateOptions(lowestChar.character);
+            }
+        }
+
+        // Then do our normal update loop
         for (let i = this.fallingCharacters.length - 1; i >= 0; i--) {
             const char = this.fallingCharacters[i];
             char.update();
 
             if (char.y > this.canvas.height) {
-                if (i === 0) {
+                if (char.character === this.targetCharacter) {
                     console.log('Target character missed');
                     this.handleMistake();
-
-                    if (this.fallingCharacters.length > 1) {
-                        const newTarget = this.fallingCharacters[1].character;
-                        console.log('Setting new target after miss:', newTarget);
-                        this.targetCharacter = newTarget;
-                        this.generateOptions(newTarget);
-                    }
                 }
                 this.fallingCharacters.splice(i, 1);
             } else {
                 // Pass true if this character is the target character
                 char.draw(char.character === this.targetCharacter);
             }
+        }
+
+        // If we have no characters left, clear the target
+        if (this.fallingCharacters.length === 0) {
+            this.targetCharacter = null;
         }
     }
 
@@ -590,11 +609,6 @@ export default class Game {
         this.isGameOver = true;
         this.clearIntervals();
 
-        if (this.gameLoop) {
-            cancelAnimationFrame(this.gameLoop);
-            this.gameLoop = null;
-        }
-
         if (this.score > this.highScore) {
             this.highScore = this.score;
             localStorage.setItem('highScore', this.highScore);
@@ -605,7 +619,7 @@ export default class Game {
         this.options = [];
         this.gameOptions.reset();
 
-        // Let GameOverScreen handle drawing completely
+        // Draw the game over screen
         this.gameOverScreen.draw(
             this.ctx,
             this.canvas,
@@ -616,8 +630,7 @@ export default class Game {
                     'Best Streak': this.bestStreak,
                     'Characters Cleared': Math.floor(this.score / 10)
                 }
-            },
-            () => this.startGame()
+            }
         );
     }
 

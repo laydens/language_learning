@@ -59,6 +59,22 @@ export default class GameUI {
             gameTitle
         } = gameState;
 
+        // Use Theme for UI font sizes
+        const headerFontSize = Theme.getCanvasFontSize(Theme.fonts.sizes.ui.normal, this.ctx.canvas);
+        const scoreFontSize = Theme.getCanvasFontSize(Theme.fonts.sizes.ui.game.score, this.ctx.canvas);
+        const versionFontSize = Theme.getCanvasFontSize(Theme.fonts.sizes.ui.game.version, this.ctx.canvas);
+
+        // Draw version number (top-left)
+        this.ctx.font = `${Theme.fonts.weights.normal} ${versionFontSize}px ${Theme.fonts.system.display}`;
+        this.ctx.fillStyle = Theme.colors.text.secondary;
+        this.ctx.textAlign = 'left';
+        this.ctx.fillText(version, 10, 20);
+
+        // Draw score (top-right)
+        this.ctx.font = `${Theme.fonts.weights.medium} ${scoreFontSize}px ${Theme.fonts.system.display}`;
+        this.ctx.textAlign = 'right';
+        this.ctx.fillText(`Score: ${score}`, this.ctx.canvas.width - 10, 20);
+
         // Draw header overlay
         this.drawHeaderOverlay();
 
@@ -101,12 +117,17 @@ export default class GameUI {
             gameTitle
         } = gameState;
 
+        // Get font sizes from Theme
+        const titleFontSize = Theme.getCanvasFontSize(Theme.fonts.sizes.ui.game.score, this.ctx.canvas);
+        const scoreFontSize = Theme.getCanvasFontSize(Theme.fonts.sizes.ui.game.score, this.ctx.canvas);
+        const versionFontSize = Theme.getCanvasFontSize(Theme.fonts.sizes.ui.game.version, this.ctx.canvas);
+
         const canvasWidth = this.ctx.canvas?.width || this.width || this.baseWidth;
 
         this.ctx.save();
 
         // Game title - centered
-        this.ctx.font = `${Theme.fonts.weights.medium} ${Theme.fonts.sizes.ui.normal} ${Theme.fonts.system.display}`;
+        this.ctx.font = `${Theme.fonts.weights.medium} ${titleFontSize}px ${Theme.fonts.system.display}`;
         this.ctx.fillStyle = Theme.colors.text.primary;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
@@ -114,7 +135,7 @@ export default class GameUI {
 
         // Score - left side
         this.ctx.textAlign = 'left';
-        this.ctx.font = `${Theme.fonts.weights.bold} ${Theme.fonts.sizes.ui.large} ${Theme.fonts.system.display}`;
+        this.ctx.font = `${Theme.fonts.weights.bold} ${scoreFontSize}px ${Theme.fonts.system.display}`;
         this.ctx.fillStyle = Theme.colors.primary.main;
         this.ctx.fillText(score.toString(), this.layout.score.x, this.layout.score.y);
 
@@ -128,11 +149,12 @@ export default class GameUI {
         const progressStartX = canvasWidth - this.layout.progress.startX;
         this.drawProgressLives(maxMistakes, mistakesMade, null, progressStartX, this.layout.progress.y);
 
-        // Version - far right
-        this.ctx.font = `${Theme.fonts.weights.normal} ${Theme.fonts.sizes.ui.small} ${Theme.fonts.system.display}`;
+        // Version - far right, adjusted position
+        this.ctx.font = `${Theme.fonts.weights.normal} ${versionFontSize}px ${Theme.fonts.system.display}`;
         this.ctx.fillStyle = Theme.colors.text.secondary;
         this.ctx.textAlign = 'right';
-        this.ctx.fillText(version, canvasWidth - this.layout.header.padding, this.layout.score.y);
+        const versionX = canvasWidth - (this.layout.progress.startX + maxMistakes * this.layout.progress.spacing + this.layout.header.padding);
+        this.ctx.fillText(version, versionX, this.layout.score.y);
 
         this.ctx.restore();
     }

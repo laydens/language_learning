@@ -9,17 +9,55 @@
     padding: var(--space-md) 0;
 }
 
+/* Navigation */
 .nav-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: var(--space-2xl);
+    position: relative;
 }
 
 .nav-menu {
     display: flex;
     align-items: center;
     gap: var(--space-lg);
+    list-style: none;
+}
+
+/* Menu List Reset */
+.nav-menu,
+.nav-menu ul,
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-menu li,
+.footer-links li {
+    margin: 0;
+    padding: 0;
+}
+
+/* General Link Styles */
+.nav-menu a,
+.footer-links a {
+    color: var(--primary-900);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.nav-menu a:hover,
+.footer-links a:hover {
+    color: var(--secondary-500);
+}
+
+.nav-menu a {
+    color: var(--primary-900);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-menu a:hover {
+    color: var(--secondary-500);
 }
 
 .nav-links {
@@ -60,6 +98,24 @@
     border: none;
     cursor: pointer;
 }
+
+home-container {
+    background: var(--background-gradient);
+}
+
+
+
+/* Mobile Menu Styles */
+.mobile-menu-button {
+    display: none;
+    background: none;
+    border: none;
+    padding: var(--space-sm);
+    color: var(--primary-900);
+    cursor: pointer;
+}
+
+
 
 .button-primary {
     background: linear-gradient(135deg, var(--secondary-500), var(--secondary-700));
@@ -113,42 +169,36 @@
     gap: var(--space-lg);
 }
 
-/* CTA Grid Section */
+/* CTA Grid Styles */
 .cta-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-lg);
+    gap: var(--space-xl);
     max-width: 1000px;
-    /* margin: var(--space-2xl) auto; */
 }
 
 .cta-card {
-    border: none;
     background: linear-gradient(165deg, var(--surface-50) 0%, var(--primary-50) 100%);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-    padding: 0 var(--space-xl) var(--space-sm) var(--space-xl);
-    position: relative;
-    border-top: 4px solid var(--primary-500);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-md);
     text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.cta-card:hover {
-    transform: translateY(-4px);
+    border-top: 4px solid var(--primary-500);
     box-shadow: var(--shadow-md);
 }
 
 .cta-card h2 {
     color: var(--primary-900);
-    font-size: var(--font-size-xl);
     margin-bottom: var(--space-md);
 }
 
 .cta-card p {
     color: var(--text-secondary);
     margin-bottom: var(--space-lg);
-    font-size: var(--font-size-sm);
+}
+
+.cta-card .button {
+    width: auto;
+    min-width: 200px;
 }
 
 /* Color Swatches */
@@ -254,7 +304,7 @@ td {
 
 /* Content Box */
 .content-box {
-    padding: var(--space-lg);
+    padding: var(--space-md);
     border-radius: var(--border-radius-md);
     margin-bottom: var(--space-lg);
     margin-top: var(--space-lg);
@@ -311,33 +361,55 @@ footer p {
     font-size: var(--font-size-xs);
 }
 
+/* Hero Section Styles */
+.hero {
+    padding: 0;
+}
+
 .hero-content {
     display: flex;
-    /* This is crucial for side-by-side */
     align-items: center;
     gap: var(--space-2xl);
+    max-width: var(--container-max);
+    margin: 0 auto;
 }
 
 .hero-text {
     flex: 1;
-    /* Takes up half the space */
-    max-width: 50%;
-    /* Ensures text doesn't get too wide */
+    max-width: 600px;
+}
+
+.hero-text h1 {
+    color: var(--primary-900);
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-3xl);
+}
+
+.hero-text h3 {
+    color: var(--secondary-500);
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-xl);
+}
+
+.hero-text p {
+    color: var(--text-secondary);
+    font-size: var(--font-size-lg);
+    line-height: 1.6;
 }
 
 .hero-image {
     flex: 1;
-    /* Takes up half the space */
-    max-width: 50%;
-    /* Ensures image doesn't get too wide */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .hero-image img {
-    /* width: 100%; */
+    max-width: 100%;
     height: auto;
-    border-radius: 12px;
-
+    border-radius: var(--border-radius-lg);
 }
+
 
 .site-footer {
     background: var(--surface-50);
@@ -357,6 +429,81 @@ main {
 \*------------------------------------*/
 
 @media (max-width: 768px) {
+
+    .mobile-menu-button {
+        display: block;
+        position: absolute;
+        right: var(--space-md);
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: var(--z-dropdown);
+    }
+
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--surface-50);
+        padding: var(--space-lg) var(--space-md);
+        box-shadow: var(--shadow-md);
+        z-index: var(--z-dropdown);
+        border-top: 1px solid var(--surface-300);
+    }
+
+    .nav-menu.active {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-lg);
+    }
+
+    .nav-menu li {
+        width: 100%;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-menu a {
+        display: block;
+        padding: var(--space-sm) 0;
+        font-size: var(--font-size-lg);
+    }
+
+    /* Hero Content Styles */
+    .hero-content {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2xl);
+        max-width: var(--container-max);
+        margin: 0 auto;
+    }
+
+    .hero-text {
+        flex: 1;
+        max-width: 600px;
+        text-align: left;
+    }
+
+    .hero-text h1,
+    .hero-text h3,
+    .hero-text p {
+        text-align: left;
+    }
+
+    .hero-image img {
+        max-width: 80%;
+    }
+
+    .cta-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+        padding: 0 var(--space-md);
+    }
+
+
     .nav-menu {
         display: none;
     }
@@ -371,6 +518,26 @@ main {
         gap: var(--space-md);
     }
 
+    /* CTA Grid Styles */
+    .cta-card {
+        text-align: left;
+        padding: var(--space-xl);
+    }
+
+    .cta-card h2,
+    .cta-card p {
+        text-align: left;
+    }
+
+
+    .hide-on-mobile {
+        display: block;
+    }
+
+    .show-on-mobile {
+        display: none;
+    }
+
     .container {
         max-width: 1200px;
         /* Add if not already defined */
@@ -380,29 +547,30 @@ main {
         /* Add if not already defined */
     }
 
-    .hero {
-        padding: var(--space-2xl) 0;
+    container-tight {
+        padding: 0 var(--space-xs);
     }
 
-
-
-    .hero-text {
-        flex: 1;
+    .hero-content {
+        padding: 0 var(--space-lg);
+        gap: var(--space-xl);
     }
 
-    .hero-image {
-        flex: 1;
+    .cta-grid {
+        padding: 0 var(--space-lg);
     }
 
-
+    /* Main Content Areas */
     .content-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-md);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--space-lg);
+        margin: var(--space-xl) 0;
     }
 
     .card {
-        margin: var(--space-xs);
-        padding: var(--space-md);
+        padding: var(--space-lg);
+        height: 100%;
     }
 
     .color-swatch {
@@ -417,4 +585,60 @@ main {
     td {
         padding: var(--space-sm);
     }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: var(--space-md) 0;
+    }
+
+    .hero-text h1 {
+        font-size: var(--font-size-2xl);
+    }
+
+    .hero-text h3 {
+        font-size: var(--font-size-lg);
+    }
+
+    .hero-text p {
+        font-size: var(--font-size-base);
+    }
+
+    .hero-content {
+        flex-direction: column;
+    }
+
+    .hero-text {
+        max-width: 100%;
+    }
+
+    .hero-text h1,
+    .hero-text h3,
+    .hero-text p {
+        text-align: left;
+    }
+
+    .cta-card {
+        padding: var(--space-lg);
+    }
+
+    .cta-card .button {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .cta-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+
+    .cta-card {
+        margin: 0;
+    }
+
+    .cta-card h2,
+    .cta-card p {
+        text-align: left;
+    }
+
 }

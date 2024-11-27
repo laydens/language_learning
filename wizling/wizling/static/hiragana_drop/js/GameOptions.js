@@ -10,6 +10,33 @@ export default class GameOptions {
         this.feedbackState = null; // { index: number, correct: boolean }
         this.feedbackStartTime = 0;
         this.lastFrameTime = 0;
+
+        // Add mousemove listener here instead of in draw
+        this.ctx.canvas.addEventListener('mousemove', (event) => {
+            const rect = this.ctx.canvas.getBoundingClientRect();
+            const mouseX = event.clientX - rect.left;
+            const mouseY = event.clientY - rect.top;
+
+            // Calculate option positions
+            const optionBoxWidth = this.ctx.canvas.width / 5;
+            const optionBoxHeight = this.ctx.canvas.height / 10;
+            const spacing = optionBoxWidth / 4;
+            const totalWidth = (optionBoxWidth + spacing) * this.options.length - spacing;
+            const startX = (this.ctx.canvas.width - totalWidth) / 2;
+            const y = this.ctx.canvas.height - optionBoxHeight * 1.3;
+
+            this.hoveredIndex = -1; // Reset
+            this.options.forEach((_, index) => {
+                const x = startX + index * (optionBoxWidth + spacing);
+                if (mouseX >= x && mouseX <= x + optionBoxWidth &&
+                    mouseY >= y && mouseY <= y + optionBoxHeight) {
+                    this.hoveredIndex = index;
+                }
+            });
+
+            // Trigger redraw when hover state changes
+            this.draw();
+        });
     }
 
     generateOptions(character, dictionary) {
@@ -46,86 +73,35 @@ export default class GameOptions {
         const startX = (canvas.width - totalWidth) / 2;
         const y = canvas.height - optionBoxHeight * 1.3;
 
-        // Clear the option area
-        //     this.ctx.clearRect(0, canvas.height - optionBoxHeight * 2, canvas.width, optionBoxHeight * 2);
+        // Use existing option size and shape
+        const optionFontSize = Theme.getCanvasFontSize(Theme.fonts.sizes.character.medium, this.ctx.canvas);
 
         this.options.forEach((option, index) => {
             const x = startX + index * (optionBoxWidth + spacing);
+            const isHovered = this.hoveredIndex === index;
 
-            // Calculate visual states
-            const isHovered = index === this.hoveredIndex;
-            const isPressed = index === this.pressedIndex;
-            const isSelected = index === this.selectedOptionIndex;
-
-            // Dynamic elevation based on state
-            let elevation = 3;  // Base elevation
-            if (isHovered) elevation = 6;
-            if (isPressed) elevation = 1;
-
-            // Calculate feedback animation if active
-            let feedbackOpacity = 0;
-            let scale = 1;
-            if (this.feedbackState && this.feedbackState.index === index) {
-                const feedbackDuration = 500; // ms
-                const elapsed = timestamp - this.feedbackStartTime;
-                const progress = Math.min(elapsed / feedbackDuration, 1);
-
-                feedbackOpacity = Math.sin(progress * Math.PI);
-                scale = 1 + Math.sin(progress * Math.PI) * 0.05;
-
-                if (progress >= 1) {
-                    this.feedbackState = null;
-                }
-            }
-
-            // Draw shadow layers for elevation
+            // Draw option background with more rounded corners
             this.ctx.save();
-            for (let i = 0; i < elevation; i++) {
-                this.ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
-                this.ctx.shadowBlur = 3 + i * 2;
-                this.ctx.shadowOffsetY = 1 + i;
-            }
-
-            // Scale transform for feedback animation
-            this.ctx.translate(x + optionBoxWidth / 2, y + optionBoxHeight / 2);
-            this.ctx.scale(scale, scale);
-            this.ctx.translate(-(x + optionBoxWidth / 2), -(y + optionBoxHeight / 2));
-
-            // Draw option box
             this.ctx.beginPath();
-            this.ctx.roundRect(x, y, optionBoxWidth, optionBoxHeight, 12);
+            this.ctx.roundRect(x, y, optionBoxWidth, optionBoxHeight, 16); // Increased corner radius
 
-            // Background color based on state
-            if (this.feedbackState && this.feedbackState.index === index) {
-                const feedbackColor = this.feedbackState.correct ?
-                    Theme.colors.success.secondary :
-                    Theme.colors.mistake.secondary;
-                this.ctx.fillStyle = feedbackColor;
-            } else if (isSelected || isPressed) {
-                this.ctx.fillStyle = Theme.colors.primary.medium;
-            } else if (isHovered) {
+            if (isHovered) {
+                // Subtle hover effect
                 this.ctx.fillStyle = Theme.colors.primary.pale;
+                this.ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+                this.ctx.shadowBlur = 8;
             } else {
-                this.ctx.fillStyle = '#FFFFFF';
+                this.ctx.fillStyle = Theme.colors.surface.white;
             }
+
             this.ctx.fill();
 
-            // Subtle border
-            this.ctx.strokeStyle = isHovered ?
-                Theme.colors.primary.medium :
-                'rgba(0, 0, 0, 0.08)';
-            this.ctx.lineWidth = isHovered ? 2 : 1;
-            this.ctx.stroke();
-
-            // Draw text
-            this.ctx.font = `${Theme.fonts.weights.medium} ${Theme.fonts.sizes.ui.large} ${Theme.fonts.system.primary}`;
-            this.ctx.fillStyle = isSelected || isPressed ?
-                '#FFFFFF' :
-                Theme.colors.text.primary;
-            const textWidth = this.ctx.measureText(option).width;
-            const textX = x + (optionBoxWidth - textWidth) / 2;
-            const textY = y + optionBoxHeight / 2 + 8;
-            this.ctx.fillText(option, textX, textY);
+            // Draw option text centered within the tile
+            this.ctx.font = `${Theme.fonts.weights.medium} ${optionFontSize}px ${Theme.fonts.system.display}`;
+            this.ctx.fillStyle = Theme.colors.text.primary;
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.fillText(option, x + optionBoxWidth / 2, y + optionBoxHeight / 2);
 
             this.ctx.restore();
         });

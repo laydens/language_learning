@@ -39,34 +39,44 @@ export default class FallingCharacter {
             Math.max(minSize, canvasWidth * scaleFactor)));
 
         // Adjust speed based on screen height
-        this.speed = this.baseSpeed * (this.ctx.canvas.height / 800);
+        const baseScreenHeight = 800;
+        const screenRatio = this.ctx.canvas.height / baseScreenHeight;
+        this.speed = this.baseSpeed * screenRatio * 2; // Double the effect of speed
+
 
         // Ensure character stays within bounds
         this.x = Math.max(this.fontSize,
             Math.min(this.x, this.ctx.canvas.width - this.fontSize));
     }
 
-    draw(isActive = false) {
-        // Update dimensions before drawing
-        this.updateDimensions();
+    draw(isTarget = false) {
+        if (!this.ctx) return;
 
-        this.ctx.font = `${this.fontSize}px ${Theme.fonts.japanese.primary}`;
+        this.ctx.save();
 
-        this.ctx.fillStyle = isActive ?
-            Theme.colors.secondary.medium :
-            Theme.colors.primary.medium;
+        // Further increase base size for better visibility
+        const baseSize = Theme.fonts.sizes.character.large + 20; // Increased from +12 to +20
+        const scaleFactor = Math.max(
+            this.ctx.canvas.width / 800,  // Adjusted base scale for larger size
+            0.7  // Minimum 70% of base size
+        );
+        const characterFontSize = Math.round(baseSize * scaleFactor);
 
-        // Center the character horizontally
-        const metrics = this.ctx.measureText(this.character);
-        const drawX = this.x - (metrics.width / 2);
+        this.ctx.font = `${Theme.fonts.weights.medium} ${characterFontSize}px ${Theme.fonts.japanese.primary}`;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
 
-        this.ctx.fillText(this.character, drawX, this.y);
-
-        // Reset shadow
-        if (isActive) {
-            this.ctx.shadowColor = 'transparent';
-            this.ctx.shadowBlur = 0;
+        if (isTarget) {
+            // Active character: orange with subtle white glow
+            this.ctx.shadowColor = 'rgba(255, 255, 255, 0.5)'; // Subtle white glow
+            this.ctx.shadowBlur = 10; // Slightly diffuse
+            this.ctx.fillStyle = Theme.colors.secondary.medium; // Crisp orange
+        } else {
+            this.ctx.fillStyle = Theme.colors.text.primary;
         }
+
+        this.ctx.fillText(this.character, this.x, this.y);
+        this.ctx.restore();
     }
 
     update() {

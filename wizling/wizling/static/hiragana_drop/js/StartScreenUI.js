@@ -39,8 +39,7 @@ export class StartScreenUI {
         // Layout configuration (needed by UIRenderer)
         this.layout = {
             title: {
-                y: 80,
-                fontSize: 56,
+                y: 90,
                 subtitleSpacing: 35
             },
             mainButton: {
@@ -69,14 +68,14 @@ export class StartScreenUI {
         // Main title
         ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
         ctx.shadowBlur = 15;
-        ctx.font = `600 ${this.layout.title.fontSize}px ${Theme.fonts.system.display}`;
+        ctx.font = `${Theme.fonts.weights.normal} ${Theme.fonts.sizes.ui.title}px ${Theme.fonts.system.display}`;
         ctx.fillStyle = Theme.colors.primary.main;
         ctx.textAlign = 'center';
         ctx.fillText('Kana Drop', canvas.width / 2, this.layout.title.y);
 
         // Mode subtitle
         ctx.shadowBlur = 0;
-        ctx.font = `${Theme.fonts.sizes.ui.normal} ${Theme.fonts.system.display}`;
+        ctx.font = `${Theme.fonts.weights.normal} ${Theme.fonts.sizes.ui.normal}px ${Theme.fonts.system.display}`;
         ctx.fillStyle = Theme.colors.text.secondary;
         ctx.fillText(
             gameTitle,
@@ -119,7 +118,7 @@ export class StartScreenUI {
             ctx.fillStyle = gradient;
             ctx.fill();
 
-            ctx.font = `600 20px ${Theme.fonts.system.display}`;
+            ctx.font = `${Theme.fonts.weights.bold} 20px ${Theme.fonts.system.display}`;
             ctx.fillStyle = '#FFFFFF';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -175,7 +174,7 @@ export class StartScreenUI {
         ctx.roundRect(x, y, width, height, height / 2);
         ctx.fill();
 
-        ctx.font = `500 ${Theme.fonts.sizes.ui.small} ${Theme.fonts.system.display}`;
+        ctx.font = `${Theme.fonts.weights.medium} ${Theme.fonts.sizes.ui.small}px ${Theme.fonts.system.display}`;
         ctx.fillStyle = Theme.colors.text.secondary;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -186,7 +185,7 @@ export class StartScreenUI {
     }
 
     drawCustomizeLink(ctx, canvas) {
-        ctx.font = Theme.fonts.sizes.ui.small + ' ' + Theme.fonts.system.display;
+        ctx.font = `${Theme.fonts.weights.normal} ${Theme.fonts.sizes.ui.normal}px ${Theme.fonts.system.display}`;
         ctx.fillStyle = Theme.colors.primary.medium;
         ctx.textAlign = 'center';
         ctx.fillText('Customize practice groups →',

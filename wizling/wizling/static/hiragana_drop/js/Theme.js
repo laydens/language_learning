@@ -99,15 +99,21 @@ const Theme = {
         },
         sizes: {
             character: {
-                large: 'clamp(32px, 6vw, 48px)',
-                medium: 'clamp(24px, 4.5vw, 36px)',
-                small: 'clamp(18px, 3vw, 24px)'
+                large: 32,    // For falling characters
+                medium: 24,   // For options
+                small: 16     // For smaller UI elements
             },
             ui: {
-                title: 'clamp(20px, 4vw, 24px)',
-                large: 'clamp(16px, 3vw, 20px)',
-                normal: 'clamp(14px, 2.5vw, 16px)',
-                small: 'clamp(12px, 2vw, 14px)'
+                title: 48,    // Leave this unchanged for start screen
+                large: 32,    // Leave this unchanged for start screen
+                normal: 18,   // For normal text
+                small: 14,    // For smaller text
+                game: {       // New section specifically for in-game UI
+                    score: 16,
+                    version: 12,
+                    level: 14,
+                    streak: 14
+                }
             }
         },
         weights: {
@@ -225,6 +231,16 @@ const Theme = {
 
         // Return rgba string
         return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    },
+
+    // Add a helper method for responsive canvas font sizes
+    getCanvasFontSize(baseSize, canvas) {
+        // Make font size relative to canvas width with a minimum scale
+        const scaleFactor = Math.max(
+            canvas.width / 1000,  // Base scale
+            0.5  // Minimum 50% of original size
+        );
+        return Math.round(baseSize * scaleFactor);
     }
 
 };

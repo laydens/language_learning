@@ -12,7 +12,7 @@
         rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{% static 'hiragana_drop/css/style.css' %}" rel="stylesheet">
+    <!-- <link href="{% static 'hiragana_drop/css/style.css' %}" rel="stylesheet"> -->
     <title>{% block title %}{% page_attribute "page_title" %} - Wizling {% endblock title %}</title>
 
 </head>
@@ -25,26 +25,43 @@
         import Game from "{% static 'hiragana_drop/js/Game.js' %}";
         import KanaConverter from "{% static 'hiragana_drop/js/kana_converter.js' %}";
 
-        const canvas = document.getElementById('gameCanvas');
-        console.log('canvas width:', window.innerWidth);
-        const ctx = canvas.getContext('2d');
+        // Create a specific font loader for Poppins
+        const poppinsFont = new FontFace(
+            'Poppins',
+            'url(https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJfecg.woff2)',
+            { weight: '400' }
+        );
 
-        // Set canvas size to match viewport
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
+        // Load the font and wait for it
+        poppinsFont.load().then(function (loadedFont) {
+            // Add the loaded font to the document
+            document.fonts.add(loadedFont);
 
-        // Initial size
-        resizeCanvas();
+            // Now wait for all fonts to be ready
+            return document.fonts.ready;
+        }).then(function () {
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
 
-        // Handle resize
-        window.addEventListener('resize', resizeCanvas);
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
 
-        // Start game
-        const hashValue = window.location.hash.slice(1);
-        console.log('Starting game with hash value:', hashValue);
-        const game = new Game(canvas, ctx, hashValue);
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // Start game only after font is definitely loaded
+            const hashValue = window.location.hash.slice(1);
+            console.log('Starting game with font loaded:', hashValue);
+            const game = new Game(canvas, ctx, hashValue);
+        }).catch(function (error) {
+            console.error('Font loading failed:', error);
+            // Start game anyway as fallback
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+            const game = new Game(canvas, ctx, window.location.hash.slice(1));
+        });
     </script>
 </body>
 
