@@ -1,0 +1,27 @@
+/* Card/CardRating.css */
+.card-rating {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.icon {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.icon:hover {
+  transform: scale(1.1);
+}
+
+.nope {
+  color: lightcoral;
+}
+
+.kind-of {
+  color: orange;
+}
+
+.got-it {
+  color: lightgreen;
+}

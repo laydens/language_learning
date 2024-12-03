@@ -29,7 +29,9 @@ export default class Game {
         this.gameStarted = false;  // Add flag to track if game has started
         console.log('Initializing game with query string:', queryString);
         this.backgroundImage = new Image();
-        this.backgroundImage.src = '/static/images/cloud3.png';
+        // Randomly select a cloud background (1-9)
+        const cloudNumber = Math.floor(Math.random() * 9) + 1;
+        this.backgroundImage.src = `/static/images/game_backgrounds/clouds${cloudNumber}.png`;
         // Visual properties
         this.colors = Theme.colors;
         this.responsive = new ResponsiveGame(canvas, this);

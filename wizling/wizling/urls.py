@@ -23,8 +23,10 @@ from django.views.i18n import JavaScriptCatalog
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
+from . import views
 
 urlpatterns = i18n_patterns(
+    path('card-study/', views.render_flashcard_game, name='flashcard_game'),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     path('admin/', admin.site.urls),
     path('filer/', include('filer.urls')),

@@ -44,7 +44,7 @@ export default class GameOverScreen {
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         // Center container
-        const containerWidth = Math.min(500, this.canvas.width * 0.8);
+        const containerWidth = Math.min(500, this.canvas.width * 0.9);
         const containerHeight = 400;
         const x = (this.canvas.width - containerWidth) / 2;
         const y = (this.canvas.height - containerHeight) / 2;
@@ -69,7 +69,7 @@ export default class GameOverScreen {
         const centerX = x + width / 2;
 
         // Title
-        this.ctx.font = `600 32px ${Theme.fonts.system.display}`;
+        this.ctx.font = `${Theme.fonts.weights.bold} ${Theme.fonts.sizes.ui.large}px ${Theme.fonts.system.display}`;
         this.ctx.fillStyle = Theme.colors.primary.main;
         this.ctx.textAlign = 'center';
         this.ctx.fillText(this.texts.gameOver, centerX, y + 60);

@@ -63,7 +63,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 
-# FIX THESE FALLBACKS. DO WE NOT NEED SOCKETS?
+# local MySQL DATABASES
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -78,6 +78,22 @@ DATABASES = {
         }
     }
 }
+
+# BlueHost MySQL DATABASES
+# DATABASES = { 
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.getenv('BLUEHOST_DB', 'namikoab_wizling_cms'),
+#         'USER': os.getenv('BLUEHOST_DB_USER', 'namikoab_wiz_cms'),
+#         'PASSWORD': os.getenv('BLUEHOST_DB_PASSWORD', '123qwe!@#QWE'),
+#         'HOST': os.getenv('BLUEHOST_DB_HOST', 'box5858.bluehost.com'),
+#         'PORT': os.getenv('CMS_DB_PORT', '3306'),
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#             'init_command': 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci'
+#         }
+#     }
+# }
 
 # Application definition
 INSTALLED_APPS = [
@@ -154,6 +170,7 @@ STATIC_URL = '/static/'  # URL prefix for static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Where collectstatic will put files
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "wizling", "static"),  # Where your source static files live
+    os.path.join(BASE_DIR, "frontend/build/static")
 ]
 
 # Media Files Configuration
@@ -196,6 +213,7 @@ SITE_ID = 1
 CMS_TEMPLATES = (
     ("base.html", _("Standard")),
     ("drop.html", _("KanaDropGame")),
+    ("cards.html", _("Cards")),
 )
 CMS_PERMISSION = True
 TEXT_INLINE_EDITING = True
@@ -222,18 +240,17 @@ LOGGING = {
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
-            'stream': sys.stdout,
         },
     },
     'root': {
         'handlers': ['console'],
-        'level': 'INFO',
+        'level': 'WARNING',
     },
     'loggers': {
-        'django.db.backends': {
+        'django': {
             'handlers': ['console'],
-            'level': 'DEBUG' if DEBUG else 'INFO',
-            'propagate': False,
+            'level': 'WARNING',
+            'propagate': True,
         },
     },
 }
