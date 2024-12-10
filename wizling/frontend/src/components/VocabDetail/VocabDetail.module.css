@@ -1,0 +1,54 @@
+.vocabDetail {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+    background: var(--surface-50);
+    color: var(--text-primary);
+}
+
+.header {
+    border-bottom: 2px solid var(--primary-100);
+    padding-bottom: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-md);
+}
+
+.title h1 {
+    font-size: var(--font-size-3xl);
+    color: var(--primary-900);
+    margin: 0;
+}
+
+.readings {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.reading {
+    font-size: var(--font-size-xl);
+    color: var(--text-secondary);
+}
+
+.romaji {
+    font-size: var(--font-size-lg);
+    color: var(--text-tertiary);
+}
+
+.meta {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.meta span {
+    background: var(--primary-50);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    color: var(--primary-700);
+}

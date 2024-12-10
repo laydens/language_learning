@@ -2,16 +2,33 @@
 .card-rating {
   display: flex;
   justify-content: space-around;
+  align-items: center;
   margin-top: 20px;
+  width: 100%;
+}
+
+.rating-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
 }
 
 .icon {
+  color: #666;
   cursor: pointer;
   transition: transform 0.2s;
 }
 
 .icon:hover {
   transform: scale(1.1);
+}
+
+.rating-label {
+  font-size: 0.8em;
+  margin-top: 5px;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .nope {
@@ -23,5 +40,18 @@
 }
 
 .got-it {
+  color: lightgreen;
+}
+
+/* Match label color with icon color */
+.nope+.rating-label {
+  color: lightcoral;
+}
+
+.kind-of+.rating-label {
+  color: orange;
+}
+
+.got-it+.rating-label {
   color: lightgreen;
 }

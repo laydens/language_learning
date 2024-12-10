@@ -1,30 +1,53 @@
 import React, { useState, useRef } from 'react';
 import Card from './Card';
 import './CardDeck.css';
+import useFlashcards from './hooks/UseFlashcards';
+import FlashcardContent from './providers/FlashcardContentProvider';
+import JapaneseFlashcard from './models/JapaneseFlashcard';
 
-interface CardData {
-  frontContent: string;
-  backContent: string;
+// Move the interface to a separate types file or export it here
+export interface CardData {
+  expression: string;
+  reading: string;
+  meanings: string[];
+  vocabId?: number;
 }
 
 interface CardDeckProps {
   cards?: CardData[];
+  numCards?: number;
+  level?: string;
 }
 
 const CardDeck: React.FC<CardDeckProps> = ({
-  cards = [
-    { frontContent: "Example 1", backContent: "Answer 1" },
-    { frontContent: "Example 2", backContent: "Answer 2" },
-    { frontContent: "Example 3", backContent: "Answer 3" },
-    { frontContent: "Example 4", backContent: "Answer 4" },
-    { frontContent: "Example 5", backContent: "Answer 5" },
-  ]
+  cards,
+  numCards = 5,
+  level = 'beginner'
 }) => {
+  const { flashcards, loading, error } = useFlashcards(numCards, level);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(1);
   const [isAnimating, setIsAnimating] = useState(false);
   const currentCardRef = useRef<HTMLDivElement>(null);
   const nextCardRef = useRef<HTMLDivElement>(null);
+
+  // Handle loading state
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // Handle error state
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  const displayCards = cards || flashcards.map(flashcard => ({
+    expression: flashcard.expression,
+    reading: flashcard.reading,
+    meanings: flashcard.meanings,
+    vocabId: flashcard.id
+  }));
 
   const handleExit = () => {
     if (isAnimating) return; // Prevent multiple animations
@@ -47,7 +70,7 @@ const CardDeck: React.FC<CardDeckProps> = ({
     // Wait for the animation to complete
     setTimeout(() => {
       setCurrentIndex(nextIndex);
-      setNextIndex((nextIndex + 1) % cards.length);
+      setNextIndex((nextIndex + 1) % displayCards.length);
 
       // Reset positions for next transition
       if (currentCard && nextCard) {
@@ -57,41 +80,37 @@ const CardDeck: React.FC<CardDeckProps> = ({
         // Reset current card to center
         currentCard.style.transform = 'translate(-50%, 0)';
         // Reset next card to starting position
-        nextCard.style.transform = 'translate(-200%, 0)';
+        nextCard.style.transform = 'translate(-300%, 0)';
       }
 
       setIsAnimating(false);
-    }, 500);
+    }, 300);
   };
 
   return (
-    <div className="card-deck" style={{ position: 'relative', height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      {/* Current card with exit animation */}
-      <div
-        className="current-card-wrapper"
-        ref={currentCardRef}
-        style={{ transform: 'translate(-50%, 0)' }} // Center the current card
-      >
+    <div className="card-deck">
+      {/* Current card */}
+      <div className="current-card-wrapper" ref={currentCardRef} style={{ transform: 'translate(-50%, 0)' }}>
         <Card
-          key={currentIndex}
-          frontContent={cards[currentIndex].frontContent}
-          backContent={cards[currentIndex].backContent}
-          onRate={handleExit} // Trigger exit on rating
+          key={`current-${currentIndex}`}
+          flashcard={displayCards[currentIndex] as JapaneseFlashcard}
+          onRate={handleExit}
+          isActive={true}
+          isNext={false}
         />
       </div>
 
-      {/* Next card, initially off-screen to the left */}
-      <div
-        className="next-card-wrapper"
-        ref={nextCardRef}
-        style={{ transform: 'translate(-200%, 0)' }} // Start completely off-screen to the left
-      >
-        <Card
-          key={nextIndex}
-          frontContent={cards[nextIndex].frontContent}
-          backContent={cards[nextIndex].backContent}
-          onRate={handleExit} // Ensure the next card also has the rating functionality
-        />
+      {/* Next card (pre-loaded) */}
+      <div className="next-card-wrapper" ref={nextCardRef} style={{ transform: 'translate(-300%, 0)' }}>
+        <>
+          {console.log("Next Card vocabId:", displayCards[nextIndex].vocabId)}
+          <Card
+            flashcard={displayCards[nextIndex] as JapaneseFlashcard}
+            onRate={handleExit}
+            isActive={false}
+            isNext={true}
+          />
+        </>
       </div>
     </div>
   );

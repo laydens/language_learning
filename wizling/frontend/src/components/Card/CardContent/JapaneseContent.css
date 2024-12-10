@@ -1,0 +1,26 @@
+.jp-reading {
+    margin-bottom: 0.5rem; /* Space below the reading */
+    font-size: 1.4rem; /* Adjust font size as needed */
+    text-align: center; /* Center the reading text */
+    line-height: 1.5; /* Adjust line height for vertical centering */
+}
+
+.jp-back-content {
+    text-align: center; /* Center the meanings container */
+    margin-top: 0.5rem; /* Space above the meanings */
+}
+
+.jp-meaning {
+    font-size: 1.2rem; /* Adjust font size as needed */
+    color: var(--text-secondary); /* Optional: use a different color for meaning */
+    margin-bottom: 0.25rem; /* Space between meanings */
+    text-align: left; /* Left-align individual meanings */
+    list-style-type: square; /* Use square bullets */
+    padding-left: 1.5rem; /* Space for bullet */
+}
+
+.jp-line-separator {
+    height: 1px; /* Adjust height as needed */
+    background-color: var(--surface-300); /* Adjust color as needed */
+    margin: 0.5rem 0; /* Space above and below the line */
+} 

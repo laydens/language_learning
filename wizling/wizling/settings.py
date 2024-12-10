@@ -61,6 +61,14 @@ CSRF_TRUSTED_ORIGINS = [
     'http://*.wizling.com',
 ]
 
+# CORS Settings
+CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', 'False') == 'True'
+CORS_ALLOW_CREDENTIALS = os.getenv('CORS_ALLOW_CREDENTIALS', 'False') == 'True'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # React development server
+    "http://127.0.0.1:3000",
+]
 
 
 # local MySQL DATABASES
@@ -72,6 +80,18 @@ DATABASES = {
         'PASSWORD': os.getenv('CMS_DB_PASSWORD'),
         'HOST': os.getenv('CMS_DB_HOST', '127.0.0.1'),
         'PORT': os.getenv('CMS_DB_PORT', '3306') if os.getenv('CMS_DB_HOST') == '127.0.0.1' else '',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'init_command': 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci'
+        }
+    },
+    'language_learning': {
+        'ENGINE': 'django.db.backends.mysql',  # or 'django.db.backends.postgresql' if using PostgreSQL
+        'NAME': os.getenv('LANGUAGE_LEARNING_DB', 'language_learning'),  # Use environment variable or default
+        'USER': os.getenv('LANGUAGE_LEARNING_DB_USER', 'lang_user'),  # Use environment variable or default
+        'PASSWORD': os.getenv('LANGUAGE_LEARNING_DB_PASSWORD', ''),  # Use environment variable or default
+        'HOST': os.getenv('LANGUAGE_LEARNING_DB_HOST', 'localhost'),  # Use environment variable or default
+        'PORT': os.getenv('LANGUAGE_LEARNING_DB_PORT', '3306'),  # Use environment variable or default
         'OPTIONS': {
             'charset': 'utf8mb4',
             'init_command': 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci'
@@ -146,11 +166,16 @@ INSTALLED_APPS = [
     'djangocms_frontend.contrib.navigation',
     'djangocms_frontend.contrib.tabs',
     'djangocms_frontend.contrib.utilities',
+    'rest_framework',
+    'corsheaders',
+    'api.core',
+    'api.japanese.apps.JapaneseConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
