@@ -14,7 +14,7 @@ const useFlashcards = (numCards: number, level: string) => {
                 console.log("Raw API Data:", rawData);
 
                 const formattedData = rawData.map((item: any) => {
-                    console.log("Processing item:", item);
+
                     return {
                         id: item.id,
                         expression: item.expression,
@@ -24,7 +24,7 @@ const useFlashcards = (numCards: number, level: string) => {
                     };
                 }) as Flashcard[];
 
-                console.log("Formatted Flashcards:", formattedData);
+
 
                 setFlashcards(formattedData);
             } catch (error) {

@@ -1,8 +1,14 @@
 from typing import Dict, List, Optional
 from django.db.models import Q
-from .models.deck import Deck
-from .models.card import Card
-from ..services.japanese_term_service import JapaneseTermService
+from ..models.deck import Deck
+from ..models.card import Card
+from ...models.meanings import Meanings
+from ...models.examples import Examples
+from ...models.kanji import Kanji
+from ...models.readings import Readings
+from ..services.term_service import JapaneseTermService
+from ...models.related_expression import RelatedExpression
+from ...models.memory_hooks import MemoryHooks
 
 class FlashcardService:
     def __init__(self, term_service: JapaneseTermService):
@@ -27,13 +33,13 @@ class FlashcardService:
         # Get all meanings with POS
         meanings = Meanings.objects.filter(
             entity_id=vocab_id,
-            entity_type='V'
+            entity_type='v'
         ).order_by('ord')
 
         # Get example sentences
         examples = Examples.objects.filter(
             entity_id=vocab_id,
-            entity_type='V'
+            entity_type='v'
         )
 
         # Get kanji breakdown if applicable
@@ -47,7 +53,7 @@ class FlashcardService:
                         'character': char,
                         'meanings': [m.meaning for m in Meanings.objects.filter(
                             entity_id=kanji.id,
-                            entity_type='K'
+                            entity_type='k'
                         )],
                         'readings': [r.reading for r in readings]
                     })
@@ -55,13 +61,13 @@ class FlashcardService:
         # Get memory hooks
         memory_hooks = MemoryHooks.objects.filter(
             entity_id=vocab_id,
-            entity_type='V'
+            entity_type='v'
         )
 
         # Get related expressions
-        related = RelatedExpressions.objects.filter(
+        related = RelatedExpression.objects.filter(
             entity_id=vocab_id,
-            entity_type='V'
+            entity_type='v'
         )
 
         return {

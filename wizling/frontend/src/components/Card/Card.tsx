@@ -13,10 +13,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import CardRating from './CardRating';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSyncAlt, faEllipsisH, faCircleInfo, faInfoCircle } from '@fortawesome/free-solid-svg-icons'; // Flip icon
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'; // Flip icon
 import './Card.css'; // Assuming you have a CSS file for styling
 import { CARD_CONSTANTS } from './constants';
-import VocabDetailView from '../VocabDetail/VocabDetailView';
+// import VocabDetailView from '../VocabDetail/VocabDetailView';
 import JapaneseContent from './CardContent/JapaneseContent';
 import JapaneseFlashcard from './models/JapaneseFlashcard';
 
@@ -25,9 +25,10 @@ interface CardProps {
     onRate?: (rating: 'good' | 'okay' | 'bad') => void;
     isActive?: boolean;
     isNext?: boolean;
+    onShowDetail?: (vocabId: number) => void;
 }
 
-const Card: React.FC<CardProps> = ({ flashcard, onRate, isActive, isNext }) => {
+const Card: React.FC<CardProps> = ({ flashcard, onRate, isActive, isNext, onShowDetail }) => {
     console.log("Card component props:", { flashcard, isActive, isNext });
     const [isFlipped, setIsFlipped] = useState(false);
     const [frontFontSize, setFrontFontSize] = useState(CARD_CONSTANTS.MAX_FONT_SIZE);
@@ -103,6 +104,17 @@ const Card: React.FC<CardProps> = ({ flashcard, onRate, isActive, isNext }) => {
         }
     }, [isActive, isNext, flashcard.expression, flashcard.reading, flashcard.meanings]);
 
+    const handleCloseModal = () => {
+        setShowDetail(false);
+    };
+
+    const handleInfoClick = (e: React.MouseEvent) => {
+        e.stopPropagation(); // Prevent card flip when clicking info button
+        if (onShowDetail && flashcard.id) {
+            onShowDetail(flashcard.id);
+        }
+    };
+
     return (
         <>
             <div
@@ -116,29 +128,22 @@ const Card: React.FC<CardProps> = ({ flashcard, onRate, isActive, isNext }) => {
                                 <JapaneseContent
                                     expr={flashcard.expression}
                                     reading={flashcard.reading}
-                                    meanings={Array.isArray(flashcard.meanings) ? flashcard.meanings : [flashcard.meanings]} // Ensure meanings is an array
-                                    isFront={isActive} // Fixing the undefined 'isFront' by using 'isActive'
+                                    meanings={Array.isArray(flashcard.meanings) ? flashcard.meanings : [flashcard.meanings]}
+                                    isFront={isActive}
                                 />
                             </div>
                         </div>
                         <div className="card-back" ref={backContentRef}>
                             {isFlipped && (
                                 <button
-                                    className="absolute top-3 right-3
-                                               text-surface-300 hover:text-surface-500
-                                               transition-colors duration-200
-                                               border-none outline-none bg-transparent"
+                                    className="absolute top-3 right-3 text-surface-300 hover:text-surface-500 transition-colors duration-200 border-none outline-none bg-transparent"
                                     style={{
                                         opacity: 0.4,
                                         transform: 'translateZ(0)',
                                         padding: 0,
                                         margin: 0
                                     }}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        console.log("Circle info button clicked");
-                                        setShowDetail(true);
-                                    }}
+                                    onClick={handleInfoClick}
                                 >
                                     <FontAwesomeIcon
                                         icon={faCircleInfo}
@@ -149,8 +154,8 @@ const Card: React.FC<CardProps> = ({ flashcard, onRate, isActive, isNext }) => {
                             <JapaneseContent
                                 expr={flashcard.expression}
                                 reading={flashcard.reading}
-                                meanings={Array.isArray(flashcard.meanings) ? flashcard.meanings : [flashcard.meanings]} // Ensure meanings is an array
-                                isFront={false} // Fixing the undefined 'isFront' by using 'isActive'
+                                meanings={Array.isArray(flashcard.meanings) ? flashcard.meanings : [flashcard.meanings]}
+                                isFront={false}
                             />
                         </div>
                     </div>
@@ -158,24 +163,16 @@ const Card: React.FC<CardProps> = ({ flashcard, onRate, isActive, isNext }) => {
                 {isFlipped && onRate && <CardRating onRate={onRate} />}
             </div>
 
-            {showDetail && vocabId ? (
-                <div className="modal" onClick={() => {
-                    console.log("Modal background clicked, closing modal");
-                    setShowDetail(false);
-                }}>
-                    <div className="modal-content" onClick={e => {
-                        e.stopPropagation();
-                        console.log("Modal content clicked, preventing close");
-                    }}>
-                        <VocabDetailView vocabId={vocabId} onClose={() => {
-                            console.log("VocabDetailView closed");
-                            setShowDetail(false);
-                        }} />
+            {/* {showDetail && vocabId ? (
+                <div className="modal" onClick={handleCloseModal}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <button className="close-button" onClick={handleCloseModal}>&times;</button>
+                        <VocabDetailView vocabId={vocabId} onClose={handleCloseModal} />
                     </div>
                 </div>
             ) : (
                 vocabId === undefined && console.log("vocabId is undefined, modal will not render")
-            )}
+            )} */}
         </>
     );
 };

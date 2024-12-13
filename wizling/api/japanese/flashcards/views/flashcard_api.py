@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
-from ...services.japanese_term_service import JapaneseTermService
+from ..services.term_service import JapaneseTermService
 import logging
 import re
 import json
@@ -28,7 +28,7 @@ class FlashcardAPI(APIView):
                         'meaning': m['meaning'],
                         'notes': m['usage_notes']
                     }
-                    for m in json.loads(term['meanings'])
+                    for m in term['meanings']
                 ],
                 'level': term['level']
             } for term in terms]

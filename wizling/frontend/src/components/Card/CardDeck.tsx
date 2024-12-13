@@ -4,13 +4,15 @@ import './CardDeck.css';
 import useFlashcards from './hooks/UseFlashcards';
 import FlashcardContent from './providers/FlashcardContentProvider';
 import JapaneseFlashcard from './models/JapaneseFlashcard';
+import VocabDetailView from '../VocabDetail/VocabDetailView';
+import { X } from 'lucide-react';
 
 // Move the interface to a separate types file or export it here
 export interface CardData {
   expression: string;
   reading: string;
   meanings: string[];
-  vocabId?: number;
+  id?: number;
 }
 
 interface CardDeckProps {
@@ -29,6 +31,8 @@ const CardDeck: React.FC<CardDeckProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(1);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
+  const [selectedVocabId, setSelectedVocabId] = useState<number | null>(null);
   const currentCardRef = useRef<HTMLDivElement>(null);
   const nextCardRef = useRef<HTMLDivElement>(null);
 
@@ -46,7 +50,7 @@ const CardDeck: React.FC<CardDeckProps> = ({
     expression: flashcard.expression,
     reading: flashcard.reading,
     meanings: flashcard.meanings,
-    vocabId: flashcard.id
+    id: flashcard.id
   }));
 
   const handleExit = () => {
@@ -87,32 +91,68 @@ const CardDeck: React.FC<CardDeckProps> = ({
     }, 300);
   };
 
+  const handleShowDetail = (vocabId: number) => {
+    setSelectedVocabId(vocabId);
+    setShowDetail(true);
+    // Optionally pause any ongoing animations or timers
+  };
+
+  const handleCloseDetail = () => {
+    setShowDetail(false);
+    setSelectedVocabId(null);
+  };
+
   return (
-    <div className="card-deck">
-      {/* Current card */}
-      <div className="current-card-wrapper" ref={currentCardRef} style={{ transform: 'translate(-50%, 0)' }}>
-        <Card
-          key={`current-${currentIndex}`}
-          flashcard={displayCards[currentIndex] as JapaneseFlashcard}
-          onRate={handleExit}
-          isActive={true}
-          isNext={false}
-        />
+    <>
+      <div className="card-deck">
+        {/* Current card */}
+        <div className="current-card-wrapper" ref={currentCardRef} style={{ transform: 'translate(-50%, 0)' }}>
+          <Card
+            key={`current-${currentIndex}`}
+            flashcard={displayCards[currentIndex] as JapaneseFlashcard}
+            onRate={handleExit}
+            isActive={true}
+            isNext={false}
+            onShowDetail={handleShowDetail}
+          />
+        </div>
+
+        {/* Next card (pre-loaded) */}
+        <div className="next-card-wrapper" ref={nextCardRef} style={{ transform: 'translate(-300%, 0)' }}>
+          <>
+            {console.log("Next Card vocabId:", displayCards[nextIndex].id)}
+            <Card
+              flashcard={displayCards[nextIndex] as JapaneseFlashcard}
+              onRate={handleExit}
+              isActive={false}
+              isNext={true}
+              onShowDetail={handleShowDetail}
+            />
+          </>
+        </div>
       </div>
 
-      {/* Next card (pre-loaded) */}
-      <div className="next-card-wrapper" ref={nextCardRef} style={{ transform: 'translate(-300%, 0)' }}>
-        <>
-          {console.log("Next Card vocabId:", displayCards[nextIndex].vocabId)}
-          <Card
-            flashcard={displayCards[nextIndex] as JapaneseFlashcard}
-            onRate={handleExit}
-            isActive={false}
-            isNext={true}
-          />
-        </>
-      </div>
-    </div>
+      {/* Detail View Modal */}
+      {showDetail && selectedVocabId && (
+        <div className="detail-view-overlay">
+          <div className="detail-view-container">
+            <button
+              className="detail-view-close"
+              onClick={handleCloseDetail}
+              aria-label="Close detail view"
+            >
+              <X size={24} />
+            </button>
+            <div className="detail-view-content">
+              <VocabDetailView
+                vocabId={selectedVocabId}
+                onClose={handleCloseDetail}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
