@@ -1,12 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import VocabDetailView from './components/VocabDetail/VocabDetailView';
+import KanjiDetailView from './components/KanjiDetail/KanjiDetailView';
 import FlashcardGame from './components/FlashcardGame';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/en/card-study" element={<FlashcardGame />} />
+        <Route path="/vocab/:id" element={<VocabDetailView />} />
+        <Route path="/kanji/:id" element={<KanjiDetailView />} />
+        <Route path="/flashcard-game" element={<FlashcardGame />} />
       </Routes>
     </Router>
   );

@@ -1,10 +1,10 @@
 from typing import List, Optional, Dict
-from ...models.term import Term  # Assuming this is your Term model
-from ...models.meanings import Meanings  # Assuming you have a Meanings model
-from ...models.examples import Examples  # Assuming you have an Examples model
-from ...models.kanji import Kanji  # Assuming you have a Kanji model
-from ...models.related_expression import RelatedExpression  # Assuming you have a RelatedExpression model
-from ...models.readings import Readings  # Assuming you have a Readings model
+from ..models.term import Term  # Assuming this is your Term model
+from ..models.meanings import Meanings  # Assuming you have a Meanings model
+from ..models.examples import Examples  # Assuming you have an Examples model
+from ..models.kanji import Kanji  # Assuming you have a Kanji model
+from ..models.related_expression import RelatedExpression  # Assuming you have a RelatedExpression model
+from ..models.readings import Readings  # Assuming you have a Readings model
 
 import logging
 

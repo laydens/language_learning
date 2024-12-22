@@ -6,7 +6,6 @@ class Kanji(models.Model):
     """
     id = models.AutoField(primary_key=True)
     kanji_char = models.CharField(max_length=1, unique=True)
-    strokes = models.IntegerField()
     grade = models.IntegerField()
     level = models.CharField(max_length=10)
     level_system_id = models.IntegerField()
