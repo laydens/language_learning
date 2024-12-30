@@ -164,15 +164,52 @@ export default class Game {
     }
 
     handleResize(width, height) {
-        // Update any size-dependent game properties
+        // Use provided dimensions or fallback to window dimensions
+        const newWidth = width || window.innerWidth || this.canvas.width;
+        const newHeight = height || window.innerHeight || this.canvas.height;
+
+        // Validate dimensions
+        if (!this.isValidDimension(newWidth) || !this.isValidDimension(newHeight)) {
+            console.warn('Invalid dimensions provided for resize:', { width: newWidth, height: newHeight });
+            return;
+        }
+
+        // Update canvas dimensions
+        this.canvas.width = newWidth;
+        this.canvas.height = newHeight;
+
+        // Handle component resizing
         if (this.gameUI) {
-            this.gameUI.handleResize(width, height);
+            this.gameUI.handleResize(newWidth, newHeight);
         }
-        if (this.gameOptions) {
-            this.gameOptions.handleResize(width, height);
+        if (this.gameOptions && typeof this.gameOptions.handleResize === 'function') {
+            this.gameOptions.handleResize(newWidth, newHeight);
         }
-        // Redraw the current game state
+
+        // Update game dimensions and redraw
+        this.updateGameDimensions();
         this.setupCanvas();
+    }
+
+    // Add helper method to validate dimensions
+    isValidDimension(value) {
+        return typeof value === 'number' &&
+            Number.isFinite(value) &&
+            value > 0 &&
+            value <= 16384; // Common max texture size limit
+    }
+
+    updateGameDimensions() {
+        // Update any size-dependent game properties
+        if (this.responsive) {
+            this.responsive.updateDimensions(this.canvas.width, this.canvas.height);
+        }
+
+        // Log the update for debugging
+        console.log('Game dimensions updated:', {
+            width: this.canvas.width,
+            height: this.canvas.height
+        });
     }
 
     // Add level up message display

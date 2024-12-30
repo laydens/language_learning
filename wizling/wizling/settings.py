@@ -44,6 +44,7 @@ DEFAULT_DOMAINS = [
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    '0.0.0.0',
     'djangocms-649684198786.us-central1.run.app',
     '.run.app',  # The dot prefix allows all subdomains
     '.wizling.com',  # Allows all subdomains of wizling.com
@@ -90,8 +91,8 @@ DATABASES = {
         'NAME': os.getenv('LANGUAGE_LEARNING_DB', 'language_learning'),  # Use environment variable or default
         'USER': os.getenv('LANGUAGE_LEARNING_DB_USER', 'lang_user'),  # Use environment variable or default
         'PASSWORD': os.getenv('LANGUAGE_LEARNING_DB_PASSWORD', ''),  # Use environment variable or default
-        'HOST': os.getenv('LANGUAGE_LEARNING_DB_HOST', 'localhost'),  # Use environment variable or default
-        'PORT': os.getenv('LANGUAGE_LEARNING_DB_PORT', '3306'),  # Use environment variable or default
+        'HOST': os.getenv('LANGUAGE_LEARNING_DB_HOST', '127.0.0.1'),  # Use environment variable or default
+        'PORT': os.getenv('CMS_DB_PORT', '3306') if os.getenv('CMS_DB_HOST') == '127.0.0.1' else '',
         'OPTIONS': {
             'charset': 'utf8mb4',
             'init_command': 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci'
@@ -169,6 +170,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'api.core',
+    'api',
     'api.japanese.apps.JapaneseConfig',
 ]
 
@@ -195,7 +197,8 @@ STATIC_URL = '/static/'  # URL prefix for static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Where collectstatic will put files
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "wizling", "static"),  # Where your source static files live
-    os.path.join(BASE_DIR, "frontend/build/static")
+    os.path.join(BASE_DIR, "frontend/build"),
+    os.path.join(BASE_DIR, "frontend/build/static"),
 ]
 
 # Media Files Configuration
@@ -262,20 +265,35 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
         },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),  # Log file path
+            'formatter': 'verbose',
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
-            'level': 'WARNING',
-            'propagate': True,
+            'handlers': ['console', 'file'],  # Add 'file' handler
+            'level': 'DEBUG',
+        },
+        'your_app_name': {
+            'handlers': ['console', 'file'],  # Add 'file' handler
+            'level': 'DEBUG',
         },
     },
 }

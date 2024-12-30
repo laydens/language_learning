@@ -10,7 +10,9 @@ function App() {
       <Routes>
         <Route path="/vocab/:id" element={<VocabDetailView />} />
         <Route path="/kanji/:id" element={<KanjiDetailView />} />
-        <Route path="/flashcard-game" element={<FlashcardGame />} />
+        <Route path="/flashcards" element={<FlashcardGame />} />
+        <Route path="/card-study" element={<FlashcardGame />} />
+        <Route path="/" element={<FlashcardGame />} />
       </Routes>
     </Router>
   );

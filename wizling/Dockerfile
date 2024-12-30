@@ -1,35 +1,80 @@
-FROM --platform=linux/amd64 python:3.10-slim
+# Stage 1: Build the React app
+FROM node:14-alpine AS build
+
+WORKDIR /app
+COPY . .
+RUN echo "Stage: build - Current directory: $(pwd)"
+RUN echo "Stage: build - Files in current directory:"
+RUN ls -la
+
+WORKDIR /app/frontend
+RUN echo "Stage: build - Installing frontend dependencies"
+RUN npm install
+RUN echo "Stage: build - Frontend dependencies installed"
+RUN echo "Stage: build - Building frontend"
+RUN npm run build
+RUN echo "Stage: build - Frontend built"
+RUN echo "Stage: build - Files in build directory:"
+RUN ls -la /app/frontend/build
+RUN find /app/frontend/build -name "asset-manifest.json"
+
+# Stage 2: Build the Django app
+FROM python:3.10-slim AS backend
+
+WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
     default-libmysqlclient-dev \
     build-essential \
-    pkg-config
-
-WORKDIR /app
-
-# Install gunicorn and python-dotenv first
-RUN pip install gunicorn python-dotenv
+    pkg-config \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN echo "Stage: backend - Installing Python dependencies"
+RUN pip install --no-cache-dir -r requirements.txt gunicorn
+RUN echo "Stage: backend - Python dependencies installed"
 
-# Copy project files
 COPY manage.py .
 COPY wizling ./wizling
-COPY media ./media
+COPY api ./api
 
-# Create static files directory
-RUN mkdir -p staticfiles
+RUN mkdir -p /app/staticfiles /app/logs
+RUN touch /app/logs/django.log
+RUN chmod 666 /app/logs/django.log
 
-# Set environment variable for static files collection
-ENV PYTHONUNBUFFERED=1 \
-    DJANGO_SETTINGS_MODULE=wizling.settings \
-    STATIC_ROOT=/app/staticfiles
+RUN echo "Stage: backend - Before COPY - Current directory: $(pwd)"
+RUN echo "Stage: backend - Before COPY - Files in current directory:"
+RUN ls -la
+RUN find /app -name "asset-manifest.json"
 
-# Collect static files
-RUN python manage.py collectstatic --noinput --clear
+COPY --from=build /app/frontend/build/static /app/staticfiles/
+COPY --from=build /app/frontend/build/asset-manifest.json /app/staticfiles/
+COPY --from=build /app/frontend/build/favicon.ico /app/staticfiles/
+COPY --from=build /app/frontend/build/index.html /app/staticfiles/
+COPY --from=build /app/frontend/build/manifest.json /app/staticfiles/
+COPY --from=build /app/frontend/build/robots.txt /app/staticfiles/  
 
-# Make sure static files are accessible
-RUN chmod -R 755 /app/staticfiles
+RUN echo "Stage: backend - After COPY - Current directory: $(pwd)"
+RUN echo "Stage: backend - After COPY - Files in /app/staticfiles:"
+RUN ls -la /app/staticfiles/
+RUN find /app/staticfiles/ -name "asset-manifest.json"
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "wizling.wsgi:application"]
+RUN echo "Stage: backend - Creating timestamp file"
+RUN echo "Container built at: $(date)" > /app/staticfiles/timestamp.txt
+RUN echo "Stage: backend - Timestamp file created"
+
+RUN echo "Stage: backend - After timestamp creation - Files in /app/staticfiles:"
+RUN ls -la /app/staticfiles/
+RUN cat /app/staticfiles/timestamp.txt
+
+RUN echo "Stage: backend - Running collectstatic"
+RUN python manage.py collectstatic --noinput
+RUN echo "Stage: backend - collectstatic completed"
+
+RUN echo "Stage: backend - After collectstatic - Files in /app/staticfiles:"
+RUN ls -la /app/staticfiles/
+
+EXPOSE 8000
+
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--log-level", "debug", "wizling.wsgi:application"]

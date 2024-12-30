@@ -1,6 +1,0 @@
-fastapi
-uvicorn
-sqlalchemy
-mysql-connector-python
-strawberry-graphql 
-flask

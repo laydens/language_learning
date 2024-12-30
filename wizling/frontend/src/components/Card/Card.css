@@ -2,6 +2,7 @@
     width: 90vw;
     max-width: 400px;
     height: calc(90vw * 0.66);
+    min-height: 200px;
     max-height: 266px;
     perspective: 1000px;
     cursor: pointer;
@@ -9,9 +10,7 @@
     margin-top: 40px;
     padding: 20px;
     position: relative;
-  
     justify-content: center;
-    height: 100%;
 }
 
 .card-inner {
@@ -118,3 +117,4 @@
 .card-back {
     transform: rotateY(180deg);
 }
+

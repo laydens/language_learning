@@ -34,5 +34,13 @@ gcloud run deploy $SERVICE_NAME \
  --add-cloudsql-instances $CLOUD_SQL_CONNECTION_NAME \
  --set-env-vars="CMS_DB=$CMS_DB,CMS_DB_USER=$CMS_DB_USER,CMS_DB_HOST=/cloudsql/$CLOUD_SQL_CONNECTION_NAME,ALLOWED_HOSTS=$CLOUD_RUN_DOMAIN" \
  --set-secrets="CMS_DB_PASSWORD=$CMS_DB_PASSWORD_SECRET:latest"
+
+# Set the latest revision to receive all traffic
+echo "🔄 Setting the latest revision to receive all traffic..."
+gcloud run services update-traffic $SERVICE_NAME \
+ --to-latest \
+ --platform managed \
+ --region $REGION
+
 echo "http://wizling.com"
 echo "✅ Deployment complete!"

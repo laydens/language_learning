@@ -26,19 +26,17 @@ from wagtail.documents import urls as wagtaildocs_urls
 from . import views
 
 urlpatterns = [
-    path('api/', include('api.urls')),  # Include API URLs without language prefix
-]
-
-urlpatterns += i18n_patterns(
+    # path('', TemplateView.as_view(template_name='home.html'), name='home'),  # Home page view
+    path('api/', include('api.urls')),  # Include API URLs under the 'api/' prefix
+    path('admin/', admin.site.urls),  # Admin interface
     path('card-study/', views.render_flashcard_game, name='flashcard_game'),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
-    path('admin/', admin.site.urls),
     path('filer/', include('filer.urls')),
     path('', include('cms.urls')),
     path('a/', include(wagtailadmin_urls)),
     path('d/', include(wagtaildocs_urls)),
-    path('p/', include(wagtail_urls)),
-)
+    path('p/', include(wagtail_urls))
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

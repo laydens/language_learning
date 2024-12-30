@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    image: wizling-web:latest
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./logs:/app/logs
+    env_file:
+      - .env
+    environment:
+      - IS_DOCKER=True
+      - DJANGO_SETTINGS_MODULE=wizling.settings
+      - PYTHONUNBUFFERED=1
+      - CMS_DB_HOST=host.docker.internal 
+      - CMS_DB=${CMS_DB}
+      - CMS_DB_USER=${CMS_DB_USER}
+      - CMS_DB_PASSWORD=${CMS_DB_PASSWORD}
+      - CMS_DB_PORT=${CMS_DB_PORT}
+      - LANGUAGE_LEARNING_DB=${LANGUAGE_LEARNING_DB}
+      - LANGUAGE_LEARNING_DB_USER=${LANGUAGE_LEARNING_DB_USER}
+      - LANGUAGE_LEARNING_DB_PASSWORD=${LANGUAGE_LEARNING_DB_PASSWORD}
+      - LANGUAGE_LEARNING_DB_HOST=host.docker.internal
+      - LANGUAGE_LEARNING_DB_PORT=${LANGUAGE_LEARNING_DB_PORT}
+      

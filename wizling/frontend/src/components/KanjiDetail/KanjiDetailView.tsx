@@ -43,7 +43,7 @@ interface KanjiDetail {
 const KanjiDetailView: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { kanjiDetail, loading, error } = useKanjiDetail(id);
+    const { kanjiDetail, loading, error } = useKanjiDetail(id!);
 
     const handleBack = () => {
         navigate(-1); // Go back to the previous page (Vocab Detail View)

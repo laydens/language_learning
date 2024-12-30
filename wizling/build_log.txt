@@ -1,0 +1,411 @@
+#1 [internal] load build definition from Dockerfile
+#1 sha256:1db2a636bff229c7a6f005b2d4e59ead946017cf9e2d7ccb8b04b5fb8d0867c1
+#1 transferring dockerfile: 74B done
+#1 DONE 0.0s
+
+#2 [internal] load .dockerignore
+#2 sha256:7ce02b416389d03b1d842aa6e81035886fb02c3551219c53227258fe1c0acf52
+#2 transferring context: 35B done
+#2 DONE 0.0s
+
+#4 [internal] load metadata for docker.io/library/node:14-alpine
+#4 sha256:e9f604fd3f1f0040236326aac32cfcef9c63fae57a1934aceea4decb8d14451f
+#4 ...
+
+#3 [internal] load metadata for docker.io/library/python:3.10-slim
+#3 sha256:2d2de0596baa6821152bac8971e6b7a462a864288e34ffb104c93d0500bf7fa3
+#3 DONE 0.9s
+
+#4 [internal] load metadata for docker.io/library/node:14-alpine
+#4 sha256:e9f604fd3f1f0040236326aac32cfcef9c63fae57a1934aceea4decb8d14451f
+#4 DONE 1.0s
+
+#5 [backend  1/38] FROM docker.io/library/python:3.10-slim@sha256:bdc6c5b8f725df8b009b32da65cbf46bfd24d1c86dce2e6169452c193ad660b4
+#5 sha256:514e55cf872dcd5a343b6d1ead2930923e9f252e0c52917da64a4cec5505b353
+#5 DONE 0.0s
+
+#23 [build  1/16] FROM docker.io/library/node:14-alpine@sha256:434215b487a329c9e867202ff89e704d3a75e554822e07f3e0c0f9e606121b33
+#23 sha256:b96fbdc9fed3b675911cec6f80267dbd0bd0c691eff28db71e01606ac5c27b71
+#23 DONE 0.0s
+
+#8 [internal] load build context
+#8 sha256:55dec258b2244f75405e1c31156dd8cdf2d348c7dfa4c15a6dafa3b19f47939b
+#8 transferring context: 8.02MB 4.0s
+#8 transferring context: 17.70MB 6.0s done
+#8 DONE 6.1s
+
+#24 [build  2/16] WORKDIR /app
+#24 sha256:e62bc4ab43807321836d3e2c94dba23d57966ef44ce83bfddfff44d473f8d542
+#24 CACHED
+
+#25 [build  3/16] COPY . .
+#25 sha256:6c4050be2bed7e735e25f019c51a52de173b15035860525133ed19fe24239c26
+#25 DONE 14.0s
+
+#26 [build  4/16] RUN echo "Stage: build - Current directory: $(pwd)"
+#26 sha256:dfb76be59c549db3a997c3d3ae7d71712f7f633e1d0914d72bb385c7cf5dbb3a
+#26 0.203 Stage: build - Current directory: /app
+#26 DONE 0.2s
+
+#27 [build  5/16] RUN echo "Stage: build - Files in current directory:"
+#27 sha256:abb7197592ca354fd3465fbb0f09e100169eb4d2d4b2dd740c98b6ed7c6df037
+#27 0.160 Stage: build - Files in current directory:
+#27 DONE 0.2s
+
+#28 [build  6/16] RUN ls -la
+#28 sha256:11664a25e9fa71ca9f1e53926c501452235356cba46abcd8dd0d173ba6bc5865
+#28 0.276 total 84
+#28 0.277 drwxr-xr-x    1 root     root          4096 Dec 30 01:31 .
+#28 0.277 drwxr-xr-x    1 root     root          4096 Dec 30 01:31 ..
+#28 0.277 -rw-r--r--    1 root     root           180 Nov 24 18:46 .dockerignore
+#28 0.277 -rw-r--r--    1 root     root          2734 Dec 30 01:05 Dockerfile
+#28 0.277 -rw-r--r--    1 root     root          1509 Nov  2 22:17 LICENSE
+#28 0.277 -rw-r--r--    1 root     root           913 Nov  2 22:17 README.md
+#28 0.277 -rw-r--r--    1 root     root             0 Dec  1 04:26 __init__.py
+#28 0.277 drwxr-xr-x    6 root     root          4096 Dec 30 00:37 api
+#28 0.277 -rw-r--r--    1 root     root           637 Dec 30 01:31 build_log.txt
+#28 0.277 -rwxr-xr-x    1 root     root          1499 Dec 25 00:40 deploy.sh
+#28 0.277 -rw-r--r--    1 root     root           779 Dec 30 01:31 docker-compose.yml
+#28 0.277 drwxr-xr-x    7 root     root          4096 Dec 30 00:37 frontend
+#28 0.277 drwxr-xr-x    2 root     root          4096 Dec 30 01:31 logs
+#28 0.277 -rwxr-xr-x    1 root     root           663 Nov  2 22:17 manage.py
+#28 0.277 drwxr-xr-x    4 root     root          4096 Dec 30 00:37 media
+#28 0.277 -rw-r--r--    1 root     root           106 Nov  2 22:17 requirements.in
+#28 0.277 -rw-r--r--    1 root     root          1740 Dec 22 02:15 requirements.txt
+#28 0.277 -rwxr-xr-x    1 root     root          4260 Dec 23 00:29 rollback.sh
+#28 0.277 drwxr-xr-x   22 root     root          4096 Dec 30 00:37 staticfiles
+#28 0.277 -rw-r--r--    1 root     root          1339 Nov  3 02:47 template.html
+#28 0.277 drwxr-xr-x    7 root     root          4096 Dec 30 00:37 wizling
+#28 DONE 0.3s
+
+#29 [build  7/16] WORKDIR /app/frontend
+#29 sha256:04f7848c248a0d662c783f0bef934d18c9c5ccdbb0f6d20ad2dea7af2135d128
+#29 DONE 0.0s
+
+#30 [build  8/16] RUN echo "Stage: build - Installing frontend dependencies"
+#30 sha256:0dcf4b9b8a91690e8798e52e3a64a69bef586e935303041fc76f3d9de518e33a
+#30 0.170 Stage: build - Installing frontend dependencies
+#30 DONE 0.2s
+
+#31 [build  9/16] RUN npm install
+#31 sha256:afd7a0124e5b649744744a986dc49c9510cd9bb9b440aec81749c74ff6b7778f
+#31 2.144 npm WARN read-shrinkwrap This version of npm is compatible with lockfileVersion@1, but package-lock.json was generated for lockfileVersion@3. I'll try to do my best with it!
+#31 24.52 npm WARN deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+#31 31.60 npm WARN deprecated svgo@1.3.2: This SVGO version is no longer supported. Upgrade to v2.x.x.
+#31 31.75 npm WARN deprecated stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
+#31 32.27 npm WARN deprecated q@1.5.1: You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+#31 32.27 npm WARN deprecated 
+#31 32.27 npm WARN deprecated (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
+#31 37.01 npm WARN deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+#31 37.15 npm WARN deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+#31 40.25 npm WARN deprecated @babel/plugin-proposal-private-methods@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-methods instead.
+#31 40.25 npm WARN deprecated @babel/plugin-proposal-numeric-separator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-numeric-separator instead.
+#31 40.32 npm WARN deprecated @babel/plugin-proposal-optional-chaining@7.21.0: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-optional-chaining instead.
+#31 40.33 npm WARN deprecated @babel/plugin-proposal-nullish-coalescing-operator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-nullish-coalescing-operator instead.
+#31 40.37 npm WARN deprecated @babel/plugin-proposal-class-properties@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-properties instead.
+#31 45.32 npm WARN deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+#31 46.62 npm WARN deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+#31 48.31 npm WARN deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+#31 68.24 npm WARN deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+#31 68.43 npm WARN deprecated domexception@2.0.1: Use your platform's native DOMException instead
+#31 68.43 npm WARN deprecated w3c-hr-time@1.0.2: Use your platform's native performance.now() and performance.timeOrigin.
+#31 89.03 npm WARN deprecated rollup-plugin-terser@7.0.2: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
+#31 89.13 npm WARN deprecated workbox-google-analytics@6.6.0: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
+#31 89.20 npm WARN deprecated workbox-cacheable-response@6.6.0: workbox-background-sync@6.6.0
+#31 91.03 npm WARN deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-codec instead
+#31 92.85 npm WARN deprecated @babel/plugin-proposal-private-property-in-object@7.21.11: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-property-in-object instead.
+#31 113.7 npm WARN rm not removing /app/frontend/node_modules/.bin/ansi-html as it wasn't installed by /app/frontend/node_modules/ansi-html-community
+#31 127.9 
+#31 127.9 > core-js@3.39.0 postinstall /app/frontend/node_modules/core-js
+#31 127.9 > node -e "try{require('./postinstall')}catch(e){}"
+#31 127.9 
+#31 128.0 [96mThank you for using core-js ([94m https://github.com/zloirock/core-js [96m) for polyfilling JavaScript standard library![0m
+#31 128.0 
+#31 128.0 [96mThe project needs your help! Please consider supporting core-js:[0m
+#31 128.0 [96m>[94m https://opencollective.com/core-js [0m
+#31 128.0 [96m>[94m https://patreon.com/zloirock [0m
+#31 128.0 [96m>[94m https://boosty.to/zloirock [0m
+#31 128.0 [96m>[94m bitcoin: bc1qlea7544qtsmj2rayg0lthvza9fau63ux0fstcz [0m
+#31 128.0 
+#31 128.0 [96mI highly recommend reading this:[94m https://github.com/zloirock/core-js/blob/master/docs/2023-02-14-so-whats-next.md [96m[0m
+#31 128.0 
+#31 128.0 
+#31 128.0 > core-js-pure@3.39.0 postinstall /app/frontend/node_modules/core-js-pure
+#31 128.0 > node -e "try{require('./postinstall')}catch(e){}"
+#31 128.0 
+#31 128.0 [96mThank you for using core-js ([94m https://github.com/zloirock/core-js [96m) for polyfilling JavaScript standard library![0m
+#31 128.0 
+#31 128.0 [96mThe project needs your help! Please consider supporting core-js:[0m
+#31 128.0 [96m>[94m https://opencollective.com/core-js [0m
+#31 128.0 [96m>[94m https://patreon.com/zloirock [0m
+#31 128.0 [96m>[94m https://boosty.to/zloirock [0m
+#31 128.0 [96m>[94m bitcoin: bc1qlea7544qtsmj2rayg0lthvza9fau63ux0fstcz [0m
+#31 128.0 
+#31 128.0 [96mI highly recommend reading this:[94m https://github.com/zloirock/core-js/blob/master/docs/2023-02-14-so-whats-next.md [96m[0m
+#31 128.0 
+#31 128.7 npm WARN notsup Unsupported engine for react-router-dom@7.0.1: wanted: {"node":">=20.0.0"} (current: {"node":"14.21.3","npm":"6.14.18"})
+#31 128.7 npm WARN notsup Not compatible with your version of node/npm: react-router-dom@7.0.1
+#31 128.8 npm WARN notsup Unsupported engine for react-router@7.0.1: wanted: {"node":">=20.0.0"} (current: {"node":"14.21.3","npm":"6.14.18"})
+#31 128.8 npm WARN notsup Not compatible with your version of node/npm: react-router@7.0.1
+#31 128.8 npm WARN notsup Unsupported engine for cookie@1.0.2: wanted: {"node":">=18"} (current: {"node":"14.21.3","npm":"6.14.18"})
+#31 128.8 npm WARN notsup Not compatible with your version of node/npm: cookie@1.0.2
+#31 128.8 npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@^2.3.2 (node_modules/react-scripts/node_modules/fsevents):
+#31 128.8 npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@2.3.3: wanted {"os":"darwin","arch":"any"} (current: {"os":"linux","arch":"arm64"})
+#31 128.8 npm WARN @testing-library/user-event@13.5.0 requires a peer of @testing-library/dom@>=7.21.4 but none is installed. You must install peer dependencies yourself.
+#31 128.8 npm WARN @csstools/selector-specificity@2.2.0 requires a peer of postcss-selector-parser@^6.0.10 but none is installed. You must install peer dependencies yourself.
+#31 128.8 
+#31 128.8 added 281 packages from 66 contributors, removed 71 packages, updated 1336 packages and audited 1621 packages in 128.127s
+#31 129.2 
+#31 129.2 278 packages are looking for funding
+#31 129.2   run `npm fund` for details
+#31 129.2 
+#31 129.2 found 2 vulnerabilities (1 moderate, 1 high)
+#31 129.2   run `npm audit fix` to fix them, or `npm audit` for details
+#31 DONE 129.4s
+
+#32 [build 10/16] RUN echo "Stage: build - Frontend dependencies installed"
+#32 sha256:8bce161cd04ccf621d33ce6904615d2b7cf2ed0a5b97d88b2b3183f9aa80ea35
+#32 0.258 Stage: build - Frontend dependencies installed
+#32 DONE 0.3s
+
+#33 [build 11/16] RUN echo "Stage: build - Building frontend"
+#33 sha256:d2f8ac7b68974d6818a3119df2ea9b06a519785adaf450f46337683fe7c9bb3b
+#33 0.191 Stage: build - Building frontend
+#33 DONE 0.2s
+
+#34 [build 12/16] RUN npm run build
+#34 sha256:f8dfb81e09dea4bb62a578d71c06d182e2d3eafead1a960fc8b80deb2e9aafa5
+#34 0.386 
+#34 0.386 > frontend@0.1.0 build /app/frontend
+#34 0.386 > react-scripts build
+#34 0.386 
+#34 1.550 Creating an optimized production build...
+#34 19.94 Compiled with warnings.
+#34 19.94 
+#34 19.94 [eslint] 
+#34 19.94 src/components/Card/Card.tsx
+#34 19.94   Line 35:12:   'backFontSize' is assigned a value but never used                                                                                 @typescript-eslint/no-unused-vars
+#34 19.94   Line 40:12:   'showDetail' is assigned a value but never used                                                                                   @typescript-eslint/no-unused-vars
+#34 19.94   Line 82:8:    React Hook useCallback has unnecessary dependencies: 'isActive' and 'isNext'. Either exclude them or remove the dependency array  react-hooks/exhaustive-deps
+#34 19.94   Line 105:8:   React Hook useEffect has a missing dependency: 'calculateFontSize'. Either include it or remove the dependency array              react-hooks/exhaustive-deps
+#34 19.94   Line 107:11:  'handleCloseModal' is assigned a value but never used                                                                             @typescript-eslint/no-unused-vars
+#34 19.94 
+#34 19.94 src/components/Card/CardDeck.tsx
+#34 19.94   Line 5:8:  'FlashcardContent' is defined but never used  @typescript-eslint/no-unused-vars
+#34 19.94 
+#34 19.94 src/components/KanjiDetail/KanjiDetailView.tsx
+#34 19.94   Line 6:11:  'KanjiDetail' is defined but never used  @typescript-eslint/no-unused-vars
+#34 19.94 
+#34 19.94 src/components/VocabDetail/VocabDetailView.tsx
+#34 19.94   Line 2:46:  'Book' is defined but never used      @typescript-eslint/no-unused-vars
+#34 19.94   Line 2:52:  'Building' is defined but never used  @typescript-eslint/no-unused-vars
+#34 19.94 
+#34 19.94 Search for the keywords to learn more about each warning.
+#34 19.94 To ignore, add // eslint-disable-next-line to the line before.
+#34 19.94 
+#34 19.94 File sizes after gzip:
+#34 19.94 
+#34 19.95   82.69 kB (+832 B)  build/static/js/main.2a21f74e.js
+#34 19.95   5.22 kB (+46 B)    build/static/css/main.a53b9b14.css
+#34 19.95 
+#34 19.95 The project was built assuming it is hosted at /.
+#34 19.95 You can control this with the homepage field in your package.json.
+#34 19.95 
+#34 19.95 The build folder is ready to be deployed.
+#34 19.95 You may serve it with a static server:
+#34 19.95 
+#34 19.95   npm install -g serve
+#34 19.95   serve -s build
+#34 19.95 
+#34 19.95 Find out more about deployment here:
+#34 19.95 
+#34 19.95   https://cra.link/deployment
+#34 19.95 
+#34 DONE 20.1s
+
+#35 [build 13/16] RUN echo "Stage: build - Frontend built"
+#35 sha256:85db1caad7ee2425ed0393b54ba1479f3b81e8252a540f1adad2f08950ab3540
+#35 0.224 Stage: build - Frontend built
+#35 DONE 0.2s
+
+#36 [build 14/16] RUN echo "Stage: build - Files in build directory:"
+#36 sha256:24a9d112a625960290fd1b6121634bb71024c03b4415c2385aa1f36d5eb161a7
+#36 0.188 Stage: build - Files in build directory:
+#36 DONE 0.2s
+
+#37 [build 15/16] RUN ls -la /app/frontend/build
+#37 sha256:2e250e129ca26e9f5f32b7b186f9c4a57b41319030a21b55e64c98cb82f8ede0
+#37 0.177 total 60
+#37 0.178 drwxr-xr-x    1 root     root          4096 Dec 30 01:34 .
+#37 0.178 drwxr-xr-x    1 root     root          4096 Dec 30 01:34 ..
+#37 0.178 -rw-r--r--    1 root     root           369 Dec 30 01:34 asset-manifest.json
+#37 0.178 -rw-r--r--    1 root     root          3870 Dec 30 01:34 favicon.ico
+#37 0.178 -rw-r--r--    1 root     root           644 Dec 30 01:34 index.html
+#37 0.178 -rw-r--r--    1 root     root          5347 Dec 30 01:34 logo192.png
+#37 0.178 -rw-r--r--    1 root     root          9664 Dec 30 01:34 logo512.png
+#37 0.178 -rw-r--r--    1 root     root           492 Dec 30 01:34 manifest.json
+#37 0.178 -rw-r--r--    1 root     root            67 Dec 30 01:34 robots.txt
+#37 0.178 drwxr-xr-x    4 root     root          4096 Dec 30 01:34 static
+#37 DONE 0.2s
+
+#38 [build 16/16] RUN find /app/frontend/build -name "asset-manifest.json"
+#38 sha256:202fb96dd4a2f162941f9a90696485914dddb103a1ee031e3c6932bddd3b0a7a
+#38 0.181 /app/frontend/build/asset-manifest.json
+#38 DONE 0.2s
+
+#43 [backend 22/38] COPY --from=build /app/frontend/build/manifest.json /app/staticfiles/
+#43 sha256:bce0ba46315b52fd181ba7d58171a5ce77224b41444da4ce03d15185a0de986f
+#43 CACHED
+
+#53 [backend 32/38] RUN ls -la /app/staticfiles/
+#53 sha256:568c8ca1179bec7043e75a6ac5fd0a1ec58bd27d3e4612be8153feaeafa48358
+#53 CACHED
+
+#55 [backend 34/38] RUN echo "Stage: backend - Running collectstatic"
+#55 sha256:ea9147274e010315ac2cc20b53b36b25b9c383d75a14b4d1d4dddd1b55ec7e08
+#55 CACHED
+
+#7 [backend  3/38] RUN apt-get update && apt-get install -y     default-libmysqlclient-dev     build-essential     pkg-config     && apt-get clean     && rm -rf /var/lib/apt/lists/*
+#7 sha256:14bd456815efa0b346677968d4aecc6c7dd3bc755633a7c09ea1bb731e1de29e
+#7 CACHED
+
+#47 [backend 26/38] RUN ls -la /app/staticfiles/
+#47 sha256:0c52dfecf0a4926dfd98ae16b0c4985783133603d8a347cdcbf643aaca52c609
+#47 CACHED
+
+#6 [backend  2/38] WORKDIR /app
+#6 sha256:b357c1bd5f2bdc779993d78fb1419155f78b01ad6f06e1479a7748404ecdab1f
+#6 CACHED
+
+#10 [backend  5/38] RUN echo "Stage: backend - Installing Python dependencies"
+#10 sha256:2a12ac4d06643c617b174b3f1daa20f12213e5fd27dd5767a95cae66233d72fc
+#10 CACHED
+
+#21 [backend 16/38] RUN ls -la
+#21 sha256:3d1c564a3ccd99cb5de2b3b5dbadb3a2af770d7056c827e021a082b5abaf7604
+#21 CACHED
+
+#41 [backend 20/38] COPY --from=build /app/frontend/build/favicon.ico /app/staticfiles/
+#41 sha256:603ac5181dabf8ce65c144cef82911d89179809cd3df28a37e4b6d8f2bad2385
+#41 CACHED
+
+#12 [backend  7/38] RUN echo "Stage: backend - Python dependencies installed"
+#12 sha256:f7a8180fb21cdfd162805aae76a6af6d0b881517830e50ea4fe1be4dbde7deff
+#12 CACHED
+
+#49 [backend 28/38] RUN echo "Stage: backend - Creating timestamp file"
+#49 sha256:3735ee086ff96fce4db211e1f5db719894c5d676b4dd7272e43a66c9db4e926a
+#49 CACHED
+
+#52 [backend 31/38] RUN echo "Stage: backend - After timestamp creation - Files in /app/staticfiles:"
+#52 sha256:dc3bd5a0868b06f5af8482a4430c8a909cd04c9fd4bb0a0cc6b6858b6b043c2f
+#52 CACHED
+
+#15 [backend 10/38] COPY api ./api
+#15 sha256:fa3f6ce6aee3adec9488a32428a6574105196ed1f57b94e8ebfef7ec3b8b48fc
+#15 CACHED
+
+#57 [backend 36/38] RUN echo "Stage: backend - collectstatic completed"
+#57 sha256:9ceb915b8e786e0657e7719b5a3096f6aa1e3fd2432b7a61b7f813ad7079b7db
+#57 CACHED
+
+#17 [backend 12/38] RUN touch /app/logs/django.log
+#17 sha256:c6682ddee644d532b312d2483bc4d120029034ea232747277279a3ac3cd27c8b
+#17 CACHED
+
+#56 [backend 35/38] RUN python manage.py collectstatic --noinput
+#56 sha256:6cbd65ad48c71b43a2cada5f84408b372aed6ce0c26134202af36bc063625842
+#56 CACHED
+
+#48 [backend 27/38] RUN find /app/staticfiles/ -name "asset-manifest.json"
+#48 sha256:2d8be7fcd86976101350d581cc355f8d92fab56d8134bb4c16df018ad2054522
+#48 CACHED
+
+#50 [backend 29/38] RUN echo "Container built at: $(date)" > /app/staticfiles/timestamp.txt
+#50 sha256:8854ffca6731f5fcdfa22f77a16fa24129b3afdf85b3bd30a06a70cd4c241f04
+#50 CACHED
+
+#22 [backend 17/38] RUN find /app -name "asset-manifest.json"
+#22 sha256:e0eb7c5465bf4c600db8f4187c386379939927911c44ed67c8a0ef540920a3aa
+#22 CACHED
+
+#18 [backend 13/38] RUN chmod 666 /app/logs/django.log
+#18 sha256:5997106faa57fad32f688c0af02572c1d3a94edab7b70b08ef4e1c7286057351
+#18 CACHED
+
+#44 [backend 23/38] COPY --from=build /app/frontend/build/robots.txt /app/staticfiles/
+#44 sha256:ab30266e4e8ac50f0cb17bc4f832c28dbd7fc42841dc7afce998f4776a8c218e
+#44 CACHED
+
+#20 [backend 15/38] RUN echo "Stage: backend - Before COPY - Files in current directory:"
+#20 sha256:68a1d4cf86f26a989c13d294e2900223b0b14374d79a58975ecea05ddf9c592b
+#20 CACHED
+
+#58 [backend 37/38] RUN echo "Stage: backend - After collectstatic - Files in /app/staticfiles:"
+#58 sha256:9c467240885fb0ab1a9e0a2038e71332fef8cfc0a73e9058c6410d05394b2173
+#58 CACHED
+
+#46 [backend 25/38] RUN echo "Stage: backend - After COPY - Files in /app/staticfiles:"
+#46 sha256:e463fb8d9ee421956aaec1601fa9856413ec11eceac0fbf176fe164cfc93e477
+#46 CACHED
+
+#11 [backend  6/38] RUN pip install --no-cache-dir -r requirements.txt gunicorn
+#11 sha256:727af3f2be8765612e6e0f5d39750ac4d0a169d3f93564e943550be22a8d4062
+#11 CACHED
+
+#51 [backend 30/38] RUN echo "Stage: backend - Timestamp file created"
+#51 sha256:d3281c6aa4ad05dda3b84ef77631c6882010f325f7e7c94484229e372154d38d
+#51 CACHED
+
+#54 [backend 33/38] RUN cat /app/staticfiles/timestamp.txt
+#54 sha256:665a6cf511ba2c6d4a8f13d76f15dff311a1fe907df27890b8d7ba4d00b2a73d
+#54 CACHED
+
+#16 [backend 11/38] RUN mkdir -p /app/staticfiles /app/logs
+#16 sha256:c815c6d3e5354a58a3c0b9f86e7d4584deb2d44273b2e79c4b1efad978025f06
+#16 CACHED
+
+#13 [backend  8/38] COPY manage.py .
+#13 sha256:dfff0af6ee87ae125a2444386d22a546a15e338485f22d940c05a3b0313bfc95
+#13 CACHED
+
+#14 [backend  9/38] COPY wizling ./wizling
+#14 sha256:0bc34bfb8bdce70941b0e5d5ee8fc783c59bf77ef3d6f33b4c29fa3fdc8b6c1e
+#14 CACHED
+
+#42 [backend 21/38] COPY --from=build /app/frontend/build/index.html /app/staticfiles/
+#42 sha256:425387c46f86cd9962e4df2e36de465820bcb51fe6bd1e2017037d0f7559d58f
+#42 CACHED
+
+#9 [backend  4/38] COPY requirements.txt .
+#9 sha256:08c759f401e6234a4fb18597812a35878b0ac41024374f4b66bcdee6c904d2dd
+#9 CACHED
+
+#40 [backend 19/38] COPY --from=build /app/frontend/build/asset-manifest.json /app/staticfiles/
+#40 sha256:5df5b2852ab44d3b0c9dbd75ab072d1423432972cd09cccd836d237ae21b165f
+#40 CACHED
+
+#45 [backend 24/38] RUN echo "Stage: backend - After COPY - Current directory: $(pwd)"
+#45 sha256:38ab135c641109148bf7c6089bea3497d29b2d1469ac464545120a69242a4c40
+#45 CACHED
+
+#39 [backend 18/38] COPY --from=build /app/frontend/build/static /app/staticfiles/
+#39 sha256:d7d9789eed3adfe56d5b20c19794cc8aad8e9cb18b7d9ec279b811eb81a54859
+#39 CACHED
+
+#19 [backend 14/38] RUN echo "Stage: backend - Before COPY - Current directory: $(pwd)"
+#19 sha256:125488c12f1ebc31d34bcaafe1362e1f1ed1195e09dbc852f7f447ec395e7ef0
+#19 CACHED
+
+#59 [backend 38/38] RUN ls -la /app/staticfiles/
+#59 sha256:69796fc47f94504f5f3a8c4de94227cf3ccac4350d0def769fe2cc85826e3956
+#59 CACHED
+
+#60 exporting to image
+#60 sha256:e8c613e07b0b7ff33893b694f7759a10d42e180f2b4dc349fb57dc6b71dcab00
+#60 exporting layers done
+#60 writing image sha256:56975d48f07323a76076c4010dd464bc31f378f643f227edd0aeba8241b36d6e done
+#60 naming to docker.io/library/your_image_name done
+#60 DONE 0.1s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
