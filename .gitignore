@@ -8,10 +8,11 @@ wizling/media/
 __pycache__/
 __init__.py
 node_modules/
+build_log.txt
 # Ignore build and dist directories
 build/
 dist/
-
+wizling/logs/django.log
 # Ignore temporary and cache directories
 .temp/
 .cache/
@@ -24,3 +25,4 @@ dist/
 *.zip
 .env
 wizling/staticfiles/*
+wizling/build_log.txt
