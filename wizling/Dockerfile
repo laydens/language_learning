@@ -75,6 +75,10 @@ RUN echo "Stage: backend - collectstatic completed"
 RUN echo "Stage: backend - After collectstatic - Files in /app/staticfiles:"
 RUN ls -la /app/staticfiles/
 
-EXPOSE 8000
+# Add health check
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl -f http://localhost:8080/ || exit 1
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--log-level", "debug", "wizling.wsgi:application"]
+EXPOSE 8080
+
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--log-level", "debug", "wizling.wsgi:application"]
