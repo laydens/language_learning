@@ -75,6 +75,6 @@ RUN echo "Stage: backend - collectstatic completed"
 RUN echo "Stage: backend - After collectstatic - Files in /app/staticfiles:"
 RUN ls -la /app/staticfiles/
 
-EXPOSE 8000
+EXPOSE 8080
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--log-level", "debug", "wizling.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--log-level", "debug", "wizling.wsgi:application"]

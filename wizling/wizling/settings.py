@@ -53,8 +53,8 @@ ALLOWED_HOSTS = [
 
 # CSRF settings should be equally explicit
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000',
-    'http://127.0.0.1:8000',
+    'http://localhost:8080',
+    'http://127.0.0.1:8080',
     'https://djangocms-649684198786.us-central1.run.app',
     'https://*.run.app',
     'https://*.wizling.com',
@@ -289,11 +289,11 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console', 'file'],  # Add 'file' handler
-            'level': 'DEBUG',
+            'level': 'WARNING',
         },
         'your_app_name': {
             'handlers': ['console', 'file'],  # Add 'file' handler
-            'level': 'DEBUG',
+            'level': 'WARNING',
         },
     },
 }

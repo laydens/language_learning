@@ -1,84 +1,91 @@
 # Stage 1: Build the React app
 FROM node:14-alpine AS build
 
+# Set the working directory
 WORKDIR /app
-COPY . .
-RUN echo "Stage: build - Current directory: $(pwd)"
-RUN echo "Stage: build - Files in current directory:"
-RUN ls -la
 
-WORKDIR /app/frontend
-RUN echo "Stage: build - Installing frontend dependencies"
-RUN npm install
-RUN echo "Stage: build - Frontend dependencies installed"
-RUN echo "Stage: build - Building frontend"
-RUN npm run build
-RUN echo "Stage: build - Frontend built"
-RUN echo "Stage: build - Files in build directory:"
-RUN ls -la /app/frontend/build
-RUN find /app/frontend/build -name "asset-manifest.json"
+# Copy only package.json and package-lock.json to leverage caching
+COPY frontend/package.json frontend/package-lock.json ./
+
+# Install dependencies
+RUN echo "Installing frontend dependencies..." && \
+    npm install && \
+    echo "Frontend dependencies installed."
+
+# Copy the rest of the frontend files
+COPY frontend/ ./
+
+# Build the React app
+RUN echo "Building the React app..." && \
+    npm run build && \
+    echo "React app built successfully."
+
+# Verify the build output
+RUN echo "Verifying build output..." && \
+    ls -la /app/build && \
+    echo "Build output verified."
 
 # Stage 2: Build the Django app
 FROM python:3.10-slim AS backend
 
+# Set the working directory
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
+# Install system dependencies
+RUN echo "Installing system dependencies..." && \
+    apt-get update && \
+    apt-get install -y \
     default-libmysqlclient-dev \
     build-essential \
     pkg-config \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    nginx && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    echo "System dependencies installed."
 
-COPY requirements.txt .
-RUN echo "Stage: backend - Installing Python dependencies"
-RUN pip install --no-cache-dir -r requirements.txt gunicorn
-RUN echo "Stage: backend - Python dependencies installed"
+# Copy only requirements.txt to leverage caching
+COPY requirements.txt ./
 
-COPY manage.py .
-COPY wizling ./wizling
-COPY api ./api
+# Install Python dependencies
+RUN echo "Installing Python dependencies..." && \
+    pip install --no-cache-dir -r requirements.txt && \
+    echo "Python dependencies installed."
 
-RUN mkdir -p /app/staticfiles /app/logs
-RUN touch /app/logs/django.log
-RUN chmod 666 /app/logs/django.log
+# Copy only the necessary built React app files from the build stage
+COPY --from=build /app/build/static /app/staticfiles/static
+COPY --from=build /app/build/asset-manifest.json /app/staticfiles/
+COPY --from=build /app/build/favicon.ico /app/staticfiles/
+COPY --from=build /app/build/index.html /app/staticfiles/
+COPY --from=build /app/build/manifest.json /app/staticfiles/
+COPY --from=build /app/build/robots.txt /app/staticfiles/
 
-RUN echo "Stage: backend - Before COPY - Current directory: $(pwd)"
-RUN echo "Stage: backend - Before COPY - Files in current directory:"
-RUN ls -la
-RUN find /app -name "asset-manifest.json"
+# Copy the Django application code
+COPY wizling /app/wizling
+COPY api /app/api
+COPY manage.py /app/
 
-COPY --from=build /app/frontend/build/static /app/staticfiles/
-COPY --from=build /app/frontend/build/asset-manifest.json /app/staticfiles/
-COPY --from=build /app/frontend/build/favicon.ico /app/staticfiles/
-COPY --from=build /app/frontend/build/index.html /app/staticfiles/
-COPY --from=build /app/frontend/build/manifest.json /app/staticfiles/
-COPY --from=build /app/frontend/build/robots.txt /app/staticfiles/  
+# Create necessary directories
+RUN echo "Creating necessary directories..." && \
+    mkdir -p /app/staticfiles /app/logs && \
+    touch /app/logs/django.log && \
+    chmod 666 /app/logs/django.log && \
+    echo "Directories created."
 
-RUN echo "Stage: backend - After COPY - Current directory: $(pwd)"
-RUN echo "Stage: backend - After COPY - Files in /app/staticfiles:"
-RUN ls -la /app/staticfiles/
-RUN find /app/staticfiles/ -name "asset-manifest.json"
+# Collect static files
+RUN echo "Collecting static files..." && \
+    python manage.py collectstatic --noinput && \
+    echo "Static files collected."
 
-RUN echo "Stage: backend - Creating timestamp file"
-RUN echo "Container built at: $(date)" > /app/staticfiles/timestamp.txt
-RUN echo "Stage: backend - Timestamp file created"
+# Verify the contents of the staticfiles directory
+RUN echo "Verifying static files..." && \
+    ls -la /app/staticfiles && \
+    echo "Static files verified."
 
-RUN echo "Stage: backend - After timestamp creation - Files in /app/staticfiles:"
-RUN ls -la /app/staticfiles/
-RUN cat /app/staticfiles/timestamp.txt
+# Copy Nginx configuration file
+COPY nginx.conf /etc/nginx/nginx.conf
 
-RUN echo "Stage: backend - Running collectstatic"
-RUN python manage.py collectstatic --noinput
-RUN echo "Stage: backend - collectstatic completed"
+# Expose the ports for both Gunicorn and Nginx
+EXPOSE 8080 80
 
-RUN echo "Stage: backend - After collectstatic - Files in /app/staticfiles:"
-RUN ls -la /app/staticfiles/
-
-# Add health check
-HEALTHCHECK --interval=30s --timeout=3s \
-  CMD curl -f http://localhost:8080/ || exit 1
-
-EXPOSE 8080
-
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--log-level", "debug", "wizling.wsgi:application"]
+# Command to run both Nginx and Gunicorn
+CMD service nginx start && gunicorn --bind 0.0.0.0:8080 --log-level debug wizling.wsgi:application

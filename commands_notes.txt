@@ -1,1 +1,14 @@
-docker-compose up --build
+COMMANDS
+
+ # deploys container
+docker-compose up --build --no-cache
+
+# builds react app in development mode
+npm run build
+
+# opens zshrc file in vscode
+code ~/.zshrc
+
+# runs zshrc file
+source ~/.zshrc
+

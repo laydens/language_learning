@@ -7,8 +7,8 @@
 
 import Flashcard from '../models/JapaneseFlashcard';
 
-const FLASHCARD_API_URL = process.env.REACT_APP_FLASHCARD_API_URL || 'http://127.0.0.1:8000/api/flashcards/';
-const VOCAB_API_URL = process.env.VOCAB_API_URL || 'http://127.0.0.1:8000/api/japanese/vocab/';
+const FLASHCARD_API_URL = process.env.REACT_APP_FLASHCARD_API_URL;
+const VOCAB_API_URL = process.env.REACT_APP_VOCAB_API_URL;
 /**
  * Fetches flashcards from the API and formats them according to the specified topic
  * @param numCards - Number of cards to fetch

@@ -5,58 +5,43 @@ PROJECT_ID="wizling"
 SERVICE_NAME="djangocms"
 REGION="us-central1"
 CLOUD_SQL_INSTANCE="wizling-mysql"
-CMS_DB="language_learning_cms"
-CMS_DB_USER="cms_service"
-CMS_DB_PASSWORD_SECRET="cms-service-password"
-SERVICE_ACCOUNT="cloudrun-serviceaccount@wizling.iam.gserviceaccount.com"
-LANGUAGE_LEARNING_DB='language_learning'
-LANGUAGE_LEARNING_DB_USER='lang_user'
-LANGUAGE_LEARNING_DB_PASSWORD='lang-db-password'
-
-# Domain Configuration
-CLOUD_RUN_DOMAIN="djangocms-649684198786.us-central1.run.app"
-
-# Derived variables
-IMAGE_PATH="$REGION-docker.pkg.dev/$PROJECT_ID/$SERVICE_NAME/$SERVICE_NAME"
 CLOUD_SQL_CONNECTION_NAME="$PROJECT_ID:$REGION:$CLOUD_SQL_INSTANCE"
+IMAGE_PATH="us-central1-docker.pkg.dev/$PROJECT_ID/$SERVICE_NAME/$SERVICE_NAME"
 
 echo "🚀 Starting deployment..."
+# Rename .env.production.off to .env.production for deployment
+if [ -f wizling/frontend/.env.production.off ]; then
+    mv wizling/frontend/.env.production.off wizling/frontend/.env.production
+    echo "Renamed .env.production.off to .env.production"
+else
+    echo ".env.production.off not found!"
+    exit 1
+fi
 
 # Build and push the Docker image
 echo "📦 Building and pushing Docker image..."
 gcloud builds submit . --tag $IMAGE_PATH
 
-# Deploy to Cloud Run with additional logging
+# Deploy to Cloud Run
 echo "🌩️  Deploying to Cloud Run..."
 gcloud run deploy $SERVICE_NAME \
   --region $REGION \
   --image $IMAGE_PATH \
   --platform managed \
-  --update-env-vars "ALLOWED_HOSTS=$CLOUD_RUN_DOMAIN wizling.com" \
-  --update-env-vars "CMS_DB=$CMS_DB" \
+  --service-account cloudrun-serviceaccount@wizling.iam.gserviceaccount.com \
+  --update-env-vars "ALLOWED_HOSTS=djangocms-649684198786.us-central1.run.app wizling.com" \
+  --update-env-vars "CMS_DB=language_learning_cms" \
   --update-env-vars "CMS_DB_HOST=/cloudsql/$CLOUD_SQL_CONNECTION_NAME" \
-  --update-env-vars "CMS_DB_USER=$CMS_DB_USER" \
-  --update-env-vars "LANGUAGE_LEARNING_DB=$LANGUAGE_LEARNING_DB" \
+  --update-env-vars "CMS_DB_USER=cms_service" \
+  --update-env-vars "LANGUAGE_LEARNING_DB=language_learning" \
   --update-env-vars "LANGUAGE_LEARNING_DB_HOST=/cloudsql/$CLOUD_SQL_CONNECTION_NAME" \
-  --update-env-vars "LANGUAGE_LEARNING_DB_USER=$LANGUAGE_LEARNING_DB_USER" \
-  --set-secrets "CMS_DB_PASSWORD=$CMS_DB_PASSWORD_SECRET:latest" \
-  --set-secrets "LANGUAGE_LEARNING_DB_PASSWORD=$LANGUAGE_LEARNING_DB_PASSWORD_SECRET:latest" \
+  --update-env-vars "LANGUAGE_LEARNING_DB_USER=lang_user" \
+  --set-secrets "CMS_DB_PASSWORD=cms-service-password:latest" \
+  --set-secrets "LANGUAGE_LEARNING_DB_PASSWORD=lang-db-password:latest" \
   --add-cloudsql-instances $CLOUD_SQL_CONNECTION_NAME
 
-# Add deployment verification
-echo "Verifying deployment..."
-gcloud run services describe $SERVICE_NAME --platform managed --region $REGION
+# Rename .env.production back to .env.production.off after deployment
+mv wizling/frontend/.env.production wizling/frontend/.env.production.off
+echo "Renamed .env.production back to .env.production.off"
 
-# Check logs if deployment fails
-echo "To view logs, run:"
-echo "gcloud logs read --project=$PROJECT_ID --filter='resource.type=cloud_run_revision AND resource.labels.service_name=$SERVICE_NAME' --limit=50"
-
-# Set the latest revision to receive all traffic
-echo "🔄 Setting the latest revision to receive all traffic..."
-gcloud run services update-traffic $SERVICE_NAME \
- --to-latest \
- --platform managed \
- --region $REGION
-
-echo "http://wizling.com"
 echo "✅ Deployment complete!"
