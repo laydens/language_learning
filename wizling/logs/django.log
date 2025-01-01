@@ -13987,3 +13987,9 @@ WARNING 2025-01-01 22:19:39,450 log Not Found: /static/css/logo.css/
 WARNING 2025-01-01 22:20:04,990 log Not Found: /static/css/base.css/
 WARNING 2025-01-01 22:20:05,034 log Not Found: /static/css/base.css/
 WARNING 2025-01-01 22:20:11,694 log Not Found: /static/css/base.css/
+WARNING 2025-01-01 23:12:12,002 log Not Found: /favicon.ico/
+WARNING 2025-01-01 23:13:39,533 log Not Found: /favicon.ico/
+WARNING 2025-01-01 23:13:39,533 basehttp "GET /favicon.ico/ HTTP/1.1" 404 4803
+WARNING 2025-01-01 23:16:44,193 basehttp "GET /static/cms/css/fonts/4.1.3/django-cms-iconfont.woff2 HTTP/1.1" 404 2062
+WARNING 2025-01-01 23:16:44,228 basehttp "GET /static/cms/css/fonts/4.1.3/django-cms-iconfont.woff HTTP/1.1" 404 2059
+WARNING 2025-01-01 23:16:44,251 basehttp "GET /static/cms/css/fonts/4.1.3/django-cms-iconfont.ttf HTTP/1.1" 404 2056

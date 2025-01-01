@@ -3,8 +3,18 @@ COMMANDS
  # deploys container
 docker-compose up --build --no-cache
 
+# builds docker image logs to build_log.txt using cache
+docker build -t wizling-web:latest . > build_log.txt 2>&1 
+
+# same with cache disabled
+docker build --no-cache -t wizling-web:latest . > build_log.txt 2>&1
+
 # builds react app in development mode
 npm run build
+
+# start react app in development mode
+npm run dev
+npm start
 
 # opens zshrc file in vscode
 code ~/.zshrc
