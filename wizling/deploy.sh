@@ -9,9 +9,14 @@ CLOUD_SQL_CONNECTION_NAME="$PROJECT_ID:$REGION:$CLOUD_SQL_INSTANCE"
 IMAGE_PATH="us-central1-docker.pkg.dev/$PROJECT_ID/$SERVICE_NAME/$SERVICE_NAME"
 
 echo "🚀 Starting deployment..."
+
+# Clean React build artifacts
+echo "🧹 Cleaning React build artifacts..."
+rm -rf frontend/build/*
+
 # Rename .env.production.off to .env.production for deployment
-if [ -f wizling/frontend/.env.production.off ]; then
-    mv wizling/frontend/.env.production.off wizling/frontend/.env.production
+if [ -f frontend/.env.production.off ]; then
+    mv frontend/.env.production.off frontend/.env.production
     echo "Renamed .env.production.off to .env.production"
 else
     echo ".env.production.off not found!"
@@ -20,15 +25,18 @@ fi
 
 # Build and push the Docker image
 echo "📦 Building and pushing Docker image..."
-gcloud builds submit . --tag $IMAGE_PATH
+gcloud builds submit . --tag $IMAGE_PATH \
+    --timeout=1h
 
 # Deploy to Cloud Run
+# "IS_DOCKER=True" required for react_utility.py to find the correct static files. 
 echo "🌩️  Deploying to Cloud Run..."
 gcloud run deploy $SERVICE_NAME \
   --region $REGION \
   --image $IMAGE_PATH \
   --platform managed \
   --service-account cloudrun-serviceaccount@wizling.iam.gserviceaccount.com \
+  --update-env-vars "IS_DOCKER=True" \
   --update-env-vars "ALLOWED_HOSTS=djangocms-649684198786.us-central1.run.app wizling.com" \
   --update-env-vars "CMS_DB=language_learning_cms" \
   --update-env-vars "CMS_DB_HOST=/cloudsql/$CLOUD_SQL_CONNECTION_NAME" \
@@ -41,7 +49,7 @@ gcloud run deploy $SERVICE_NAME \
   --add-cloudsql-instances $CLOUD_SQL_CONNECTION_NAME
 
 # Rename .env.production back to .env.production.off after deployment
-mv wizling/frontend/.env.production wizling/frontend/.env.production.off
+mv frontend/.env.production frontend/.env.production.off
 echo "Renamed .env.production back to .env.production.off"
 
 echo "✅ Deployment complete!"

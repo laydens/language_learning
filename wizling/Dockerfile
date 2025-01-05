@@ -87,5 +87,11 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Expose the ports for both Gunicorn and Nginx
 EXPOSE 8080 80
 
-# Command to run both Nginx and Gunicorn
-CMD service nginx start && gunicorn --bind 0.0.0.0:8080 --log-level debug wizling.wsgi:application
+# Copy the start script into the container
+COPY startservers.sh /startservers.sh
+
+# Make the script executable
+RUN chmod +x /startservers.sh
+
+# Use the script as the command to run when the container starts
+CMD ["/startservers.sh"]

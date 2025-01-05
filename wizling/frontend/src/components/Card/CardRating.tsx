@@ -16,20 +16,20 @@ const CardRating: React.FC<CardRatingProps> = ({ onRate }) => {
 
   return (
     <div className="card-rating">
-      <div className="rating-item">
-        <div className="icon nope" onClick={handleIconClick('bad')}>
+      <div className="rating-item" onClick={handleIconClick('bad')}>
+        <div className="icon nope">
           <FontAwesomeIcon icon={faFaceFrown} size="2x" />
         </div>
         <span className="rating-label">Didn't know</span>
       </div>
-      <div className="rating-item">
-        <div className="icon kind-of" onClick={handleIconClick('okay')}>
+      <div className="rating-item" onClick={handleIconClick('okay')}>
+        <div className="icon kind-of">
           <FontAwesomeIcon icon={faFaceMeh} size="2x" />
         </div>
         <span className="rating-label">Partial</span>
       </div>
-      <div className="rating-item">
-        <div className="icon got-it" onClick={handleIconClick('good')}>
+      <div className="rating-item" onClick={handleIconClick('good')}>
+        <div className="icon got-it">
           <FontAwesomeIcon icon={faFaceSmile} size="2x" />
         </div>
         <span className="rating-label">Got it</span>

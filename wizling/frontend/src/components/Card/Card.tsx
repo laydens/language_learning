@@ -32,22 +32,12 @@ const Card: React.FC<CardProps> = ({ flashcard, onRate, isActive, isNext, onShow
     console.log("Card component props:", { flashcard, isActive, isNext });
     const [isFlipped, setIsFlipped] = useState(false);
     const [frontFontSize, setFrontFontSize] = useState(CARD_CONSTANTS.MAX_FONT_SIZE);
-    const [backFontSize, setBackFontSize] = useState(CARD_CONSTANTS.MAX_FONT_SIZE);
     const [isContentReady, setIsContentReady] = useState(false);
     const cardRef = useRef<HTMLDivElement>(null);
     const frontContentRef = useRef<HTMLDivElement>(null);
     const backContentRef = useRef<HTMLDivElement>(null);
-    const [showDetail, setShowDetail] = useState(false);
-    const vocabId = flashcard.id; // Assuming vocabId is a property of flashcard
-    console.log({
-        vocabId,
-        isActive,
-        isFlipped,
-        shouldShowInfo: Boolean(vocabId && isActive && isFlipped),
-        cardRef: cardRef.current,
-        frontContentRef: frontContentRef.current,
-        backContentRef: backContentRef.current
-    });
+    const vocabId = flashcard.id;
+
     const handleFlip = () => {
         if (isActive) {
             setIsFlipped(!isFlipped);
@@ -55,7 +45,6 @@ const Card: React.FC<CardProps> = ({ flashcard, onRate, isActive, isNext, onShow
     };
 
     const calculateFontSize = useCallback((content: React.ReactNode, isBackSide: boolean) => {
-        // Convert ReactNode to string length for calculation
         const contentLength = content?.toString().length || 0;
         if (!cardRef.current) {
             return CARD_CONSTANTS.MAX_FONT_SIZE;
@@ -75,18 +64,14 @@ const Card: React.FC<CardProps> = ({ flashcard, onRate, isActive, isNext, onShow
             optimalSize *= 0.8;
         }
 
-        const finalSize = Math.min(Math.max(optimalSize, CARD_CONSTANTS.MIN_FONT_SIZE),
+        return Math.min(Math.max(optimalSize, CARD_CONSTANTS.MIN_FONT_SIZE),
             CARD_CONSTANTS.MAX_FONT_SIZE);
-
-        return finalSize;
-    }, [isActive, isNext]);
+    }, []);
 
     useEffect(() => {
         if (isActive || isNext) {
-            // Reset content ready state
             setIsContentReady(false);
 
-            // Calculate font sizes first
             setTimeout(() => {
                 if (!cardRef.current) return;
 
@@ -94,22 +79,16 @@ const Card: React.FC<CardProps> = ({ flashcard, onRate, isActive, isNext, onShow
                 const combinedBackContent = `${flashcard.reading}\n${flashcard.meanings.join(', ')}`;
                 const backSize = calculateFontSize(combinedBackContent, true);
                 setFrontFontSize(frontSize);
-                setBackFontSize(backSize);
 
-                // After font sizes are set, trigger fade in
                 setTimeout(() => {
                     setIsContentReady(true);
                 }, 50);
             }, 50);
         }
-    }, [isActive, isNext, flashcard.expression, flashcard.reading, flashcard.meanings]);
-
-    const handleCloseModal = () => {
-        setShowDetail(false);
-    };
+    }, [isActive, isNext, flashcard.expression, flashcard.reading, flashcard.meanings, calculateFontSize]);
 
     const handleInfoClick = (e: React.MouseEvent) => {
-        e.stopPropagation(); // Prevent card flip when clicking info button
+        e.stopPropagation();
         if (onShowDetail && flashcard.id) {
             onShowDetail(flashcard.id);
         }

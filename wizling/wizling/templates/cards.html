@@ -5,12 +5,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flashcard Game</title>
+    <title>Flashcard Study</title>
     <!-- Load React app's CSS -->
+    <link href="{% static 'css/logo.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ main_css }}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@1,500&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
+    {% include 'partials/minimal_nav.html' %}
     <div id="root">
         <!-- React will render here -->
     </div>

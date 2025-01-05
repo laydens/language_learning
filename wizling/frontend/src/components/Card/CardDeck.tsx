@@ -6,6 +6,8 @@ import FlashcardContent from './providers/FlashcardContentProvider';
 import JapaneseFlashcard from './models/JapaneseFlashcard';
 import VocabDetailView from '../VocabDetail/VocabDetailView';
 import { X } from 'lucide-react';
+import LevelSelection from '../LevelSelection/LevelSelection';
+import { PreferencesService, StudyLevel } from '../../services/PreferencesService';
 
 // Move the interface to a separate types file or export it here
 export interface CardData {
@@ -24,9 +26,13 @@ interface CardDeckProps {
 const CardDeck: React.FC<CardDeckProps> = ({
   cards,
   numCards = 5,
-  level = 'beginner'
+  level: propLevel
 }) => {
-  const { flashcards, loading, error } = useFlashcards(numCards, level);
+  const [selectedLevel, setSelectedLevel] = useState<StudyLevel | null>(
+    propLevel as StudyLevel || PreferencesService.getStudyLevel()
+  );
+
+  const { flashcards, loading, error } = useFlashcards(numCards, selectedLevel as StudyLevel);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(1);
@@ -35,6 +41,11 @@ const CardDeck: React.FC<CardDeckProps> = ({
   const [selectedVocabId, setSelectedVocabId] = useState<number | null>(null);
   const currentCardRef = useRef<HTMLDivElement>(null);
   const nextCardRef = useRef<HTMLDivElement>(null);
+
+  // Handle case where level isn't selected
+  if (!selectedLevel) {
+    return <LevelSelection onLevelSelected={setSelectedLevel} />;
+  }
 
   // Handle loading state
   if (loading) {

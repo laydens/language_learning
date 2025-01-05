@@ -83,9 +83,8 @@
 }
 
 /* Hover Effects */
-.brand-logo:hover .dot-secondary {
+/* .brand-logo:hover .dot-secondary {
     fill: var(--secondary-600);
-    /* <-- Could update this for more vibrant hover */
 }
 
 .brand-logo:hover .dot-primary {
@@ -98,7 +97,24 @@
 
 .brand-logo:hover .dot-tertiary {
     fill: var(--primary-200);
+} */
+
+
+.brand-logo:hover .dot-primary {
+    fill: var(--primary-300);
+    /* Medium Fjord - Balanced blue-gray for leading dot (#527887) */
 }
+
+.brand-logo:hover .dot-secondary {
+    fill: var(--secondary-300);
+    /* Vibrant Maple - Matching warm orange for middle dot (#E36922) */
+}
+
+.brand-logo:hover.dot-tertiary {
+    fill: var(--primary-100);
+    /* Soft Fjord - Lighter blue-gray for trailing dot (#7397A5) */
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
