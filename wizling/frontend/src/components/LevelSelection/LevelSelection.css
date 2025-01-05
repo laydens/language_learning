@@ -22,35 +22,35 @@
 }
 
 .level-selection-content h1 {
-    font-size: 1.75rem;
+    font-size: 1.50rem;
     color: var(--text-primary);
     margin-bottom: 0.5rem;
     text-align: center;
+    line-height: 1;
 }
 
 .level-selection-content p {
     font-size: 1.1rem;
     color: var(--text-secondary);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     text-align: center;
+    line-height: 1;
 }
 
 .level-buttons {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
 }
 
 .level-button {
     background: transparent;
     border: none;
-    padding: 0.75rem 1rem;
+    padding: 0.50rem 1rem 0.50rem 0.50rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    text-align: left;
     border-radius: 8px;
+    width: 100%;
 }
 
 .level-button:hover {
@@ -59,8 +59,13 @@
 
 .level-button-content {
     display: flex;
+    flex-direction: column;
+}
+
+.level-main {
+    display: flex;
     align-items: center;
-    gap: 0.75rem;
+
 }
 
 .level-title {
@@ -78,10 +83,28 @@
     font-weight: 500;
 }
 
+.level-details {
+    display: flex;
+    flex-direction: column;
+   
+}
+
 .level-description {
     font-size: 0.875rem;
     color: var(--text-secondary);
-    margin-left: auto;
+}
+
+.level-examples {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-style: italic;
+}
+
+h3 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: normal;
+    text-align: center;
 }
 
 @keyframes fadeIn {
