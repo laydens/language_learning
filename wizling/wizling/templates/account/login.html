@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block content %}
+<main class="container">
+    <article style="max-width: 400px; margin: 3rem auto; padding: 0 var(--space-md);">
+        <div class="card">
+            <div class="content-box" style="padding: var(--space-xl);">
+                <div style="text-align: center; margin-bottom: var(--space-xl);">
+                    <h1 style="font-size: var(--font-size-2xl); margin-bottom: var(--space-xs);">Welcome Back</h1>
+                    <p style="color: var(--text-secondary);">Sign in to continue your learning journey</p>
+                </div>
+
+                <form method="POST" action="{% url 'account_login' %}">
+                    {% csrf_token %}
+
+                    <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                        <div>
+                            <label for="id_login" class="form-label">Email</label>
+                            {{ form.login }}
+                        </div>
+
+                        <div>
+                            <label for="id_password" class="form-label">Password</label>
+                            {{ form.password }}
+                        </div>
+
+                        <div class="form-checkbox">
+                            {{ form.remember }}
+                            <label for="id_remember">Keep me signed in</label>
+                        </div>
+
+                        <div class="button-container" style="margin: var(--space-md) 0;">
+                            <button type="submit" class="button button-primary">Sign In</button>
+                        </div>
+
+                        <div style="text-align: center;">
+                            <a href="{% url 'account_reset_password' %}" class="form-link">Forgot your password?</a>
+                        </div>
+                    </div>
+                </form>
+
+                <div
+                    style="margin-top: var(--space-lg); padding-top: var(--space-md); border-top: 1px solid var(--surface-200);">
+                    <p style="text-align: center; margin-bottom: var(--space-sm); color: var(--text-secondary);">
+                        New to Wizling?
+                    </p>
+                    <div class="button-container">
+                        <a href="{{ signup_url }}" class="button button-secondary">Create an Account</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+</main>
+{% endblock %}

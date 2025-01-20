@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="content-box">
+        <h1>Profile</h1>
+    </div>
+
+    <div class="content-grid">
+        <div class="card">
+            <h3>Account Details</h3>
+            <div class="content-box">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Member since:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Study Progress</h3>
+            <div class="content-box">
+                <p><strong>Current Level:</strong> N5</p>
+                <p><strong>Cards Studied:</strong> 0</p>
+                <p><strong>Study Streak:</strong> 0 days</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

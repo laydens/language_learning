@@ -20,22 +20,21 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.i18n import JavaScriptCatalog
-from wagtail.admin import urls as wagtailadmin_urls
-from wagtail import urls as wagtail_urls
-from wagtail.documents import urls as wagtaildocs_urls
+from django.apps import apps
+from cms.sitemaps import CMSSitemap
 from . import views
 
 urlpatterns = [
-    # path('', TemplateView.as_view(template_name='home.html'), name='home'),  # Home page view
     path('api/', include('api.urls')),  # Include API URLs under the 'api/' prefix
     path('admin/', admin.site.urls),  # Admin interface
     path('card-study/', views.render_flashcard_game, name='flashcard_game'),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     path('filer/', include('filer.urls')),
+    # Add allauth URLs before CMS URLs
+    path('accounts/', include('allauth.urls')),
+    path('profile/', views.profile_view, name='profile'),
+    # CMS URLs should be last as they have a catch-all pattern
     path('', include('cms.urls')),
-    path('a/', include(wagtailadmin_urls)),
-    path('d/', include(wagtaildocs_urls)),
-    path('p/', include(wagtail_urls))
 ]
 
 if settings.DEBUG:

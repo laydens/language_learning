@@ -1,0 +1,8 @@
+{% load allauth %}
+<div style="margin-bottom: var(--space-md);">
+    <label class="form-label" for="{{ attrs.id }}">{{ attrs.label }}</label>
+    {{ attrs.field }}
+    {% if attrs.errors %}
+    <p class="form-error">{{ attrs.errors.0 }}</p>
+    {% endif %}
+</div>

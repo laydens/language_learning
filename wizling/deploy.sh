@@ -7,7 +7,7 @@ REGION="us-central1"
 CLOUD_SQL_INSTANCE="wizling-mysql"
 CLOUD_SQL_CONNECTION_NAME="$PROJECT_ID:$REGION:$CLOUD_SQL_INSTANCE"
 IMAGE_PATH="us-central1-docker.pkg.dev/$PROJECT_ID/$SERVICE_NAME/$SERVICE_NAME"
-
+WAGTAILADMIN_BASE_URL="https://wizling.com"
 echo "🚀 Starting deployment..."
 
 # Clean React build artifacts
@@ -44,6 +44,7 @@ gcloud run deploy $SERVICE_NAME \
   --update-env-vars "LANGUAGE_LEARNING_DB=language_learning" \
   --update-env-vars "LANGUAGE_LEARNING_DB_HOST=/cloudsql/$CLOUD_SQL_CONNECTION_NAME" \
   --update-env-vars "LANGUAGE_LEARNING_DB_USER=lang_user" \
+  --update-env-vars "WAGTAILADMIN_BASE_URL=$WAGTAILADMIN_BASE_URL" \
   --set-secrets "CMS_DB_PASSWORD=cms-service-password:latest" \
   --set-secrets "LANGUAGE_LEARNING_DB_PASSWORD=lang-db-password:latest" \
   --add-cloudsql-instances $CLOUD_SQL_CONNECTION_NAME

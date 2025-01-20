@@ -1,0 +1,4 @@
+{% load allauth %}
+<div class="card alert {% if 'error' in attrs.tags %}alert-error{% else %}alert-success{% endif %}">
+    {% slot %}{% endslot %}
+</div>

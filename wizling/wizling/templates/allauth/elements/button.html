@@ -1,0 +1,6 @@
+{% load allauth %}
+<button type="{{ attrs.type|default:'button' }}"
+    class="button {% if 'primary' in attrs.tags %}button-primary{% else %}button-secondary{% endif %}" {% if
+    attrs.disabled %}disabled{% endif %}>
+    {% slot %}{% endslot %}
+</button>

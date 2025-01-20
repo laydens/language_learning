@@ -143,13 +143,13 @@ home-container {
 }
 
 /* Cards */
-.card {
-    border: none;
-    border-radius: 16px;
-    background: var(--surface-50);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
-    padding: var(--space-xl);
+.card,
+article .card,
+main .card {
+    background: var(--surface-0);
+    border: 1px solid var(--surface-300);
+    border-radius: var(--border-radius-lg);
+    box-shadow: none;
 }
 
 .card:hover {
@@ -641,4 +641,241 @@ main {
         text-align: left;
     }
 
+}
+
+/* Form Components - Refined */
+.form-container {
+    max-width: 440px;  /* Slightly wider for better proportions */
+    margin: 4rem auto; /* More vertical space */
+    padding: 0 var(--space-md); /* Ensure mobile padding */
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+}
+
+.form-header h3 {
+    color: var(--text-primary);
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-2xl);
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+}
+
+.form-header p {
+    color: var(--text-secondary);
+    font-size: var(--font-size-base);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);  /* More space between fields */
+    margin-bottom: var(--space-2xl);
+}
+
+.form-field {
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--space-xs);
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    font-family: var(--font-family-base);
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--space-md);  /* More generous padding */
+    border: 2px solid var(--surface-200);
+    border-radius: var(--border-radius-md);  /* Slightly more rounded */
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    background: var(--surface-50);
+    transition: all 0.2s ease;
+}
+
+.form-input:hover {
+    border-color: var(--surface-300);
+    background: var(--surface-100);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    background: var(--surface-0);
+    box-shadow: 0 0 0 4px var(--primary-100);
+}
+
+.form-input::placeholder {
+    color: var(--text-tertiary);
+}
+
+.form-error {
+    color: var(--secondary-700);
+    font-size: var(--font-size-sm);
+    margin-top: var(--space-xs);
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) 0;
+}
+
+.form-checkbox label {
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+    margin: 0;
+}
+
+.form-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    border: 2px solid var(--surface-300);
+    border-radius: 4px;
+}
+
+.form-divider {
+    border: none;
+    border-top: 1px solid var(--surface-200);
+    margin: var(--space-2xl) 0;
+}
+
+.form-footer {
+    text-align: center;
+}
+
+.form-footer-text {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-md);
+}
+
+.form-link {
+    color: var(--primary-700);
+    text-decoration: none;
+    font-size: var(--font-size-base);
+    transition: color 0.2s ease;
+}
+
+.form-link:hover {
+    color: var(--primary-900);
+}
+
+/* Button refinements */
+.button-primary {
+    padding: var(--space-md) var(--space-xl);  /* More generous padding */
+    font-size: var(--font-size-base);
+    font-weight: 500;
+}
+
+/* Override any Pico article shadows */
+article {
+    box-shadow: none !important;
+}
+
+/* Ensure form inputs have clean borders */
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: var(--space-md);
+    border: 1px solid var(--surface-300);  /* Always visible border */
+    border-radius: var(--border-radius-md);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    background: var(--surface-0);
+    color: var(--text-primary);
+    height: 48px;  /* Consistent height */
+}
+
+/* Hover state */
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="email"]:hover {
+    border-color: var(--surface-400);
+    background: var(--surface-50);
+}
+
+/* Focus state */
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+    border-color: var(--primary-500);
+    background: var(--surface-0);
+    box-shadow: 0 0 0 2px var(--primary-100);
+    outline: none;
+}
+
+/* Placeholder text */
+input::placeholder {
+    color: var(--text-tertiary);
+}
+
+/* Override any Pico defaults */
+article {
+    box-shadow: none !important;
+}
+
+/* Button consistency */
+.button,
+.button-primary,
+.button-secondary {
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    font-family: var(--font-family-base);
+    padding: var(--space-sm) var(--space-xl);
+    height: 48px;
+    width: 250px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+/* Center button container */
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: var(--space-xl) 0;
+}
+
+/* Alert Components */
+.alert {
+    padding: var(--space-md);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--space-md);
+}
+
+.alert-error {
+    background: var(--surface-100);
+    color: var(--secondary-700);
+    border-left: 4px solid var(--secondary-500);
+}
+
+.alert-success {
+    background: var(--primary-50);
+    color: var(--primary-700);
+    border-left: 4px solid var(--primary-500);
+}
+
+/* Alert styles */
+.alert {
+    margin-bottom: var(--space-md);
+}
+
+.alert-error {
+    background-color: var(--surface-100);
+}
+
+.alert-success {
+    background-color: var(--primary-50);
 }

@@ -2,12 +2,13 @@
 Django settings for wizling project.
 Environment-aware configuration supporting both local and Google Cloud deployment.
 """
-
 import os
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
-import logging
+import logging 
 import sys
+from django.dispatch import receiver
+from allauth.account.signals import email_confirmed
 
 try:
     from dotenv import load_dotenv
@@ -15,6 +16,8 @@ try:
 except ImportError:
     pass
 
+
+logger = logging.getLogger(__name__)
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -118,18 +121,18 @@ DATABASES = {
 
 # Application definition
 INSTALLED_APPS = [
-    'wagtail.contrib.forms',
-    'wagtail.contrib.redirects',
-    'wagtail.embeds',
-    'wagtail.sites',
-    'wagtail.users',
-    'wagtail.snippets',
-    'wagtail.documents',
-    'wagtail.images',
-    'wagtail.search',
-    'wagtail.admin',
-    'wagtail',
-    'modelcluster',
+    # 'wagtail.contrib.forms',
+    # 'wagtail.contrib.redirects',
+    # 'wagtail.embeds',
+    # 'wagtail.sites',
+    # 'wagtail.users',
+    # 'wagtail.snippets',
+    # 'wagtail.documents',
+    # 'wagtail.images',
+    # 'wagtail.search',
+    # 'wagtail.admin',
+    # 'wagtail',
+    # 'modelcluster',
     'taggit',
     'djangocms_admin_style',
     'django.contrib.admin',
@@ -172,12 +175,18 @@ INSTALLED_APPS = [
     'api.core',
     'api',
     'api.japanese.apps.JapaneseConfig',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # If you want social authentication, add providers here:
+    # 'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -187,8 +196,8 @@ MIDDLEWARE = [
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
     # 'django.middleware.locale.LocaleMiddleware',
-    'cms.middleware.language.LanguageCookieMiddleware',
-    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'cms.middleware.language.LanguageCookieMiddleware'
+    # 'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 # Static Files Configuration
@@ -202,11 +211,11 @@ STATICFILES_DIRS = [
 ]
 
 CMS_PERMISSION = True
-
+CMS_CONFIRM_VERSION4 = True
 # Media Files Configuration
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
+WAGTAILADMIN_BASE_URL = os.getenv('WAGTAILADMIN_BASE_URL', 'localhost:8080')
 # Templates Configuration
 TEMPLATES = [
     {
@@ -256,8 +265,8 @@ CKEDITOR_SETTINGS = {
 }
 
 # Wagtail Configuration
-WAGTAIL_SITE_NAME = 'Wizling'
-WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip']
+# WAGTAIL_SITE_NAME = 'Wizling'
+# WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip']
 
 # Security Configuration
 X_FRAME_OPTIONS = 'SAMEORIGIN'
@@ -272,10 +281,6 @@ LOGGING = {
             'format': '{levelname} {asctime} {module} {message}',
             'style': '{',
         },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
-        },
     },
     'handlers': {
         'console': {
@@ -284,18 +289,44 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),  # Log file path
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
             'formatter': 'verbose',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],  # Add 'file' handler
-            'level': 'WARNING',
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
         },
-        'your_app_name': {
-            'handlers': ['console', 'file'],  # Add 'file' handler
-            'level': 'WARNING',
+        'wizling.signal_handler': {  # Logger for the signal handler
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',  # Log DEBUG level messages
+            'propagate': False, # Prevents duplicate logging
         },
     },
 }
+
+LOGIN_URL = 'account_login'
+
+# Authentication settings
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+
+# Auth settings
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+# Email settings
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+DEFAULT_FROM_EMAIL = "noreply@wizling.com"
+SENDGRID_SANDBOX_MODE_IN_DEBUG = os.getenv('SENDGRID_SANDBOX_MODE_IN_DEBUG', 'True') == 'True'  # Set to False to send real emails in debug mode

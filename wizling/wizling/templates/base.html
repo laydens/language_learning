@@ -14,8 +14,9 @@
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     {% render_block "css" %}
-    <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'css/components.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components.css' %}">
     <link href="{% static 'css/logo.css' %}" rel="stylesheet" type="text/css">
     {% block extra_css %}{% endblock %}
 </head>
@@ -75,6 +76,15 @@
                     {% show_menu 0 1 100 100 "menu/menu.html" %}
                     <div class="nav-cta">
                         {% static_placeholder 'nav_cta' %}
+                    </div>
+                    <div class="nav-end">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'profile' %}" class="nav-link">Profile</a>
+                        <a href="{% url 'account_logout' %}" class="nav-link">Sign Out</a>
+                        {% else %}
+                        <a href="{% url 'account_login' %}" class="nav-link">Sign In</a>
+                        <a href="{% url 'account_signup' %}" class="nav-link">Create Account</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

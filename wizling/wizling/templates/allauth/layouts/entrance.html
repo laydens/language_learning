@@ -1,0 +1,11 @@
+{% extends "allauth/layouts/base.html" %}
+
+{% block allauth_content %}
+<article style="max-width: 400px; margin: 3rem auto; padding: 0 var(--space-md);">
+    <div class="card">
+        <div class="content-box" style="padding: var(--space-xl);">
+            {% block inner_content %}{% endblock %}
+        </div>
+    </div>
+</article>
+{% endblock %}

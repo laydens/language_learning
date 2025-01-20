@@ -82,11 +82,11 @@ tinycss2==1.4.0
 typing_extensions==4.12.2
 urllib3==2.2.3
 uvicorn==0.32.0
-wagtail==6.3
 webencodings==0.5.1
+django-allauth==65.3.1
+django-sendgrid-v5==1.2.4
 Werkzeug==3.1.0
 Willow==1.9.0
 django-cors-headers==4.3.1 
 gunicorn==20.1.0 
-
 

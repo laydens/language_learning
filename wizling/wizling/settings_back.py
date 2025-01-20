@@ -52,19 +52,18 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
-    'wagtail.contrib.forms',
-    'wagtail.contrib.redirects',
-    'wagtail.embeds',
-    'wagtail.sites',
-    'wagtail.users',
-    'wagtail.snippets',
-    'wagtail.documents',
-    'wagtail.images',
-    'wagtail.search',
-    'wagtail.admin',
-    'wagtail',
-
-    'modelcluster',
+    # 'wagtail.contrib.forms',
+    # 'wagtail.contrib.redirects',
+    # 'wagtail.embeds',
+    # 'wagtail.sites',
+    # 'wagtail.users',
+    # 'wagtail.snippets',
+    # 'wagtail.documents',
+    # 'wagtail.images',
+    # 'wagtail.search',
+    # 'wagtail.admin',
+    # 'wagtail',
+    # 'modelcluster',
     'taggit',
     'djangocms_admin_style',
 
@@ -122,7 +121,7 @@ MIDDLEWARE = [
     'cms.middleware.toolbar.ToolbarMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
-    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+
 ]
 
 ROOT_URLCONF = 'wizling.urls'
