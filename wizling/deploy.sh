@@ -47,6 +47,8 @@ gcloud run deploy $SERVICE_NAME \
   --update-env-vars "WAGTAILADMIN_BASE_URL=$WAGTAILADMIN_BASE_URL" \
   --set-secrets "CMS_DB_PASSWORD=cms-service-password:latest" \
   --set-secrets "LANGUAGE_LEARNING_DB_PASSWORD=lang-db-password:latest" \
+  --set-secrets "MAILGUN_API_KEY=mailgun-api-key:latest" \
+  --set-secrets "GOOGLE_WORKSPACE_PASSWORD=google-workspace-password:latest" \
   --add-cloudsql-instances $CLOUD_SQL_CONNECTION_NAME
 
 # Rename .env.production back to .env.production.off after deployment

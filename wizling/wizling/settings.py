@@ -322,11 +322,41 @@ LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
+
 # Email settings
-EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-DEFAULT_FROM_EMAIL = "noreply@wizling.com"
-SENDGRID_SANDBOX_MODE_IN_DEBUG = os.getenv('SENDGRID_SANDBOX_MODE_IN_DEBUG', 'True') == 'True'  # Set to False to send real emails in debug mode
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-relay.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'noreply@wizling.com'  # Change to noreply@
+EMAIL_HOST_PASSWORD = os.getenv('GOOGLE_WORKSPACE_PASSWORD')
+
+# Email addresses
+DEFAULT_FROM_EMAIL = 'Wizling <noreply@wizling.com>'
+SERVER_EMAIL = 'noreply@wizling.com'
+SUPPORT_EMAIL = 'support@wizling.com'
+
+# Django-allauth settings
+ACCOUNT_EMAIL_SUBJECT_PREFIX = '[Wizling] '  # Optional: customize email subject
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+
+# For local development
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Remove these SendGrid-specific settings if they exist:
+# SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+# SENDGRID_SANDBOX_MODE_IN_DEBUG = os.getenv('SENDGRID_SANDBOX_MODE_IN_DEBUG', 'True') == 'True'
+
+# Add some debugging
+print("DEBUG: SENDGRID_API_KEY present:", bool(os.getenv('SENDGRID_API_KEY')))
+print("DEBUG: SENDGRID_SANDBOX_MODE_IN_DEBUG:", os.getenv('SENDGRID_SANDBOX_MODE_IN_DEBUG'))
+
+if os.getenv('SENDGRID_API_KEY'):
+    print("DEBUG: SENDGRID_API_KEY last 5 chars:", os.getenv('SENDGRID_API_KEY')[-5:])
+else:
+    print("DEBUG: SENDGRID_API_KEY is None or empty")
+    

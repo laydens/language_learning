@@ -1,7 +1,7 @@
-#!/bin/bash
-
-# dc.sh
 # Build and run the Docker container locally using Docker Compose
+#!/bin/bash
+# dc.sh
+
 
 # Define the path to the .env files
 ENV_DIR="frontend"

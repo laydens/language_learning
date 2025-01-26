@@ -150,6 +150,7 @@ main .card {
     border: 1px solid var(--surface-300);
     border-radius: var(--border-radius-lg);
     box-shadow: none;
+    padding: 16px; 
 }
 
 .card:hover {
@@ -307,7 +308,7 @@ td {
     padding: var(--space-md);
     border-radius: var(--border-radius-md);
     margin-bottom: var(--space-lg);
-    margin-top: var(--space-lg);
+  
 }
 
 .content-box-light {
@@ -368,7 +369,6 @@ footer p {
 
 .hero-content {
     display: flex;
-    align-items: center;
     gap: var(--space-2xl);
     max-width: var(--container-max);
     margin: 0 auto;
@@ -475,7 +475,6 @@ main {
     /* Hero Content Styles */
     .hero-content {
         display: flex;
-        align-items: center;
         gap: var(--space-2xl);
         max-width: var(--container-max);
         margin: 0 auto;
